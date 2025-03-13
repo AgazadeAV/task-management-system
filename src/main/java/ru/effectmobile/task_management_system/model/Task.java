@@ -20,6 +20,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.effectmobile.task_management_system.model.enums.TaskPriority;
+import ru.effectmobile.task_management_system.model.enums.TaskStatus;
 
 import java.util.List;
 import java.util.UUID;

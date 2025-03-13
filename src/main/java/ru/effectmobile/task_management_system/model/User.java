@@ -18,6 +18,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ru.effectmobile.task_management_system.model.enums.Role;
 
 import java.time.LocalDate;
 import java.util.List;

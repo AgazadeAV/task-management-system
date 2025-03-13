@@ -1,7 +1,7 @@
 databaseChangeLog:
   - changeSet:
       id: add-foreign-keys
-      author: your_name
+      author: azer agazade
       changes:
         - addForeignKeyConstraint:
             baseTableName: comments

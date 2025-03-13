@@ -6,7 +6,7 @@ services:
     container_name: taskmanager-postgres
     restart: always
     env_file:
-      - .env # Загружаем переменные из .env
+      - .env
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
