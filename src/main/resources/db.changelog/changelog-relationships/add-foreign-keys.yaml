@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-foreign-keys
+      author: your_name
+      changes:
+        - addForeignKeyConstraint:
+            baseTableName: comments
+            baseColumnNames: task_id
+            constraintName: fk_comments_task
+            referencedTableName: tasks
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: comments
+            baseColumnNames: author_id
+            constraintName: fk_comments_author
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: tasks
+            baseColumnNames: author_id
+            constraintName: fk_tasks_author
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: tasks
+            baseColumnNames: assignee_id
+            constraintName: fk_tasks_assignee
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: SET NULL
