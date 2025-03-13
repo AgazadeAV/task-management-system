@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-schema
+      author: azer agazade
+      changes:
+        - sql:
+            dbms: postgresql
+            splitStatements: true
+            stripComments: true
+            sql: |
+              CREATE SCHEMA IF NOT EXISTS taskmanager;
+              ALTER DATABASE taskmanagerdb SET search_path TO taskmanager;
