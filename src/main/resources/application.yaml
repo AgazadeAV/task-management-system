@@ -1,0 +1,64 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /task-manager
+
+api:
+  base:
+    url: /api/v1
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/taskmanagerdb
+    driver-class-name: org.postgresql.Driver
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    hikari:
+      maximum-pool-size: 10
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    default-schema: taskmanager
+    enabled: true
+    validate-on-migrate: true
+
+  docker:
+    compose:
+      enabled: true
+      profiles:
+        active: postgres
+      file: docker-compose.yaml
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 86400000
+  issuer: "task-management-system"
+
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  info:
+    env:
+      enabled: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
