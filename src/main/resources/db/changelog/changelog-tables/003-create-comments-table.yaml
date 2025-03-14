@@ -16,16 +16,12 @@ databaseChangeLog:
                   name: task_id
                   type: UUID
                   constraints:
-                    nullable: false
-                    foreignKeyName: fk_comments_task
-                    references: tasks(id)
+                    nullable: true
               - column:
                   name: author_id
                   type: UUID
                   constraints:
-                    nullable: false
-                    foreignKeyName: fk_comments_author
-                    references: users(id)
+                    nullable: true
               - column:
                   name: text
                   type: VARCHAR(2000)

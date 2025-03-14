@@ -9,24 +9,24 @@ api:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/taskmanagerdb
+    url: jdbc:postgresql://localhost:5432/taskmanagerdb
     driver-class-name: org.postgresql.Driver
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    username: your_username
+    password: your_secure_password
     hikari:
+      initialization-fail-timeout: 5000
+      schema: taskmanager
       maximum-pool-size: 10
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
         format_sql: true
   liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yaml
-    default-schema: taskmanager
-    enabled: true
-    validate-on-migrate: true
+    user: your_username
+    password: your_secure_password
 
   docker:
     compose:
