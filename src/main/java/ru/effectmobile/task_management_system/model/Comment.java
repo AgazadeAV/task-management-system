@@ -27,8 +27,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "comments")
 public class Comment {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne

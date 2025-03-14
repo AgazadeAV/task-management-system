@@ -21,6 +21,7 @@ import lombok.Setter;
 import ru.effectmobile.task_management_system.model.enums.Role;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,8 +33,9 @@ import java.util.UUID;
 @Entity
 @Table(name = "users")
 public class User {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(nullable = false, unique = true)
@@ -52,11 +54,11 @@ public class User {
     @Column(name = "phone_number", nullable = false)
     private String phoneNumber;
 
-    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL)
-    private List<Task> tasks;
+    @OneToMany(mappedBy = "assignee", cascade = CascadeType.PERSIST)
+    private List<Task> tasks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-    private List<Task> createdTasks;
+    @OneToMany(mappedBy = "author", cascade = CascadeType.PERSIST)
+    private List<Task> createdTasks = new ArrayList<>();
 
     @Embedded
     @AttributeOverrides({

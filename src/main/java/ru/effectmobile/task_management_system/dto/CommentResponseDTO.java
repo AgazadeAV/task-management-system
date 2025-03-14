@@ -4,16 +4,20 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.effectmobile.task_management_system.model.enums.Role;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+public class CommentResponseDTO {
+
     private UUID id;
-    private String email;
-    private Role role;
+    private TaskResponseDTO taskDTO;
+    private UserResponseDTO userDTO;
+    private String text;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
