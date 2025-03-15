@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.UserResponseDTO;
 import ru.effectmobile.task_management_system.service.TaskManagementFacade;
+import ru.effectmobile.task_management_system.swagger.specs.UserApiSpec;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("${api.base.url}" + UserController.USER_API_URI)
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserApiSpec {
 
     public static final String USER_API_URI = "/users";
     public static final String GET_ALL_USERS = "/users-list";

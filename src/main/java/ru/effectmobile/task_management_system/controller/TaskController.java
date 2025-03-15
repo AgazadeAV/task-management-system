@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.effectmobile.task_management_system.dto.requests.TaskRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.TaskResponseDTO;
 import ru.effectmobile.task_management_system.service.TaskManagementFacade;
+import ru.effectmobile.task_management_system.swagger.specs.TaskApiSpec;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,7 +22,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("${api.base.url}" + TaskController.TASK_API_URI)
 @RequiredArgsConstructor
-public class TaskController {
+public class TaskController implements TaskApiSpec {
 
     public static final String TASK_API_URI = "/tasks";
     public static final String GET_ALL_TASKS = "/tasks-list";
