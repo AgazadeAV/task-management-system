@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.dto;
+package ru.effectmobile.task_management_system.dto.requests;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

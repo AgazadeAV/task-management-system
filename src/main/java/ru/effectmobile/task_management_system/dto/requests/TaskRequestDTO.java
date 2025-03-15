@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.dto;
+package ru.effectmobile.task_management_system.dto.requests;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.effectmobile.task_management_system.model.enums.TaskPriority;
-import ru.effectmobile.task_management_system.model.enums.TaskStatus;
 
 import java.util.UUID;
 
@@ -27,10 +25,10 @@ public class TaskRequestDTO {
     private String description;
 
     @NotNull(message = "Task status cannot be null")
-    private TaskStatus status;
+    private String status;
 
     @NotNull(message = "Task priority cannot be null")
-    private TaskPriority priority;
+    private String priority;
 
     @NotNull(message = "Author ID cannot be null")
     private UUID authorId;

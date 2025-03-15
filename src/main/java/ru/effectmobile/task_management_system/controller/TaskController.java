@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.effectmobile.task_management_system.dto.TaskRequestDTO;
-import ru.effectmobile.task_management_system.dto.TaskResponseDTO;
+import ru.effectmobile.task_management_system.dto.requests.TaskRequestDTO;
+import ru.effectmobile.task_management_system.dto.responses.TaskResponseDTO;
 import ru.effectmobile.task_management_system.service.TaskManagementFacade;
 
 import java.util.List;

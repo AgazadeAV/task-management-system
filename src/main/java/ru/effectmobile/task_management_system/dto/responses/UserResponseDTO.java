@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.dto;
+package ru.effectmobile.task_management_system.dto.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,6 +15,9 @@ import java.util.UUID;
 public class UserResponseDTO {
 
     private UUID id;
+    private String username;
+    private String firstName;
+    private String lastName;
     private String email;
     private Role role;
 }

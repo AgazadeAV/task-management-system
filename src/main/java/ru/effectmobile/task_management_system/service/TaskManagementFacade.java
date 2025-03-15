@@ -1,11 +1,11 @@
 package ru.effectmobile.task_management_system.service;
 
-import ru.effectmobile.task_management_system.dto.CommentRequestDTO;
-import ru.effectmobile.task_management_system.dto.CommentResponseDTO;
-import ru.effectmobile.task_management_system.dto.TaskRequestDTO;
-import ru.effectmobile.task_management_system.dto.TaskResponseDTO;
-import ru.effectmobile.task_management_system.dto.UserRequestDTO;
-import ru.effectmobile.task_management_system.dto.UserResponseDTO;
+import ru.effectmobile.task_management_system.dto.requests.CommentRequestDTO;
+import ru.effectmobile.task_management_system.dto.requests.TaskRequestDTO;
+import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
+import ru.effectmobile.task_management_system.dto.responses.CommentResponseDTO;
+import ru.effectmobile.task_management_system.dto.responses.TaskResponseDTO;
+import ru.effectmobile.task_management_system.dto.responses.UserResponseDTO;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.dto;
+package ru.effectmobile.task_management_system.dto.requests;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.effectmobile.task_management_system.model.enums.Role;
 
 import java.time.LocalDate;
 
@@ -19,6 +18,18 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserRequestDTO {
+
+    @NotBlank(message = "Username cannot be blank")
+    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters long")
+    private String username;
+
+    @NotBlank(message = "First name cannot be blank")
+    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters long")
+    private String firstName;
+
+    @NotBlank(message = "Last name cannot be blank")
+    @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters long")
+    private String lastName;
 
     @Email(message = "Invalid email format")
     @NotBlank(message = "Email cannot be blank")
@@ -29,7 +40,7 @@ public class UserRequestDTO {
     private String password;
 
     @NotNull(message = "Role cannot be null")
-    private Role role;
+    private String role;
 
     @NotNull(message = "Birth date cannot be null")
     @Past(message = "Birth date must be in the past")

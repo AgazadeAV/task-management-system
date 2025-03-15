@@ -40,7 +40,7 @@ public class Comment {
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
 
-    @Column(nullable = false, length = 2000)
+    @Column(name = "text", nullable = false, length = 2000)
     private String text;
 
     @Embedded

@@ -27,12 +27,9 @@ spring:
   liquibase:
     user: your_username
     password: your_secure_password
-
   docker:
     compose:
       enabled: true
-      profiles:
-        active: postgres
       file: docker-compose.yaml
 
 jwt:

@@ -11,6 +11,8 @@ import ru.effectmobile.task_management_system.service.CommentService;
 import java.util.List;
 import java.util.UUID;
 
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.COMMENT_NOT_FOUND_BY_ID_MESSAGE;
+
 @Service
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
@@ -27,7 +29,7 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(readOnly = true)
     public Comment findById(UUID id) {
         return commentRepository.findById(id)
-                .orElseThrow(() -> new CommentNotFoundException("Comment not found with id: " + id));
+                .orElseThrow(() -> new CommentNotFoundException(String.format(COMMENT_NOT_FOUND_BY_ID_MESSAGE, id)));
     }
 
     @Override

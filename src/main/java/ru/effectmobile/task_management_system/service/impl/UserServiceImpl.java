@@ -11,6 +11,8 @@ import ru.effectmobile.task_management_system.service.UserService;
 import java.util.List;
 import java.util.UUID;
 
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.USER_NOT_FOUND_BY_ID_MESSAGE;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -27,7 +29,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public User findById(UUID id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + id));
+                .orElseThrow(() -> new UserNotFoundException(String.format(USER_NOT_FOUND_BY_ID_MESSAGE, id)));
     }
 
     @Override

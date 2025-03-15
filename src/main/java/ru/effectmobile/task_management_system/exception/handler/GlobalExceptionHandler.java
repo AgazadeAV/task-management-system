@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.controller.handler;
+package ru.effectmobile.task_management_system.exception.handler;
 
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
@@ -7,12 +7,13 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import ru.effectmobile.task_management_system.exception.InvalidEnumValueException;
 import ru.effectmobile.task_management_system.exception.NotFoundException;
-import ru.effectmobile.task_management_system.util.ExceptionResponseUtil.ErrorResponseFormat;
+import ru.effectmobile.task_management_system.exception.util.ExceptionResponseUtil.ErrorResponseFormat;
 
-import static ru.effectmobile.task_management_system.util.ExceptionMessageUtil.getConstraintViolationMessage;
-import static ru.effectmobile.task_management_system.util.ExceptionMessageUtil.getMethodArgumentNotValidMessage;
-import static ru.effectmobile.task_management_system.util.ExceptionResponseUtil.buildErrorResponse;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.getConstraintViolationMessage;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.getMethodArgumentNotValidMessage;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionResponseUtil.buildErrorResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -40,5 +41,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponseFormat> handleGeneralException(Exception ex) {
         return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidEnumValueException.class)
+    public ResponseEntity<ErrorResponseFormat> handleInvalidEnumValueException(InvalidEnumValueException ex) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 }
