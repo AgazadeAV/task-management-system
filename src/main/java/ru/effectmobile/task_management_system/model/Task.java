@@ -41,18 +41,18 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(nullable = false, length = 1000)
+    @Column(name = "description", nullable = false, length = 1000)
     private String description;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "status", nullable = false)
     private TaskStatus status;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "priority", nullable = false)
     private TaskPriority priority;
 
     @ManyToOne

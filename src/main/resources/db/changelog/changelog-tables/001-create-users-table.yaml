@@ -48,3 +48,34 @@ databaseChangeLog:
                   type: TIMESTAMP
                   constraints:
                     nullable: false
+  - changeSet:
+      id: add_username_firstname_and_lastname
+      author: azer agazade
+      changes:
+        - addColumn:
+            tableName: users
+            schemaName: taskmanager
+            columns:
+              - column:
+                  name: username
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+        - addColumn:
+            tableName: users
+            schemaName: taskmanager
+            columns:
+              - column:
+                  name: first_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+        - addColumn:
+            tableName: users
+            schemaName: taskmanager
+            columns:
+              - column:
+                  name: last_name
+                  type: varchar(50)
+                  constraints:
+                    nullable: false

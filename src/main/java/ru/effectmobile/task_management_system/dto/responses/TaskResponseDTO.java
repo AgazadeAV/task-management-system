@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.dto;
+package ru.effectmobile.task_management_system.dto.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,8 +21,10 @@ public class TaskResponseDTO {
     private String description;
     private TaskStatus status;
     private TaskPriority priority;
-    private UserResponseDTO author;
-    private UserResponseDTO assignee;
+    private UUID authorId;
+    private String authorFullName;
+    private UUID assigneeId;
+    private String assigneeFullName;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

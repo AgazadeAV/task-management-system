@@ -9,8 +9,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import ru.effectmobile.task_management_system.dto.CommentRequestDTO;
-import ru.effectmobile.task_management_system.dto.CommentResponseDTO;
+import ru.effectmobile.task_management_system.dto.requests.CommentRequestDTO;
+import ru.effectmobile.task_management_system.dto.responses.CommentResponseDTO;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +23,7 @@ public interface CommentApiSpec {
             description = "Returns a list of comments associated with a task")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Comments retrieved successfully",
-                    content = @Content(schema = @Schema(hidden = true))),
+                    content = @Content(schema = @Schema(implementation = CommentResponseDTO.class))),
             @ApiResponse(responseCode = "204", description = "Comments for this task not found",
                     content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "404", description = "Task not found",

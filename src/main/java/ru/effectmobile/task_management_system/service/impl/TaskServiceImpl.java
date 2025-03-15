@@ -11,6 +11,8 @@ import ru.effectmobile.task_management_system.service.TaskService;
 import java.util.List;
 import java.util.UUID;
 
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.TASK_NOT_FOUND_BY_ID_MESSAGE;
+
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
@@ -27,7 +29,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional(readOnly = true)
     public Task findById(UUID id) {
         return taskRepository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException("Task not found with id: " + id));
+                .orElseThrow(() -> new TaskNotFoundException(String.format(TASK_NOT_FOUND_BY_ID_MESSAGE, id)));
     }
 
     @Override

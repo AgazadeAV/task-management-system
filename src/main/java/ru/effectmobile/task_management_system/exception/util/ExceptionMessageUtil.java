@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.util;
+package ru.effectmobile.task_management_system.exception.util;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.AccessLevel;
@@ -23,5 +23,14 @@ public final class ExceptionMessageUtil {
         }
 
         return fieldError.getDefaultMessage();
+    }
+
+    public static class Messages {
+
+        public static final String COMMENT_NOT_FOUND_BY_ID_MESSAGE = "Comment not found with id: %s";
+        public static final String TASK_NOT_FOUND_BY_ID_MESSAGE = "Task not found with id: %s";
+        public static final String USER_NOT_FOUND_BY_ID_MESSAGE = "User not found with id: %s";
+        public static final String ENUM_VALUE_NULL_OR_EMPTY = "Value cannot be null or empty for %s. Allowed values: %s";
+        public static final String INVALID_ENUM_VALUE = "Invalid value '%s' for: %s. Allowed values: %s";
     }
 }
