@@ -14,7 +14,7 @@ import java.util.Base64;
 
 @Component
 @RequiredArgsConstructor
-public class AesService implements CipherService {
+public class CipherServiceImpl implements CipherService {
 
     private final KeyStorage keyStorage;
 

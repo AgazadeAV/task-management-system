@@ -13,11 +13,11 @@ import ru.effectmobile.task_management_system.dto.responses.UserResponseDTO;
 import ru.effectmobile.task_management_system.exception.PasswordDoesNotMatchException;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
+import ru.effectmobile.task_management_system.service.base.CipherService;
 import ru.effectmobile.task_management_system.service.base.JwtService;
 import ru.effectmobile.task_management_system.service.base.UserService;
 import ru.effectmobile.task_management_system.service.facade.UserFacade;
 import ru.effectmobile.task_management_system.service.factory.UserFactory;
-import ru.effectmobile.task_management_system.service.base.impl.AesService;
 import ru.effectmobile.task_management_system.service.mapper.UserMapper;
 
 import java.util.Optional;
@@ -34,20 +34,20 @@ public class UserFacadeImpl implements UserFacade {
     private final UserFactory userFactory;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
-    private final AesService aesService;
+    private final CipherService cipherService;
 
     @Override
     @Transactional(readOnly = true)
     public Page<UserResponseDTO> getAllUsers(Pageable pageable) {
         return userService.findAll(pageable)
-                .map(user -> userMapper.userToResponseDTO(user, aesService));
+                .map(user -> userMapper.userToResponseDTO(user, cipherService));
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserResponseDTO getUserById(UUID id) {
         User user = userService.findById(id);
-        return userMapper.userToResponseDTO(user, aesService);
+        return userMapper.userToResponseDTO(user, cipherService);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class UserFacadeImpl implements UserFacade {
     public UserResponseDTO createUser(UserRequestDTO userDTO) {
         User user = userFactory.createUser(userDTO);
         handleSensitiveData(user);
-        return userMapper.userToResponseDTO(userService.save(user), aesService);
+        return userMapper.userToResponseDTO(userService.save(user), cipherService);
     }
 
     @Override
@@ -82,15 +82,15 @@ public class UserFacadeImpl implements UserFacade {
         user.setRole(Role.USER);
         handleSensitiveData(user);
         userService.save(user);
-        return userMapper.userToResponseDTO(user, aesService);
+        return userMapper.userToResponseDTO(user, cipherService);
     }
 
     void handleSensitiveData(User user) {
         Optional.ofNullable(user.getPassword())
                 .ifPresent(password -> user.setPassword(passwordEncoder.encode(password)));
-        String encryptedUsername = aesService.encrypt(user.getUsername());
-        String encryptedEmail = aesService.encrypt(user.getEmail());
-        String encryptedPhoneNumber = aesService.encrypt(user.getPhoneNumber());
+        String encryptedUsername = cipherService.encrypt(user.getUsername());
+        String encryptedEmail = cipherService.encrypt(user.getEmail());
+        String encryptedPhoneNumber = cipherService.encrypt(user.getPhoneNumber());
         user.setUsername(encryptedUsername);
         user.setEmail(encryptedEmail);
         user.setPhoneNumber(encryptedPhoneNumber);
