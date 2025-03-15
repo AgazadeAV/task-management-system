@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import ru.effectmobile.task_management_system.swagger.schemas.requests.CommentRequestDTOSchema;
+import ru.effectmobile.task_management_system.config.swagger.schemas.requests.CommentRequestDTOSchema;
 
 import java.util.UUID;
 

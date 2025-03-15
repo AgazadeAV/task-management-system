@@ -2,9 +2,9 @@ package ru.effectmobile.task_management_system.service.factory;
 
 import org.springframework.stereotype.Component;
 import ru.effectmobile.task_management_system.dto.requests.TaskRequestDTO;
-import ru.effectmobile.task_management_system.model.MetaData;
-import ru.effectmobile.task_management_system.model.Task;
-import ru.effectmobile.task_management_system.model.User;
+import ru.effectmobile.task_management_system.model.metadata.MetaData;
+import ru.effectmobile.task_management_system.model.entity.Task;
+import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.TaskPriority;
 import ru.effectmobile.task_management_system.model.enums.TaskStatus;
 

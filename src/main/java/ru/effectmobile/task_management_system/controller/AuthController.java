@@ -12,7 +12,7 @@ import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.AuthResponseDTO;
 import ru.effectmobile.task_management_system.dto.responses.UserResponseDTO;
 import ru.effectmobile.task_management_system.service.facade.UserFacade;
-import ru.effectmobile.task_management_system.swagger.specs.AuthApiSpec;
+import ru.effectmobile.task_management_system.config.swagger.specs.AuthApiSpec;
 
 @RestController
 @RequestMapping("${api.base.url}" + AuthController.AUTH_API_URI)

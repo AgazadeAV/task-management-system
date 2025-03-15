@@ -1,7 +1,7 @@
 package ru.effectmobile.task_management_system.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.effectmobile.task_management_system.model.User;
+import ru.effectmobile.task_management_system.model.entity.User;
 
 import java.util.Optional;
 import java.util.UUID;

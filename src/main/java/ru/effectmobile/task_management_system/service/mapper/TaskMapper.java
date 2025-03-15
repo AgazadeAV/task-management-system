@@ -6,8 +6,8 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import ru.effectmobile.task_management_system.dto.requests.TaskRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.TaskResponseDTO;
-import ru.effectmobile.task_management_system.model.Task;
-import ru.effectmobile.task_management_system.model.User;
+import ru.effectmobile.task_management_system.model.entity.Task;
+import ru.effectmobile.task_management_system.model.entity.User;
 
 import java.util.Objects;
 import java.util.stream.Collectors;

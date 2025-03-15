@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.effectmobile.task_management_system.dto.requests.CommentRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.CommentResponseDTO;
 import ru.effectmobile.task_management_system.service.facade.CommentFacade;
-import ru.effectmobile.task_management_system.swagger.specs.CommentApiSpec;
+import ru.effectmobile.task_management_system.config.swagger.specs.CommentApiSpec;
 
 import java.util.UUID;
 

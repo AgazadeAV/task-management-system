@@ -7,8 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import ru.effectmobile.task_management_system.swagger.schemas.requests.UserRequestDTOSchema;
-import ru.effectmobile.task_management_system.validator.annotation.Password;
+import ru.effectmobile.task_management_system.config.swagger.schemas.requests.UserRequestDTOSchema;
+import ru.effectmobile.task_management_system.service.validation.annotation.Password;
 
 import java.time.LocalDate;
 

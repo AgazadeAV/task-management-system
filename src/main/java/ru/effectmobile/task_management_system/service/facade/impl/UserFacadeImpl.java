@@ -11,13 +11,13 @@ import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.AuthResponseDTO;
 import ru.effectmobile.task_management_system.dto.responses.UserResponseDTO;
 import ru.effectmobile.task_management_system.exception.PasswordDoesNotMatchException;
-import ru.effectmobile.task_management_system.model.User;
+import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
-import ru.effectmobile.task_management_system.service.JwtService;
-import ru.effectmobile.task_management_system.service.UserService;
+import ru.effectmobile.task_management_system.service.base.JwtService;
+import ru.effectmobile.task_management_system.service.base.UserService;
 import ru.effectmobile.task_management_system.service.facade.UserFacade;
 import ru.effectmobile.task_management_system.service.factory.UserFactory;
-import ru.effectmobile.task_management_system.service.impl.AesService;
+import ru.effectmobile.task_management_system.service.base.impl.AesService;
 import ru.effectmobile.task_management_system.service.mapper.UserMapper;
 
 import java.util.Optional;

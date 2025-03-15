@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.effectmobile.task_management_system.dto.requests.TaskFilterDTO;
+import ru.effectmobile.task_management_system.dto.filters.TaskFilterDTO;
 import ru.effectmobile.task_management_system.dto.requests.TaskRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.TaskResponseDTO;
 import ru.effectmobile.task_management_system.service.facade.TaskFacade;
-import ru.effectmobile.task_management_system.swagger.specs.TaskApiSpec;
+import ru.effectmobile.task_management_system.config.swagger.specs.TaskApiSpec;
 
 import java.util.UUID;
 

@@ -2,7 +2,7 @@ package ru.effectmobile.task_management_system.service.facade;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import ru.effectmobile.task_management_system.dto.requests.TaskFilterDTO;
+import ru.effectmobile.task_management_system.dto.filters.TaskFilterDTO;
 import ru.effectmobile.task_management_system.dto.requests.TaskRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.TaskResponseDTO;
 

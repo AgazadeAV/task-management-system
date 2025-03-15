@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.UserResponseDTO;
 import ru.effectmobile.task_management_system.service.facade.UserFacade;
-import ru.effectmobile.task_management_system.swagger.specs.UserApiSpec;
+import ru.effectmobile.task_management_system.config.swagger.specs.UserApiSpec;
 
 import java.util.UUID;
 
