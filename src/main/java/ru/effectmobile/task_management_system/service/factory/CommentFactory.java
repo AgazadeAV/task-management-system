@@ -14,7 +14,7 @@ public class CommentFactory {
         return Comment.builder()
                 .task(task)
                 .author(author)
-                .text(dto.getText())
+                .text(dto.text())
                 .metaData(new MetaData())
                 .build();
     }

@@ -8,24 +8,23 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.UserResponseDTO;
 
-import java.util.List;
 import java.util.UUID;
 
 @Tag(name = "User API", description = "API for managing users")
 public interface UserApiSpec {
 
-    @Operation(summary = "Get all users", description = "Returns a list of all registered users.")
+    @Operation(summary = "Get all users", description = "Returns a paginated list of all registered users.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Users retrieved successfully",
-                    content = @Content(schema = @Schema(implementation = UserResponseDTO.class))),
-            @ApiResponse(responseCode = "204", description = "No users found",
-                    content = @Content(schema = @Schema(hidden = true)))
+                    content = @Content(schema = @Schema(implementation = UserResponseDTO.class)))
     })
-    ResponseEntity<List<UserResponseDTO>> getAllUsers();
+    ResponseEntity<Page<UserResponseDTO>> getAllUsers(Pageable pageable);
 
     @Operation(summary = "Get user by ID", description = "Retrieves a user by their unique identifier.")
     @ApiResponses(value = {

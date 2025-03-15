@@ -1,11 +1,23 @@
 package ru.effectmobile.task_management_system.service.mapper;
 
+import org.mapstruct.Context;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 import ru.effectmobile.task_management_system.dto.responses.UserResponseDTO;
 import ru.effectmobile.task_management_system.model.User;
+import ru.effectmobile.task_management_system.service.CipherService;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    UserResponseDTO userToResponseDTO(User user);
+    @Mapping(target = "username", source = "username", qualifiedByName = "decryptData")
+    @Mapping(target = "email", source = "email", qualifiedByName = "decryptData")
+    @Mapping(target = "phoneNumber", source = "phoneNumber", qualifiedByName = "decryptData")
+    UserResponseDTO userToResponseDTO(User user, @Context CipherService aesService);
+
+    @Named("decryptData")
+    static String decryptEmail(String data, @Context CipherService aesService) {
+        return aesService.decrypt(data);
+    }
 }

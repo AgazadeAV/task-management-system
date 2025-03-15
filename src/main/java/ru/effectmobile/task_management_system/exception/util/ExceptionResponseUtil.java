@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class ExceptionResponseUtil {
+public final class ExceptionResponseUtil {
 
     @Getter
     @AllArgsConstructor

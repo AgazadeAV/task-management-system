@@ -7,49 +7,42 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import ru.effectmobile.task_management_system.swagger.schemas.requests.UserRequestDTOSchema;
+import ru.effectmobile.task_management_system.validator.annotation.Password;
 
 import java.time.LocalDate;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Schema(implementation = UserRequestDTOSchema.class)
-public class UserRequestDTO {
+public record UserRequestDTO(
 
-    @NotBlank(message = "Username cannot be blank")
-    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters long")
-    private String username;
+        @NotBlank(message = "Username cannot be blank")
+        @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters long")
+        String username,
 
-    @NotBlank(message = "First name cannot be blank")
-    @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters long")
-    private String firstName;
+        @NotBlank(message = "First name cannot be blank")
+        @Size(min = 2, max = 50, message = "First name must be between 2 and 50 characters long")
+        String firstName,
 
-    @NotBlank(message = "Last name cannot be blank")
-    @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters long")
-    private String lastName;
+        @NotBlank(message = "Last name cannot be blank")
+        @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters long")
+        String lastName,
 
-    @Email(message = "Invalid email format")
-    @NotBlank(message = "Email cannot be blank")
-    private String email;
+        @Email(message = "Invalid email format")
+        @NotBlank(message = "Email cannot be blank")
+        String email,
 
-    @NotBlank(message = "Password cannot be blank")
-    @Size(min = 6, max = 50, message = "Password must be between 6 and 50 characters long")
-    private String password;
+        @Password
+        @Size(min = 8, max = 22, message = "Password must be between 8 and 22 characters long")
+        String password,
 
-    @NotNull(message = "Role cannot be null")
-    private String role;
+        @NotNull(message = "Role cannot be null")
+        String role,
 
-    @NotNull(message = "Birth date cannot be null")
-    @Past(message = "Birth date must be in the past")
-    private LocalDate birthDate;
+        @NotNull(message = "Birth date cannot be null")
+        @Past(message = "Birth date must be in the past")
+        LocalDate birthDate,
 
-    @NotBlank(message = "Phone number cannot be blank")
-    @Pattern(regexp = "\\+7\\d{10}", message = "Phone number must start with +7 and contain exactly 10 digits")
-    private String phoneNumber;
-}
+        @NotBlank(message = "Phone number cannot be blank")
+        @Pattern(regexp = "\\+7\\d{10}", message = "Phone number must start with +7 and contain exactly 10 digits")
+        String phoneNumber
+) {}

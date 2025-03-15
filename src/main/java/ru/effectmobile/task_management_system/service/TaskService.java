@@ -1,17 +1,11 @@
 package ru.effectmobile.task_management_system.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import ru.effectmobile.task_management_system.dto.requests.TaskFilterDTO;
 import ru.effectmobile.task_management_system.model.Task;
 
-import java.util.List;
-import java.util.UUID;
+public interface TaskService extends AbstractService<Task> {
 
-public interface TaskService {
-
-    List<Task> findAll();
-
-    Task findById(UUID id);
-
-    Task save(Task task);
-
-    void deleteById(UUID id);
+    Page<Task> findWithFilters(TaskFilterDTO filter, Pageable pageable);
 }

@@ -22,6 +22,9 @@ public class UserResponseDTOSchema {
     @Schema(example = EMAIL_EXAMPLE, description = "Email of the user.")
     private String email;
 
+    @Schema(example = PHONE_NUMBER_EXAMPLE, description = "Phone number of the user.")
+    private String phoneNumber;
+
     @Schema(example = ROLE_EXAMPLE, description = "Role of the user.")
     private String role;
 }

@@ -13,11 +13,11 @@ public class UserFactory {
 
     public User createUser(UserRequestDTO dto) {
         return User.builder()
-                .email(dto.getEmail())
-                .password(dto.getPassword())
-                .role(mapToEnum(Role.class, dto.getRole()))
-                .birthDate(dto.getBirthDate())
-                .phoneNumber(dto.getPhoneNumber())
+                .email(dto.email())
+                .password(dto.password())
+                .role(mapToEnum(Role.class, dto.role()))
+                .birthDate(dto.birthDate())
+                .phoneNumber(dto.phoneNumber())
                 .metaData(new MetaData())
                 .build();
     }

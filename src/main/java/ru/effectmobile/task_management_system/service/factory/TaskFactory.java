@@ -15,10 +15,10 @@ public class TaskFactory {
 
     public Task createTask(TaskRequestDTO dto, User author) {
         return Task.builder()
-                .title(dto.getTitle())
-                .description(dto.getDescription())
-                .status(mapToEnum(TaskStatus.class, dto.getStatus()))
-                .priority(mapToEnum(TaskPriority.class, dto.getPriority()))
+                .title(dto.title())
+                .description(dto.description())
+                .status(mapToEnum(TaskStatus.class, dto.status()))
+                .priority(mapToEnum(TaskPriority.class, dto.priority()))
                 .author(author)
                 .metaData(new MetaData())
                 .build();

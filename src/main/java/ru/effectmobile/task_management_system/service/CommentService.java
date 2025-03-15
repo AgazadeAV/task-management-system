@@ -1,19 +1,12 @@
 package ru.effectmobile.task_management_system.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ru.effectmobile.task_management_system.model.Comment;
 
-import java.util.List;
 import java.util.UUID;
 
-public interface CommentService {
+public interface CommentService extends AbstractService<Comment> {
 
-    List<Comment> findAll();
-
-    Comment findById(UUID id);
-
-    Comment save(Comment comment);
-
-    void deleteById(UUID id);
-
-    List<Comment> findByTaskId(UUID taskId);
+    Page<Comment> findByTaskId(UUID taskId, Pageable pageable);
 }

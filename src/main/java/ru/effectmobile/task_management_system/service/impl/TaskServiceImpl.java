@@ -1,14 +1,16 @@
 package ru.effectmobile.task_management_system.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.effectmobile.task_management_system.dto.requests.TaskFilterDTO;
 import ru.effectmobile.task_management_system.exception.TaskNotFoundException;
 import ru.effectmobile.task_management_system.model.Task;
 import ru.effectmobile.task_management_system.repository.TaskRepository;
 import ru.effectmobile.task_management_system.service.TaskService;
 
-import java.util.List;
 import java.util.UUID;
 
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.TASK_NOT_FOUND_BY_ID_MESSAGE;
@@ -21,8 +23,8 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<Task> findAll() {
-        return taskRepository.findAll();
+    public Page<Task> findAll(Pageable pageable) {
+        return taskRepository.findAll(pageable);
     }
 
     @Override
@@ -43,5 +45,17 @@ public class TaskServiceImpl implements TaskService {
     public void deleteById(UUID id) {
         Task task = findById(id);
         taskRepository.delete(task);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Task> findWithFilters(TaskFilterDTO filter, Pageable pageable) {
+        return taskRepository.findWithFilters(
+                filter.authorId(),
+                filter.assigneeId(),
+                filter.status(),
+                filter.priority(),
+                pageable
+        );
     }
 }
