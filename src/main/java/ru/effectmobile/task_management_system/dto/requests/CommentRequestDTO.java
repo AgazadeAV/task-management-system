@@ -1,5 +1,6 @@
 package ru.effectmobile.task_management_system.dto.requests;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.effectmobile.task_management_system.swagger.schemas.requests.CommentRequestDTOSchema;
 
 import java.util.UUID;
 
@@ -14,6 +16,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(implementation = CommentRequestDTOSchema.class)
 public class CommentRequestDTO {
 
     @NotNull(message = "Task ID cannot be null")

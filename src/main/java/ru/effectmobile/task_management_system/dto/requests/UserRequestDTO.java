@@ -1,5 +1,6 @@
 package ru.effectmobile.task_management_system.dto.requests;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.effectmobile.task_management_system.swagger.schemas.requests.UserRequestDTOSchema;
 
 import java.time.LocalDate;
 
@@ -17,6 +19,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Schema(implementation = UserRequestDTOSchema.class)
 public class UserRequestDTO {
 
     @NotBlank(message = "Username cannot be blank")
