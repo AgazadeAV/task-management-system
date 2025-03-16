@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.effectmobile.task_management_system.exception.CommentNotFoundException;
+import ru.effectmobile.task_management_system.exception.notfound.CommentNotFoundException;
 import ru.effectmobile.task_management_system.model.entity.Comment;
 import ru.effectmobile.task_management_system.repository.CommentRepository;
 import ru.effectmobile.task_management_system.service.base.CommentService;

@@ -1,6 +1,7 @@
 package ru.effectmobile.task_management_system.config.swagger.schemas.requests;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
 
 import static ru.effectmobile.task_management_system.util.DefaultInputs.AUTHOR_ID_EXAMPLE_JSON;
@@ -8,14 +9,15 @@ import static ru.effectmobile.task_management_system.util.DefaultInputs.COMMENT_
 import static ru.effectmobile.task_management_system.util.DefaultInputs.TASK_ID_EXAMPLE_JSON;
 
 @Getter
-public class CommentRequestDTOSchema {
+@Builder
+public final class CommentRequestDTOSchema {
 
     @Schema(example = TASK_ID_EXAMPLE_JSON, description = "Task ID to which the comment belongs.")
-    private String taskId;
+    private final String taskId;
 
     @Schema(example = AUTHOR_ID_EXAMPLE_JSON, description = "Author ID who created the comment.")
-    private String authorId;
+    private final String authorId;
 
     @Schema(example = COMMENT_TEXT_EXAMPLE, description = "Text of the comment.")
-    private String text;
+    private final String text;
 }

@@ -6,20 +6,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.effectmobile.task_management_system.model.entity.User;
-import ru.effectmobile.task_management_system.repository.UserRepository;
-
-import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.USER_NOT_FOUND_BY_EMAIL_MESSAGE;
+import ru.effectmobile.task_management_system.service.base.UserService;
 
 @Service
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException(String.format(USER_NOT_FOUND_BY_EMAIL_MESSAGE, email)));
+        User user = userService.findByEmail(email);
 
         return org.springframework.security.core.userdetails.User
                 .withUsername(user.getEmail())

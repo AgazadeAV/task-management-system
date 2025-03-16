@@ -1,6 +1,7 @@
 package ru.effectmobile.task_management_system.config.swagger.schemas.requests;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
 
 import static ru.effectmobile.task_management_system.util.DefaultInputs.BIRTH_DATE_EXAMPLE;
@@ -13,29 +14,30 @@ import static ru.effectmobile.task_management_system.util.DefaultInputs.ROLE_EXA
 import static ru.effectmobile.task_management_system.util.DefaultInputs.USERNAME_EXAMPLE;
 
 @Getter
-public class UserRequestDTOSchema {
+@Builder
+public final class UserRequestDTOSchema {
 
     @Schema(example = USERNAME_EXAMPLE, description = "Username of the user.")
-    private String username;
+    private final String username;
 
     @Schema(example = FIRST_NAME_EXAMPLE, description = "First name of the user.")
-    private String firstName;
+    private final String firstName;
 
     @Schema(example = LAST_NAME_EXAMPLE, description = "Last name of the user.")
-    private String lastName;
+    private final String lastName;
 
     @Schema(example = EMAIL_EXAMPLE, description = "Email address of the user.")
-    private String email;
+    private final String email;
 
     @Schema(example = PASSWORD_EXAMPLE, description = "Password for the user account.")
-    private String password;
+    private final String password;
 
     @Schema(example = ROLE_EXAMPLE, description = "Role assigned to the user.")
-    private String role;
+    private final String role;
 
     @Schema(example = BIRTH_DATE_EXAMPLE, description = "User's birth date.")
-    private String birthDate;
+    private final String birthDate;
 
     @Schema(example = PHONE_NUMBER_EXAMPLE, description = "User's phone number.")
-    private String phoneNumber;
+    private final String phoneNumber;
 }

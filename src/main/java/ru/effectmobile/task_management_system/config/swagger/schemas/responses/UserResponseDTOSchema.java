@@ -1,30 +1,33 @@
 package ru.effectmobile.task_management_system.config.swagger.schemas.responses;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
+
 import static ru.effectmobile.task_management_system.util.DefaultInputs.*;
 
 @Getter
-public class UserResponseDTOSchema {
+@Builder
+public final class UserResponseDTOSchema {
 
     @Schema(example = USER_ID_EXAMPLE_JSON, description = "Unique identifier of the user.")
-    private String id;
+    private final String id;
 
     @Schema(example = USERNAME_EXAMPLE, description = "Username of the user.")
-    private String username;
+    private final String username;
 
     @Schema(example = FIRST_NAME_EXAMPLE, description = "First name of the user.")
-    private String firstName;
+    private final String firstName;
 
     @Schema(example = LAST_NAME_EXAMPLE, description = "Last name of the user.")
-    private String lastName;
+    private final String lastName;
 
     @Schema(example = EMAIL_EXAMPLE, description = "Email of the user.")
-    private String email;
+    private final String email;
 
     @Schema(example = PHONE_NUMBER_EXAMPLE, description = "Phone number of the user.")
-    private String phoneNumber;
+    private final String phoneNumber;
 
     @Schema(example = ROLE_EXAMPLE, description = "Role of the user.")
-    private String role;
+    private final String role;
 }

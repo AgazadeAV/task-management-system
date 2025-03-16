@@ -28,6 +28,7 @@ public final class ExceptionResponseUtil {
                 status.name(),
                 message
         );
+
         return ResponseEntity.status(status).body(errorResponseFormat);
     }
 }

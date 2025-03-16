@@ -13,10 +13,7 @@ import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
-import ru.effectmobile.task_management_system.exception.AlreadyRegisteredException;
-import ru.effectmobile.task_management_system.exception.InvalidEnumValueException;
-import ru.effectmobile.task_management_system.exception.NotFoundException;
-import ru.effectmobile.task_management_system.exception.PasswordDoesNotMatchException;
+import ru.effectmobile.task_management_system.exception.base.BusinessException;
 import ru.effectmobile.task_management_system.exception.util.ExceptionResponseUtil.ErrorResponseFormat;
 
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.ACCESS_DENIED_MESSAGE;
@@ -32,9 +29,9 @@ import static ru.effectmobile.task_management_system.exception.util.ExceptionRes
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponseFormat> handleNotFoundException(NotFoundException ex) {
-        return buildErrorResponse(HttpStatus.NOT_FOUND, ex.getMessage());
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponseFormat> handleBusinessException(BusinessException ex) {
+        return buildErrorResponse(ex.getHttpStatus(), ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -49,11 +46,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HandlerMethodValidationException.class)
     public ResponseEntity<ErrorResponseFormat> handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
-        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
-    }
-
-    @ExceptionHandler(InvalidEnumValueException.class)
-    public ResponseEntity<ErrorResponseFormat> handleInvalidEnumValueException(InvalidEnumValueException ex) {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
@@ -72,11 +64,6 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.UNAUTHORIZED, USER_NOT_FOUND_MESSAGE + ex.getMessage());
     }
 
-    @ExceptionHandler(PasswordDoesNotMatchException.class)
-    public ResponseEntity<ErrorResponseFormat> handlePasswordDoesNotMatchException(PasswordDoesNotMatchException ex) {
-        return buildErrorResponse(HttpStatus.UNAUTHORIZED, ex.getMessage());
-    }
-
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponseFormat> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         return buildErrorResponse(HttpStatus.CONFLICT, DB_CONSTRAINT_VIOLATION_MESSAGE + ex.getMessage());
@@ -90,15 +77,5 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<ErrorResponseFormat> handleMissingRequestHeaderException(MissingRequestHeaderException ex) {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, MISSING_HEADER_MESSAGE + ex.getMessage());
-    }
-
-    @ExceptionHandler(AlreadyRegisteredException.class)
-    public ResponseEntity<ErrorResponseFormat> handleAlreadyRegisteredException(AlreadyRegisteredException ex) {
-        return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage());
-    }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponseFormat> handleGeneralException(Exception ex) {
-        return buildErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
     }
 }

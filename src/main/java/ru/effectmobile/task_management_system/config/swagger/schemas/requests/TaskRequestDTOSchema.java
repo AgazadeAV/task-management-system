@@ -1,6 +1,7 @@
 package ru.effectmobile.task_management_system.config.swagger.schemas.requests;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
 
 import static ru.effectmobile.task_management_system.util.DefaultInputs.ASSIGNEE_ID_EXAMPLE_JSON;
@@ -11,23 +12,24 @@ import static ru.effectmobile.task_management_system.util.DefaultInputs.TASK_STA
 import static ru.effectmobile.task_management_system.util.DefaultInputs.TASK_TITLE_EXAMPLE;
 
 @Getter
-public class TaskRequestDTOSchema {
+@Builder
+public final class TaskRequestDTOSchema {
 
     @Schema(example = TASK_TITLE_EXAMPLE, description = "Title of the task.")
-    private String title;
+    private final String title;
 
     @Schema(example = TASK_DESCRIPTION_EXAMPLE, description = "Description of the task.")
-    private String description;
+    private final String description;
 
     @Schema(example = TASK_STATUS_EXAMPLE, description = "Current status of the task.")
-    private String status;
+    private final String status;
 
     @Schema(example = TASK_PRIORITY_EXAMPLE, description = "Priority level of the task.")
-    private String priority;
+    private final String priority;
 
     @Schema(example = AUTHOR_ID_EXAMPLE_JSON, description = "Author ID of the task.")
-    private String authorId;
+    private final String authorId;
 
     @Schema(example = ASSIGNEE_ID_EXAMPLE_JSON, description = "Assignee ID of the task.")
-    private String assigneeId;
+    private final String assigneeId;
 }

@@ -7,14 +7,8 @@ import ru.effectmobile.task_management_system.service.validation.annotation.Pass
 
 public class PasswordValidator implements ConstraintValidator<Password, String> {
 
-    private static final String PASSWORD_PATTERN = """
-        ^(?=.*[0-9])
-        (?=.*[a-z])
-        (?=.*[A-Z])
-        (?=.*[~'`,|{}\\[\\]@$!%*?&#=/^+÷×€£¥₩:;"()_-])
-        (?=\\S+$)
-        [0-9a-zA-Z~'`,|{}\\[\\]@$!%*?&#=/^+÷×€£¥₩:;"()_-]{8,22}$
-        """;
+    private static final String PASSWORD_PATTERN =
+            "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[~''`,|{}\\[\\]@$!%*?&#=/^+÷×€£¥₩:;\"()_-])(?=\\S+$)[0-9a-zA-Z~''`,|{}\\[\\]@$!%*?&#=/^+÷×€£¥₩:;\"()_-]{8,22}$";
 
     @Override
     public void initialize(Password constraintAnnotation) {
