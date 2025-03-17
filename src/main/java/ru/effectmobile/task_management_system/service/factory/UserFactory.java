@@ -11,14 +11,17 @@ import static ru.effectmobile.task_management_system.service.mapper.EnumMapper.m
 @Component
 public class UserFactory {
 
-    public User createUser(UserRequestDTO dto) {
+    public User createUser(UserRequestDTO dto, MetaData metaData) {
         return User.builder()
+                .username(dto.username())
+                .firstName(dto.firstName())
+                .lastName(dto.lastName())
                 .email(dto.email())
                 .password(dto.password())
                 .role(mapToEnum(Role.class, dto.role()))
                 .birthDate(dto.birthDate())
                 .phoneNumber(dto.phoneNumber())
-                .metaData(new MetaData())
+                .metaData(metaData)
                 .build();
     }
 }

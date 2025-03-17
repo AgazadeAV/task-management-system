@@ -19,11 +19,12 @@ public interface TaskMapper {
     @Mapping(source = "author.id", target = "authorId")
     @Mapping(source = "author", target = "authorFullName", qualifiedByName = "getUserFullName")
     @Mapping(source = "assignee.id", target = "assigneeId")
-    @Mapping(source = "assignee", target = "assigneeFullName", qualifiedByName = "getUserFullName")
+    @Mapping(source = "assignee", target = "assigneeFullName", qualifiedByName = "getUserFullNameOrNull")
     @Mapping(source = "metaData.createdAt", target = "createdAt")
     @Mapping(source = "metaData.updatedAt", target = "updatedAt")
     TaskResponseDTO taskToResponseDTO(Task task);
 
+    @Mapping(target = "assignee", ignore = true)
     void updateTaskFromRequestDTO(TaskRequestDTO taskDTO, @MappingTarget Task task);
 
     @Named("getUserFullName")
@@ -31,5 +32,10 @@ public interface TaskMapper {
         return Stream.of(user.getFirstName(), user.getLastName())
                 .filter(Objects::nonNull)
                 .collect(Collectors.joining(" "));
+    }
+
+    @Named("getUserFullNameOrNull")
+    static String getUserFullNameOrNull(User user) {
+        return (user == null) ? null : getUserFullName(user);
     }
 }

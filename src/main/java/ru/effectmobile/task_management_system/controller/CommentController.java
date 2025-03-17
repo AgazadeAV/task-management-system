@@ -1,5 +1,6 @@
 package ru.effectmobile.task_management_system.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -24,6 +25,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("${api.base.url}" + CommentController.COMMENT_API_URI)
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class CommentController implements CommentApiSpec {
 
     public static final String COMMENT_API_URI = "/comments";

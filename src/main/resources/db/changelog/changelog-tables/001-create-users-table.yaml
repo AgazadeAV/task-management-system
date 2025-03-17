@@ -35,7 +35,7 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: phone_number
-                  type: VARCHAR(20)
+                  type: VARCHAR(100)
                   constraints:
                     nullable: false
               - column:

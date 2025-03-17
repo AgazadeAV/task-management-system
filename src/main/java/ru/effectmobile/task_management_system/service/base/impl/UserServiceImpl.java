@@ -5,11 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
+import ru.effectmobile.task_management_system.dto.UserCredsExistanceCheckDTO;
 import ru.effectmobile.task_management_system.exception.custom.conflict.EmailAlreadyRegisteredException;
 import ru.effectmobile.task_management_system.exception.custom.conflict.PhoneNumberAlreadyRegisteredException;
-import ru.effectmobile.task_management_system.exception.custom.notfound.UserNotFoundException;
 import ru.effectmobile.task_management_system.exception.custom.conflict.UsernameAlreadyRegisteredException;
+import ru.effectmobile.task_management_system.exception.custom.notfound.UserNotFoundException;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.repository.UserRepository;
 import ru.effectmobile.task_management_system.service.base.UserService;
@@ -62,15 +62,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void validateExistingFields(UserRequestDTO request) {
-        if (userRepository.existsByEmail(request.email())) {
+    public void validateExistingFields(UserCredsExistanceCheckDTO request, UserCredsExistanceCheckDTO encryptedRequest) {
+        if (userRepository.existsByUsername(encryptedRequest.username())) {
+            throw new UsernameAlreadyRegisteredException(String.format(USERNAME_ALREADY_REGISTERED, request.username()));
+        }
+        if (userRepository.existsByEmail(encryptedRequest.email())) {
             throw new EmailAlreadyRegisteredException(String.format(EMAIL_ALREADY_REGISTERED, request.email()));
         }
-        if (userRepository.existsByPhoneNumber(request.phoneNumber())) {
+        if (userRepository.existsByPhoneNumber(encryptedRequest.phoneNumber())) {
             throw new PhoneNumberAlreadyRegisteredException(String.format(PHONE_NUMBER_ALREADY_REGISTERED, request.phoneNumber()));
-        }
-        if (userRepository.existsByUsername(request.username())) {
-            throw new UsernameAlreadyRegisteredException(String.format(USERNAME_ALREADY_REGISTERED, request.username()));
         }
     }
 }

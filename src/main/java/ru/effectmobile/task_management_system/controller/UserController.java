@@ -1,5 +1,6 @@
 package ru.effectmobile.task_management_system.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
@@ -22,6 +23,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("${api.base.url}" + UserController.USER_API_URI)
 @RequiredArgsConstructor
+@SecurityRequirement(name = "bearerAuth")
 public class UserController implements UserApiSpec {
 
     public static final String USER_API_URI = "/users";

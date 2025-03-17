@@ -85,5 +85,7 @@ public final class ExceptionMessageUtil {
         public static final String EMAIL_ALREADY_REGISTERED = "Email: '%s' already registered";
         public static final String PHONE_NUMBER_ALREADY_REGISTERED = "Phone number: '%s' already registered";
         public static final String USERNAME_ALREADY_REGISTERED = "Username: '%s' already registered";
+        public static final String JWT_DECODING_ERROR_MESSAGE = "Invalid JWT token format: %s";
+        public static final String JWT_ERROR_MESSAGE = "JWT processing error: %s";
     }
 }

@@ -1,5 +1,7 @@
 package ru.effectmobile.task_management_system.exception.handler;
 
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.io.DecodingException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,8 @@ import ru.effectmobile.task_management_system.exception.util.ExceptionResponseUt
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.ACCESS_DENIED_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.DB_CONSTRAINT_VIOLATION_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.INVALID_CREDENTIALS_MESSAGE;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.JWT_DECODING_ERROR_MESSAGE;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.JWT_ERROR_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.MALFORMED_JSON_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.USER_NOT_FOUND_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.getConstraintViolationMessage;
@@ -79,5 +83,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponseFormat> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, getExceptionMessage(ex, MALFORMED_JSON_MESSAGE));
+    }
+
+    @ExceptionHandler(DecodingException.class)
+    public ResponseEntity<ErrorResponseFormat> handleJwtDecodingException(DecodingException ex) {
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, getExceptionMessage(ex, JWT_DECODING_ERROR_MESSAGE));
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ErrorResponseFormat> handleJwtException(JwtException ex) {
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, getExceptionMessage(ex, JWT_ERROR_MESSAGE));
     }
 }

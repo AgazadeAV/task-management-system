@@ -10,9 +10,11 @@ import ru.effectmobile.task_management_system.dto.requests.TaskRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.TaskResponseDTO;
 import ru.effectmobile.task_management_system.model.entity.Task;
 import ru.effectmobile.task_management_system.model.entity.User;
+import ru.effectmobile.task_management_system.model.metadata.MetaData;
 import ru.effectmobile.task_management_system.service.base.TaskService;
 import ru.effectmobile.task_management_system.service.base.UserService;
 import ru.effectmobile.task_management_system.service.facade.TaskFacade;
+import ru.effectmobile.task_management_system.service.factory.MetaDataFactory;
 import ru.effectmobile.task_management_system.service.factory.TaskFactory;
 import ru.effectmobile.task_management_system.service.mapper.TaskMapper;
 
@@ -26,6 +28,7 @@ public class TaskFacadeImpl implements TaskFacade {
     private final TaskMapper taskMapper;
     private final TaskFactory taskFactory;
     private final UserService userService;
+    private final MetaDataFactory metaDataFactory;
 
     @Override
     @Transactional(readOnly = true)
@@ -45,9 +48,11 @@ public class TaskFacadeImpl implements TaskFacade {
     @Transactional
     public TaskResponseDTO createTask(TaskRequestDTO taskDTO) {
         User author = userService.findById(taskDTO.authorId());
-        Task task = taskFactory.createTask(taskDTO, author);
+        MetaData metaData = metaDataFactory.createMetaData();
+        Task task = taskFactory.createTask(taskDTO, author, metaData);
         setAssignee(task, taskDTO.assigneeId());
-        return taskMapper.taskToResponseDTO(taskService.save(task));
+        Task savedTask = taskService.save(task);
+        return taskMapper.taskToResponseDTO(savedTask);
     }
 
     @Override
@@ -56,7 +61,8 @@ public class TaskFacadeImpl implements TaskFacade {
         Task task = taskService.findById(id);
         taskMapper.updateTaskFromRequestDTO(taskDTO, task);
         setAssignee(task, taskDTO.assigneeId());
-        return taskMapper.taskToResponseDTO(taskService.save(task));
+        Task savedTask = taskService.save(task);
+        return taskMapper.taskToResponseDTO(savedTask);
     }
 
     @Override

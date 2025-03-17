@@ -43,6 +43,8 @@ springdoc:
     path: /swagger-ui.html
   api-docs:
     path: /v3/api-docs
+  default-produces-media-type: application/json
+  show-login-endpoint: true
 
 management:
   endpoints:
@@ -61,4 +63,9 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 crypto:
-  cipher-algorithm: AES/GCM/PKCS5Padding
+  cipher-algorithm: AES/ECB/PKCS5Padding
+  keys:
+    AES: 770A8A65DA156D24EE2A093277530142
+
+hash:
+  algorithm: ${HASH_ALGORITHM:HmacSHA256}

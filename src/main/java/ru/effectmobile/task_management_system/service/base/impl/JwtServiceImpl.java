@@ -3,15 +3,15 @@ package ru.effectmobile.task_management_system.service.base.impl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.service.base.JwtService;
 
+import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
@@ -26,9 +26,10 @@ public class JwtServiceImpl implements JwtService {
     public JwtServiceImpl(
             @Value("${jwt.secret}") String secretKey,
             @Value("${jwt.expiration}") long jwtExpirationMs,
-            @Value("${jwt.issuer}") String issuer
+            @Value("${jwt.issuer}") String issuer,
+            @Value("${hash.algorithm}") String hashAlgorithm
     ) {
-        this.signInKey = Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
+        this.signInKey = new SecretKeySpec(Base64.getDecoder().decode(secretKey), hashAlgorithm);
         this.jwtExpirationMs = jwtExpirationMs;
         this.issuer = issuer;
     }

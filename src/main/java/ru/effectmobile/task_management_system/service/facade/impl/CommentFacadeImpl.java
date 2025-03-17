@@ -10,11 +10,13 @@ import ru.effectmobile.task_management_system.dto.responses.CommentResponseDTO;
 import ru.effectmobile.task_management_system.model.entity.Comment;
 import ru.effectmobile.task_management_system.model.entity.Task;
 import ru.effectmobile.task_management_system.model.entity.User;
+import ru.effectmobile.task_management_system.model.metadata.MetaData;
 import ru.effectmobile.task_management_system.service.base.CommentService;
 import ru.effectmobile.task_management_system.service.base.TaskService;
 import ru.effectmobile.task_management_system.service.base.UserService;
 import ru.effectmobile.task_management_system.service.facade.CommentFacade;
 import ru.effectmobile.task_management_system.service.factory.CommentFactory;
+import ru.effectmobile.task_management_system.service.factory.MetaDataFactory;
 import ru.effectmobile.task_management_system.service.mapper.CommentMapper;
 
 import java.util.UUID;
@@ -28,6 +30,7 @@ public class CommentFacadeImpl implements CommentFacade {
     private final CommentFactory commentFactory;
     private final TaskService taskService;
     private final UserService userService;
+    private final MetaDataFactory metaDataFactory;
 
     @Override
     @Transactional(readOnly = true)
@@ -42,8 +45,10 @@ public class CommentFacadeImpl implements CommentFacade {
     public CommentResponseDTO createComment(CommentRequestDTO commentDTO) {
         Task task = taskService.findById(commentDTO.taskId());
         User author = userService.findById(commentDTO.authorId());
-        Comment comment = commentFactory.createComment(commentDTO, task, author);
-        return commentMapper.commentToResponseDTO(commentService.save(comment));
+        MetaData metaData = metaDataFactory.createMetaData();
+        Comment comment = commentFactory.createComment(commentDTO, task, author, metaData);
+        Comment savedComment = commentService.save(comment);
+        return commentMapper.commentToResponseDTO(savedComment);
     }
 
     @Override

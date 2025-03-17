@@ -13,14 +13,14 @@ import static ru.effectmobile.task_management_system.service.mapper.EnumMapper.m
 @Component
 public class TaskFactory {
 
-    public Task createTask(TaskRequestDTO dto, User author) {
+    public Task createTask(TaskRequestDTO dto, User author, MetaData metaData) {
         return Task.builder()
                 .title(dto.title())
                 .description(dto.description())
                 .status(mapToEnum(TaskStatus.class, dto.status()))
                 .priority(mapToEnum(TaskPriority.class, dto.priority()))
                 .author(author)
-                .metaData(new MetaData())
+                .metaData(metaData)
                 .build();
     }
 }
