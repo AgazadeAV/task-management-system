@@ -20,10 +20,12 @@ import static ru.effectmobile.task_management_system.exception.util.ExceptionMes
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.DB_CONSTRAINT_VIOLATION_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.INVALID_CREDENTIALS_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.MALFORMED_JSON_MESSAGE;
-import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.MISSING_HEADER_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.USER_NOT_FOUND_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.getConstraintViolationMessage;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.getExceptionMessage;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.getHandlerMethodValidationMessage;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.getMethodArgumentNotValidMessage;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.getMissingRequestHeaderMessage;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionResponseUtil.buildErrorResponse;
 
 @ControllerAdvice
@@ -46,36 +48,36 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HandlerMethodValidationException.class)
     public ResponseEntity<ErrorResponseFormat> handleHandlerMethodValidationException(HandlerMethodValidationException ex) {
-        return buildErrorResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
-    }
-
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorResponseFormat> handleAccessDeniedException(AccessDeniedException ex) {
-        return buildErrorResponse(HttpStatus.FORBIDDEN, ACCESS_DENIED_MESSAGE + ex.getMessage());
-    }
-
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorResponseFormat> handleBadCredentialsException(BadCredentialsException ex) {
-        return buildErrorResponse(HttpStatus.UNAUTHORIZED, INVALID_CREDENTIALS_MESSAGE + ex.getMessage());
-    }
-
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ErrorResponseFormat> handleUsernameNotFoundException(UsernameNotFoundException ex) {
-        return buildErrorResponse(HttpStatus.UNAUTHORIZED, USER_NOT_FOUND_MESSAGE + ex.getMessage());
-    }
-
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponseFormat> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        return buildErrorResponse(HttpStatus.CONFLICT, DB_CONSTRAINT_VIOLATION_MESSAGE + ex.getMessage());
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponseFormat> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
-        return buildErrorResponse(HttpStatus.BAD_REQUEST, MALFORMED_JSON_MESSAGE + ex.getMessage());
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, getHandlerMethodValidationMessage(ex));
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
     public ResponseEntity<ErrorResponseFormat> handleMissingRequestHeaderException(MissingRequestHeaderException ex) {
-        return buildErrorResponse(HttpStatus.BAD_REQUEST, MISSING_HEADER_MESSAGE + ex.getMessage());
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, getMissingRequestHeaderMessage(ex));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponseFormat> handleAccessDeniedException(AccessDeniedException ex) {
+        return buildErrorResponse(HttpStatus.FORBIDDEN, getExceptionMessage(ex, ACCESS_DENIED_MESSAGE));
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponseFormat> handleBadCredentialsException(BadCredentialsException ex) {
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, getExceptionMessage(ex, INVALID_CREDENTIALS_MESSAGE));
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ErrorResponseFormat> handleUsernameNotFoundException(UsernameNotFoundException ex) {
+        return buildErrorResponse(HttpStatus.UNAUTHORIZED, getExceptionMessage(ex, USER_NOT_FOUND_MESSAGE));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponseFormat> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        return buildErrorResponse(HttpStatus.CONFLICT, getExceptionMessage(ex, DB_CONSTRAINT_VIOLATION_MESSAGE));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponseFormat> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        return buildErrorResponse(HttpStatus.BAD_REQUEST, getExceptionMessage(ex, MALFORMED_JSON_MESSAGE));
     }
 }
