@@ -11,8 +11,8 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/taskmanagerdb
     driver-class-name: org.postgresql.Driver
-    username: your_username
-    password: your_secure_password
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
     hikari:
       initialization-fail-timeout: 5000
       schema: taskmanager
@@ -25,8 +25,8 @@ spring:
       hibernate:
         format_sql: true
   liquibase:
-    user: your_username
-    password: your_secure_password
+    user: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
   docker:
     compose:
       enabled: true
@@ -69,3 +69,12 @@ crypto:
 
 hash:
   algorithm: ${HASH_ALGORITHM:HmacSHA256}
+
+admin:
+  username: ${ADMIN_USERNAME}
+  first-name: ${ADMIN_FIRST_NAME}
+  last-name: ${ADMIN_LAST_NAME}
+  email: ${ADMIN_EMAIL}
+  password: ${ADMIN_PASSWORD}
+  birth-date: ${ADMIN_BIRTH_DATE}
+  phone-number: ${ADMIN_PHONE_NUMBER}

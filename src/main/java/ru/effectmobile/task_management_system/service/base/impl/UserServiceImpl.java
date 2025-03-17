@@ -1,12 +1,11 @@
 package ru.effectmobile.task_management_system.service.base.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.effectmobile.task_management_system.dto.UserCredsExistanceCheckDTO;
+import ru.effectmobile.task_management_system.dto.filters.UserCredsExistanceCheckDTO;
 import ru.effectmobile.task_management_system.exception.custom.conflict.EmailAlreadyRegisteredException;
 import ru.effectmobile.task_management_system.exception.custom.conflict.PhoneNumberAlreadyRegisteredException;
 import ru.effectmobile.task_management_system.exception.custom.conflict.UsernameAlreadyRegisteredException;

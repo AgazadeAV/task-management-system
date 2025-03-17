@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.dto;
+package ru.effectmobile.task_management_system.dto.filters;
 
 
 public record UserCredsExistanceCheckDTO (

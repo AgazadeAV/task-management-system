@@ -1,6 +1,7 @@
 package ru.effectmobile.task_management_system.config.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,10 +14,28 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ru.effectmobile.task_management_system.model.enums.Role;
+
+import static ru.effectmobile.task_management_system.controller.AuthController.AUTH_API_URI;
+import static ru.effectmobile.task_management_system.controller.CommentController.COMMENT_API_URI;
+import static ru.effectmobile.task_management_system.controller.TaskController.TASK_API_URI;
+import static ru.effectmobile.task_management_system.controller.UserController.USER_API_URI;
 
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
+
+    @Value("${api.base.url}")
+    private String apiBaseUrl;
+
+    @Value("${springdoc.api-docs.path}")
+    private String apiDocsPath;
+
+    @Value("${springdoc.swagger-ui.path}")
+    private String swaggerUiPath;
+
+    private static final String ROLE_ADMIN = Role.ROLE_ADMIN.name();
+    private static final String ROLE_USER = Role.ROLE_USER.name();
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
@@ -26,14 +45,9 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/v1/tasks/**").hasAnyRole("ADMIN", "USER")
-                        .requestMatchers(
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui.html"
-                        ).permitAll()
+                        .requestMatchers(getPublicEndpoints()).permitAll()
+                        .requestMatchers(getAdminEndpoints()).hasAuthority(ROLE_ADMIN)
+                        .requestMatchers(getUserEndpoints()).hasAnyAuthority(ROLE_ADMIN, ROLE_USER)
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -52,5 +66,27 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    private String[] getPublicEndpoints() {
+        return new String[]{
+                apiBaseUrl + AUTH_API_URI + "/**",
+                apiDocsPath + "/**",
+                swaggerUiPath,
+                swaggerUiPath.replaceAll("\\.\\w+$", "") + "/**"
+        };
+    }
+
+    private String[] getUserEndpoints() {
+        return new String[]{
+                apiBaseUrl + COMMENT_API_URI + "/**",
+                apiBaseUrl + TASK_API_URI + "/**"
+        };
+    }
+
+    private String[] getAdminEndpoints() {
+        return new String[]{
+                apiBaseUrl + USER_API_URI + "/**"
+        };
     }
 }

@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.effectmobile.task_management_system.dto.UserCredsExistanceCheckDTO;
+import ru.effectmobile.task_management_system.dto.filters.UserCredsExistanceCheckDTO;
 import ru.effectmobile.task_management_system.dto.requests.LoginRequestDTO;
 import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.AuthResponseDTO;
@@ -88,7 +88,7 @@ public class UserFacadeImpl implements UserFacade {
         validateExistingFields(request);
         MetaData metaData = metaDataFactory.createMetaData();
         User user = userFactory.createUser(request, metaData);
-        user.setRole(Role.USER);
+        user.setRole(Role.ROLE_USER);
         handleSensitiveData(user, request);
         userService.save(user);
         return userMapper.userToResponseDTO(user, cipherService);

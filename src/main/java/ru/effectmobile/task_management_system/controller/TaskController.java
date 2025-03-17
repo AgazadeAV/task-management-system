@@ -16,11 +16,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.effectmobile.task_management_system.config.swagger.specs.TaskApiSpec;
 import ru.effectmobile.task_management_system.dto.filters.TaskFilterDTO;
 import ru.effectmobile.task_management_system.dto.requests.TaskRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.TaskResponseDTO;
 import ru.effectmobile.task_management_system.service.facade.TaskFacade;
-import ru.effectmobile.task_management_system.config.swagger.specs.TaskApiSpec;
 
 import java.util.UUID;
 
@@ -41,38 +41,38 @@ public class TaskController implements TaskApiSpec {
     private final TaskFacade taskFacade;
 
     @GetMapping(GET_ALL_TASKS)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<Page<TaskResponseDTO>> getAllTasks(@ParameterObject Pageable pageable) {
         return ResponseEntity.ok(taskFacade.getAllTasks(pageable));
     }
 
     @GetMapping(GET_TASK_BY_ID)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(taskFacade.getTaskById(id));
     }
 
     @PostMapping(CREATE_TASK)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<TaskResponseDTO> createTask(@Valid @RequestBody TaskRequestDTO taskRequestDTO) {
         return ResponseEntity.ok(taskFacade.createTask(taskRequestDTO));
     }
 
     @PutMapping(UPDATE_TASK_BY_ID)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable("id") UUID id, @Valid @RequestBody TaskRequestDTO taskRequestDTO) {
         return ResponseEntity.ok(taskFacade.updateTask(id, taskRequestDTO));
     }
 
     @DeleteMapping(DELETE_TASK_BY_ID)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> deleteTask(@PathVariable("id") UUID id) {
         taskFacade.deleteTask(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping(GET_TASKS_WITH_FILTERS)
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<Page<TaskResponseDTO>> getTasksWithFilters(@RequestBody TaskFilterDTO filter, @ParameterObject Pageable pageable) {
         return ResponseEntity.ok(taskFacade.getTasksWithFilters(filter, pageable));
     }
