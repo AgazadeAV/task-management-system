@@ -1,6 +1,7 @@
-package ru.effectmobile.task_management_system.exception.custom;
+package ru.effectmobile.task_management_system.exception.custom.notfound;
 
 import org.springframework.http.HttpStatus;
+import ru.effectmobile.task_management_system.exception.custom.BusinessException;
 
 public abstract class NotFoundException extends BusinessException {
 
