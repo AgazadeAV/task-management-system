@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.effectmobile.task_management_system.dto.filters.TaskFilterDTO;
-import ru.effectmobile.task_management_system.exception.notfound.TaskNotFoundException;
+import ru.effectmobile.task_management_system.exception.custom.notfound.TaskNotFoundException;
 import ru.effectmobile.task_management_system.model.entity.Task;
 import ru.effectmobile.task_management_system.repository.TaskRepository;
 import ru.effectmobile.task_management_system.service.base.TaskService;

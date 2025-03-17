@@ -3,7 +3,7 @@ package ru.effectmobile.task_management_system.service.mapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import ru.effectmobile.task_management_system.exception.validation.InvalidEnumValueException;
+import ru.effectmobile.task_management_system.exception.custom.validation.InvalidEnumValueException;
 
 import java.util.Arrays;
 import java.util.Map;

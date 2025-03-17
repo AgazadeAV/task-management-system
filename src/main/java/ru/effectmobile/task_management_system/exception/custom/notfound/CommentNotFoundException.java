@@ -1,6 +1,6 @@
-package ru.effectmobile.task_management_system.exception.notfound;
+package ru.effectmobile.task_management_system.exception.custom.notfound;
 
-import ru.effectmobile.task_management_system.exception.base.NotFoundException;
+import ru.effectmobile.task_management_system.exception.custom.NotFoundException;
 
 public final class CommentNotFoundException extends NotFoundException {
 

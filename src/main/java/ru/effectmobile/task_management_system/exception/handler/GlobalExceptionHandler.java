@@ -13,7 +13,7 @@ import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
-import ru.effectmobile.task_management_system.exception.base.BusinessException;
+import ru.effectmobile.task_management_system.exception.custom.BusinessException;
 import ru.effectmobile.task_management_system.exception.util.ExceptionResponseUtil.ErrorResponseFormat;
 
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.ACCESS_DENIED_MESSAGE;

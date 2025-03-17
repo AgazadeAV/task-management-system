@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.exception.base;
+package ru.effectmobile.task_management_system.exception.custom;
 
 import org.springframework.http.HttpStatus;
 

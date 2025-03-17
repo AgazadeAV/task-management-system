@@ -10,7 +10,7 @@ import ru.effectmobile.task_management_system.dto.requests.LoginRequestDTO;
 import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.AuthResponseDTO;
 import ru.effectmobile.task_management_system.dto.responses.UserResponseDTO;
-import ru.effectmobile.task_management_system.exception.auth.PasswordDoesNotMatchException;
+import ru.effectmobile.task_management_system.exception.custom.auth.PasswordDoesNotMatchException;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
 import ru.effectmobile.task_management_system.service.base.CipherService;

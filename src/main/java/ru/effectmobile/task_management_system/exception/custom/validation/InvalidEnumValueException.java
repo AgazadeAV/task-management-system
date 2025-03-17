@@ -1,6 +1,6 @@
-package ru.effectmobile.task_management_system.exception.validation;
+package ru.effectmobile.task_management_system.exception.custom.validation;
 
-import ru.effectmobile.task_management_system.exception.base.BusinessException;
+import ru.effectmobile.task_management_system.exception.custom.BusinessException;
 import org.springframework.http.HttpStatus;
 
 public final class InvalidEnumValueException extends BusinessException {

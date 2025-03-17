@@ -1,7 +1,7 @@
-package ru.effectmobile.task_management_system.exception.auth;
+package ru.effectmobile.task_management_system.exception.custom.auth;
 
 import org.springframework.http.HttpStatus;
-import ru.effectmobile.task_management_system.exception.base.BusinessException;
+import ru.effectmobile.task_management_system.exception.custom.BusinessException;
 
 public final class PasswordDoesNotMatchException extends BusinessException {
 
