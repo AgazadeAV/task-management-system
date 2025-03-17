@@ -17,7 +17,7 @@ public interface UserMapper {
     UserResponseDTO userToResponseDTO(User user, @Context CipherService aesService);
 
     @Named("decryptData")
-    static String decryptEmail(String data, @Context CipherService aesService) {
+    static String decryptData(String data, @Context CipherService aesService) {
         return aesService.decrypt(data);
     }
 }

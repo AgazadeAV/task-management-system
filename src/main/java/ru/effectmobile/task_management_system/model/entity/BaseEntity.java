@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,7 @@ public abstract class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
     @Embedded
@@ -35,4 +37,8 @@ public abstract class BaseEntity {
             @AttributeOverride(name = "updatedAt", column = @Column(name = "updated_at", nullable = false))
     })
     private MetaData metaData;
+
+    @Version
+    @Column(name = "version")
+    private Integer version;
 }

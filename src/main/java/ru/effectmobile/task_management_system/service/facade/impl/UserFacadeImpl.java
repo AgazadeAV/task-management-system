@@ -94,7 +94,7 @@ public class UserFacadeImpl implements UserFacade {
         return userMapper.userToResponseDTO(user, cipherService);
     }
 
-    void handleSensitiveData(User user, UserRequestDTO request) {
+    private void handleSensitiveData(User user, UserRequestDTO request) {
         Optional.ofNullable(request.password())
                 .ifPresent(password -> user.setPassword(passwordEncoder.encode(password)));
         String encryptedUsername = cipherService.encrypt(request.username());
@@ -111,11 +111,13 @@ public class UserFacadeImpl implements UserFacade {
                                 request.username(),
                                 request.email(),
                                 request.phoneNumber());
+
         UserCredsExistanceCheckDTO encryptedRequestForCheck =
                 new UserCredsExistanceCheckDTO(
                         cipherService.encrypt(request.username()),
                         cipherService.encrypt(request.email()),
                         cipherService.encrypt(request.phoneNumber()));
+
         userService.validateExistingFields(requestForCheck, encryptedRequestForCheck);
     }
 }

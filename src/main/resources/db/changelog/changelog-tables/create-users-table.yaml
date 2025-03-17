@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 001-create-users-table
+      id: create-users-table
       author: azer agazade
       changes:
         - createTable:
@@ -79,3 +79,17 @@ databaseChangeLog:
                   type: varchar(50)
                   constraints:
                     nullable: false
+  - changeSet:
+      id: add_version_column_to_users
+      author: azer agazade
+      changes:
+        - addColumn:
+            tableName: users
+            schemaName: taskmanager
+            columns:
+              - column:
+                  name: version
+                  type: integer
+                  constraints:
+                    nullable: false
+                  defaultValue: "0"

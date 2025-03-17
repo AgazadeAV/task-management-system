@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 002-create-tasks-table
+      id: create-tasks-table
       author: azer agazade
       changes:
         - createTable:
@@ -52,3 +52,17 @@ databaseChangeLog:
                   type: TIMESTAMP
                   constraints:
                     nullable: false
+  - changeSet:
+      id: add_version_column_to_tasks
+      author: azer agazade
+      changes:
+        - addColumn:
+            tableName: tasks
+            schemaName: taskmanager
+            columns:
+              - column:
+                  name: version
+                  type: integer
+                  constraints:
+                    nullable: false
+                  defaultValue: "0"

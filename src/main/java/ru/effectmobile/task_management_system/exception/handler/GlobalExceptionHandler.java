@@ -19,13 +19,13 @@ import ru.effectmobile.task_management_system.exception.custom.BusinessException
 import ru.effectmobile.task_management_system.exception.util.ExceptionResponseUtil.ErrorResponseFormat;
 
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.ACCESS_DENIED_MESSAGE;
-import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.DB_CONSTRAINT_VIOLATION_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.INVALID_CREDENTIALS_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.JWT_DECODING_ERROR_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.JWT_ERROR_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.MALFORMED_JSON_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.USER_NOT_FOUND_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.getConstraintViolationMessage;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.getDataIntegrityViolationMessage;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.getExceptionMessage;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.getHandlerMethodValidationMessage;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.getMethodArgumentNotValidMessage;
@@ -60,6 +60,11 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.BAD_REQUEST, getMissingRequestHeaderMessage(ex));
     }
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponseFormat> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+        return buildErrorResponse(HttpStatus.CONFLICT, getDataIntegrityViolationMessage(ex));
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ErrorResponseFormat> handleAccessDeniedException(AccessDeniedException ex) {
         return buildErrorResponse(HttpStatus.FORBIDDEN, getExceptionMessage(ex, ACCESS_DENIED_MESSAGE));
@@ -73,11 +78,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ErrorResponseFormat> handleUsernameNotFoundException(UsernameNotFoundException ex) {
         return buildErrorResponse(HttpStatus.UNAUTHORIZED, getExceptionMessage(ex, USER_NOT_FOUND_MESSAGE));
-    }
-
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponseFormat> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        return buildErrorResponse(HttpStatus.CONFLICT, getExceptionMessage(ex, DB_CONSTRAINT_VIOLATION_MESSAGE));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)

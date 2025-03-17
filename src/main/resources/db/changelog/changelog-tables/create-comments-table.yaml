@@ -1,6 +1,6 @@
 databaseChangeLog:
   - changeSet:
-      id: 003-create-comments-table
+      id: create-comments-table
       author: azer agazade
       changes:
         - createTable:
@@ -37,3 +37,17 @@ databaseChangeLog:
                   type: TIMESTAMP
                   constraints:
                     nullable: false
+  - changeSet:
+      id: add_version_column_to_comments
+      author: azer agazade
+      changes:
+        - addColumn:
+            tableName: comments
+            schemaName: taskmanager
+            columns:
+              - column:
+                  name: version
+                  type: integer
+                  constraints:
+                    nullable: false
+                  defaultValue: "0"

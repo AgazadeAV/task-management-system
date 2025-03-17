@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.core.MethodParameter;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
@@ -51,6 +52,22 @@ public final class ExceptionMessageUtil {
                 : Messages.HEADER_NOT_PRESENT;
 
         return String.format(Messages.MISSING_HEADER_MESSAGE, ex.getHeaderName(), typeName, reason);
+    }
+
+    public static String getDataIntegrityViolationMessage(DataIntegrityViolationException ex) {
+        String message = ex.getMostSpecificCause().getMessage();
+
+        if (message.contains("users_username_key")) {
+            return "This username is already taken.";
+        }
+        if (message.contains("users_email_key")) {
+            return "This email is already registered.";
+        }
+        if (message.contains("users_phone_number_key")) {
+            return "This phone number is already in use.";
+        }
+
+        return getExceptionMessage(ex, Messages.DB_CONSTRAINT_VIOLATION_MESSAGE);
     }
 
     public static <T extends Exception> String getExceptionMessage(T ex, String customMessage) {
