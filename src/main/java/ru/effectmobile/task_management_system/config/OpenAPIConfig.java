@@ -5,9 +5,11 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+@Slf4j
 @Configuration
 public class OpenAPIConfig {
 
@@ -20,7 +22,9 @@ public class OpenAPIConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-        return new OpenAPI()
+        log.info("Initializing OpenAPI configuration...");
+
+        OpenAPI openAPI = new OpenAPI()
                 .info(new Info()
                         .title(API_TITLE)
                         .version(API_VERSION)
@@ -33,5 +37,8 @@ public class OpenAPIConfig {
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme(SECURITY_SCHEME_TYPE)
                                         .bearerFormat(SECURITY_BEARER_FORMAT)));
+
+        log.info("OpenAPI configuration initialized successfully with title: '{}', version: '{}'", API_TITLE, API_VERSION);
+        return openAPI;
     }
 }

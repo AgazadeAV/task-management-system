@@ -3,6 +3,7 @@ package ru.effectmobile.task_management_system.service.base.impl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
 
+@Slf4j
 @Service
 public class JwtServiceImpl implements JwtService {
 
@@ -32,22 +34,26 @@ public class JwtServiceImpl implements JwtService {
         this.signInKey = new SecretKeySpec(Base64.getDecoder().decode(secretKey), hashAlgorithm);
         this.jwtExpirationMs = jwtExpirationMs;
         this.issuer = issuer;
+        log.info("JWT Service initialized with expiration: {}ms, issuer: {}", jwtExpirationMs, issuer);
     }
 
     @Override
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        String username = extractClaim(token, Claims::getSubject);
+        log.debug("Extracted username from token: {}", username);
+        return username;
     }
 
     @Override
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
+        Claims claims = extractAllClaims(token);
+        log.debug("Extracted claims: {}", claims);
         return claimsResolver.apply(claims);
     }
 
     @Override
     public String generateToken(User user) {
-        return Jwts.builder()
+        String token = Jwts.builder()
                 .setClaims(Map.of("role", user.getRole().name()))
                 .setSubject(user.getEmail())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
@@ -55,16 +61,22 @@ public class JwtServiceImpl implements JwtService {
                 .setIssuer(issuer)
                 .signWith(signInKey, SignatureAlgorithm.HS256)
                 .compact();
+        log.info("Generated JWT token for user: {}", user.getEmail());
+        return token;
     }
 
     @Override
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token) && isIssuerValid(token);
+        String username = extractUsername(token);
+        boolean valid = username.equals(userDetails.getUsername()) && !isTokenExpired(token) && isIssuerValid(token);
+        log.info("Token validation result for user {}: {}", username, valid);
+        return valid;
     }
 
     private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
+        boolean expired = extractExpiration(token).before(new Date());
+        log.debug("Token expiration check: {}", expired);
+        return expired;
     }
 
     private Date extractExpiration(String token) {
@@ -72,7 +84,9 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private boolean isIssuerValid(String token) {
-        return issuer.equals(extractIssuer(token));
+        boolean valid = issuer.equals(extractIssuer(token));
+        log.debug("Issuer validation result: {}", valid);
+        return valid;
     }
 
     private String extractIssuer(String token) {
@@ -80,6 +94,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Claims extractAllClaims(String token) {
+        log.debug("Parsing JWT token...");
         return Jwts.parserBuilder()
                 .setSigningKey(signInKey)
                 .build()

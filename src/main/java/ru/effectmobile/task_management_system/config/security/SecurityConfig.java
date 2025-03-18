@@ -1,6 +1,7 @@
 package ru.effectmobile.task_management_system.config.security;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,7 @@ import static ru.effectmobile.task_management_system.controller.TaskController.T
 import static ru.effectmobile.task_management_system.controller.TaskController.UPDATE_TASK_BY_ID;
 import static ru.effectmobile.task_management_system.controller.UserController.USER_API_URI;
 
+@Slf4j
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
@@ -48,65 +50,78 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        log.info("Configuring security filter chain...");
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(getPublicEndpoints()).permitAll()
-                        .requestMatchers(getAdminEndpoints()).hasAuthority(ROLE_ADMIN)
-                        .requestMatchers(getUserEndpoints()).hasAnyAuthority(ROLE_ADMIN, ROLE_USER)
-                        .anyRequest().authenticated()
-                )
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers(getPublicEndpoints()).permitAll();
+                    auth.requestMatchers(getAdminEndpoints()).hasAuthority(ROLE_ADMIN);
+                    auth.requestMatchers(getUserEndpoints()).hasAnyAuthority(ROLE_ADMIN, ROLE_USER);
+                    auth.anyRequest().authenticated();
+                })
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
+        log.info("Security filter chain configured successfully.");
         return http.build();
     }
 
     @Bean
     public AuthenticationManager authenticationManager() {
+        log.info("Configuring AuthenticationManager with DaoAuthenticationProvider...");
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
+        log.info("AuthenticationManager configured successfully.");
         return new ProviderManager(authProvider);
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
+        log.debug("Creating BCryptPasswordEncoder bean...");
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public TaskSecurityService taskSecurityService(TaskRepository taskRepository) {
+        log.info("Creating TaskSecurityService bean...");
         return new TaskSecurityService(taskRepository);
     }
 
     @Bean
     public CommentSecurityService commentSecurityService(CommentRepository commentRepository) {
+        log.info("Creating CommentSecurityService bean...");
         return new CommentSecurityService(commentRepository);
     }
 
     private String[] getPublicEndpoints() {
-        return new String[]{
+        String[] endpoints = new String[]{
                 apiBaseUrl + AUTH_API_URI + "/**",
                 apiDocsPath + "/**",
                 swaggerUiPath,
                 swaggerUiPath.replaceAll("\\.\\w+$", "") + "/**"
         };
+        log.debug("Public endpoints configured: {}", (Object) endpoints);
+        return endpoints;
     }
 
     private String[] getUserEndpoints() {
-        return new String[]{
+        String[] endpoints = new String[]{
                 apiBaseUrl + COMMENT_API_URI + "/**",
                 apiBaseUrl + TASK_API_URI + GET_ALL_TASKS,
                 apiBaseUrl + TASK_API_URI + GET_TASK_BY_ID,
                 apiBaseUrl + TASK_API_URI + UPDATE_TASK_BY_ID,
                 apiBaseUrl + TASK_API_URI + GET_TASKS_WITH_FILTERS
         };
+        log.debug("User endpoints configured: {}", (Object) endpoints);
+        return endpoints;
     }
 
     private String[] getAdminEndpoints() {
-        return new String[]{
+        String[] endpoints = new String[]{
                 apiBaseUrl + USER_API_URI + "/**",
                 apiBaseUrl + TASK_API_URI + "/**"
         };
+        log.debug("Admin endpoints configured: {}", (Object) endpoints);
+        return endpoints;
     }
 }

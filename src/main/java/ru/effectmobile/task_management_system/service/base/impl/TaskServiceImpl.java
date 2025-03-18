@@ -1,6 +1,7 @@
 package ru.effectmobile.task_management_system.service.base.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.TASK_NOT_FOUND_BY_ID_MESSAGE;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
@@ -24,32 +26,41 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public Page<Task> findAll(Pageable pageable) {
+        log.debug("Fetching all tasks with pagination: {}", pageable);
         return taskRepository.findAll(pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Task findById(UUID id) {
+        log.debug("Searching for task with ID: {}", id);
         return taskRepository.findById(id)
-                .orElseThrow(() -> new TaskNotFoundException(String.format(TASK_NOT_FOUND_BY_ID_MESSAGE, id)));
+                .orElseThrow(() -> {
+                    log.warn("Task not found with ID: {}", id);
+                    return new TaskNotFoundException(String.format(TASK_NOT_FOUND_BY_ID_MESSAGE, id));
+                });
     }
 
     @Override
     @Transactional
     public Task save(Task task) {
+        log.info("Saving task: {}", task);
         return taskRepository.save(task);
     }
 
     @Override
     @Transactional
     public void deleteById(UUID id) {
+        log.info("Deleting task with ID: {}", id);
         Task task = findById(id);
         taskRepository.delete(task);
+        log.debug("Task deleted successfully: {}", id);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<Task> findWithFilters(TaskFilterDTO filter, Pageable pageable) {
+        log.debug("Fetching tasks with filters: {} and pagination: {}", filter, pageable);
         return taskRepository.findWithFilters(
                 filter.authorId(),
                 filter.assigneeId(),

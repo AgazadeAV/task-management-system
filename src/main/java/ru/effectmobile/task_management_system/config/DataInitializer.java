@@ -1,6 +1,7 @@
 package ru.effectmobile.task_management_system.config;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,6 +13,7 @@ import ru.effectmobile.task_management_system.service.base.CipherService;
 
 import java.time.LocalDate;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
@@ -43,7 +45,14 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (userRepository.existsByEmail(cipherService.encrypt(adminEmail))) return;
+        log.info("Checking if admin user already exists...");
+
+        if (userRepository.existsByEmail(cipherService.encrypt(adminEmail))) {
+            log.info("Admin user already exists, skipping initialization.");
+            return;
+        }
+
+        log.info("Admin user does not exist. Creating a new admin user...");
 
         User admin = User.builder()
                 .username(cipherService.encrypt(adminUsername))
@@ -57,5 +66,6 @@ public class DataInitializer implements CommandLineRunner {
                 .build();
 
         userRepository.save(admin);
+        log.info("Admin user '{}' created successfully.", adminUsername);
     }
 }

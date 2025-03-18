@@ -3,6 +3,7 @@ package ru.effectmobile.task_management_system.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +21,7 @@ import ru.effectmobile.task_management_system.service.facade.UserFacade;
 
 import java.util.UUID;
 
+@Slf4j
 @RestController
 @RequestMapping("${api.base.url}" + UserController.USER_API_URI)
 @RequiredArgsConstructor
@@ -35,19 +37,25 @@ public class UserController implements UserApiSpec {
 
     @GetMapping(GET_ALL_USERS)
     public ResponseEntity<Page<UserResponseDTO>> getAllUsers(@ParameterObject Pageable pageable) {
+        log.info("Fetching all users with pagination: {}", pageable);
         Page<UserResponseDTO> response = userFacade.getAllUsers(pageable);
+        log.info("Retrieved {} users", response.getTotalElements());
         return ResponseEntity.ok(response);
     }
 
     @GetMapping(GET_USER_BY_ID)
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable("id") UUID id) {
+        log.info("Fetching user by ID '{}'", id);
         UserResponseDTO response = userFacade.getUserById(id);
+        log.info("User retrieved: {}", response);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping(CREATE_USER)
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
+        log.info("Creating a new user: {}", userRequestDTO);
         UserResponseDTO response = userFacade.createUser(userRequestDTO);
+        log.info("User created successfully with ID '{}'", response.id());
         return ResponseEntity.ok(response);
     }
 }

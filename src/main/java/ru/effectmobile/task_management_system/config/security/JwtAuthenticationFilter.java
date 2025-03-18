@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +18,7 @@ import ru.effectmobile.task_management_system.service.base.JwtService;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -38,23 +40,42 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String userEmail;
 
         if (authHeader == null || !authHeader.startsWith(TOKEN_PREFIX)) {
+            log.debug("No valid Authorization header found in request to '{}'", request.getRequestURI());
             filterChain.doFilter(request, response);
             return;
         }
 
         jwt = authHeader.substring(TOKEN_PREFIX_LENGTH);
-        userEmail = jwtService.extractUsername(jwt).trim();
+        log.debug("Extracted JWT token from request: {}", jwt);
+
+        try {
+            userEmail = jwtService.extractUsername(jwt).trim();
+            log.debug("Extracted username from JWT: {}", userEmail);
+        } catch (Exception e) {
+            log.warn("Failed to extract username from JWT: {}", e.getMessage());
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            log.debug("No existing authentication found in SecurityContext. Validating token...");
+
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt, userDetails)) {
+                log.info("JWT token is valid for user: {}", userEmail);
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                log.info("User '{}' successfully authenticated and added to SecurityContext.", userEmail);
+            } else {
+                log.warn("JWT token is invalid for user: {}", userEmail);
             }
+        } else {
+            log.debug("User '{}' is already authenticated.", userEmail);
         }
+
         filterChain.doFilter(request, response);
     }
 }
