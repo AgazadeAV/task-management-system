@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -44,25 +45,29 @@ public class TaskController implements TaskApiSpec {
     @GetMapping(GET_ALL_TASKS)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<Page<TaskResponseDTO>> getAllTasks(@ParameterObject Pageable pageable) {
-        return ResponseEntity.ok(taskFacade.getAllTasks(pageable));
+        Page<TaskResponseDTO> response = taskFacade.getAllTasks(pageable);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping(GET_TASK_BY_ID + TASK_ID_PATH)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable("id") UUID id) {
-        return ResponseEntity.ok(taskFacade.getTaskById(id));
+        TaskResponseDTO response = taskFacade.getTaskById(id);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(CREATE_TASK)
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<TaskResponseDTO> createTask(@Valid @RequestBody TaskRequestDTO taskRequestDTO) {
-        return ResponseEntity.ok(taskFacade.createTask(taskRequestDTO));
+        TaskResponseDTO response = taskFacade.createTask(taskRequestDTO);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PutMapping(UPDATE_TASK_BY_ID + TASK_ID_PATH)
     @PreAuthorize("hasAuthority('ROLE_ADMIN') or @taskSecurityService.isTaskOwner(#id, authentication.principal.username)")
     public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable("id") UUID id, @Valid @RequestBody TaskRequestDTO taskRequestDTO) {
-        return ResponseEntity.ok(taskFacade.updateTask(id, taskRequestDTO));
+        TaskResponseDTO response = taskFacade.updateTask(id, taskRequestDTO);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping(DELETE_TASK_BY_ID + TASK_ID_PATH)
@@ -75,6 +80,7 @@ public class TaskController implements TaskApiSpec {
     @PostMapping(GET_TASKS_WITH_FILTERS)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<Page<TaskResponseDTO>> getTasksWithFilters(@RequestBody TaskFilterDTO filter, @ParameterObject Pageable pageable) {
-        return ResponseEntity.ok(taskFacade.getTasksWithFilters(filter, pageable));
+        Page<TaskResponseDTO> response = taskFacade.getTasksWithFilters(filter, pageable);
+        return ResponseEntity.ok(response);
     }
 }

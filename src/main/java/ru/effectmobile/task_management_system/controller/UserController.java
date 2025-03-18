@@ -35,16 +35,19 @@ public class UserController implements UserApiSpec {
 
     @GetMapping(GET_ALL_USERS)
     public ResponseEntity<Page<UserResponseDTO>> getAllUsers(@ParameterObject Pageable pageable) {
-        return ResponseEntity.ok(userFacade.getAllUsers(pageable));
+        Page<UserResponseDTO> response = userFacade.getAllUsers(pageable);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping(GET_USER_BY_ID)
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable("id") UUID id) {
-        return ResponseEntity.ok(userFacade.getUserById(id));
+        UserResponseDTO response = userFacade.getUserById(id);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(CREATE_USER)
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
-        return ResponseEntity.ok(userFacade.createUser(userRequestDTO));
+        UserResponseDTO response = userFacade.createUser(userRequestDTO);
+        return ResponseEntity.ok(response);
     }
 }

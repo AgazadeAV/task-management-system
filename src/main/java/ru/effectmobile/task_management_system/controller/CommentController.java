@@ -39,14 +39,15 @@ public class CommentController implements CommentApiSpec {
     @GetMapping(GET_TASK_COMMENTS)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<Page<CommentResponseDTO>> getTaskComments(@PathVariable("taskId") UUID taskId, @ParameterObject Pageable pageable) {
-        return ResponseEntity.ok(commentFacade.getTaskComments(taskId, pageable));
+        Page<CommentResponseDTO> response = commentFacade.getTaskComments(taskId, pageable);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping(CREATE_COMMENT)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<CommentResponseDTO> createComment(@Valid @RequestBody CommentRequestDTO commentRequestDTO) {
-        CommentResponseDTO createdComment = commentFacade.createComment(commentRequestDTO);
-        return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
+        CommentResponseDTO response = commentFacade.createComment(commentRequestDTO);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @DeleteMapping(DELETE_COMMENT_BY_ID)
