@@ -15,10 +15,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.effectmobile.task_management_system.model.enums.Role;
+import ru.effectmobile.task_management_system.repository.CommentRepository;
+import ru.effectmobile.task_management_system.repository.TaskRepository;
 
 import static ru.effectmobile.task_management_system.controller.AuthController.AUTH_API_URI;
 import static ru.effectmobile.task_management_system.controller.CommentController.COMMENT_API_URI;
+import static ru.effectmobile.task_management_system.controller.TaskController.GET_ALL_TASKS;
+import static ru.effectmobile.task_management_system.controller.TaskController.GET_TASKS_WITH_FILTERS;
+import static ru.effectmobile.task_management_system.controller.TaskController.GET_TASK_BY_ID;
 import static ru.effectmobile.task_management_system.controller.TaskController.TASK_API_URI;
+import static ru.effectmobile.task_management_system.controller.TaskController.UPDATE_TASK_BY_ID;
 import static ru.effectmobile.task_management_system.controller.UserController.USER_API_URI;
 
 @Configuration
@@ -68,6 +74,16 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public TaskSecurityService taskSecurityService(TaskRepository taskRepository) {
+        return new TaskSecurityService(taskRepository);
+    }
+
+    @Bean
+    public CommentSecurityService commentSecurityService(CommentRepository commentRepository) {
+        return new CommentSecurityService(commentRepository);
+    }
+
     private String[] getPublicEndpoints() {
         return new String[]{
                 apiBaseUrl + AUTH_API_URI + "/**",
@@ -80,13 +96,17 @@ public class SecurityConfig {
     private String[] getUserEndpoints() {
         return new String[]{
                 apiBaseUrl + COMMENT_API_URI + "/**",
-                apiBaseUrl + TASK_API_URI + "/**"
+                apiBaseUrl + TASK_API_URI + GET_ALL_TASKS,
+                apiBaseUrl + TASK_API_URI + GET_TASK_BY_ID,
+                apiBaseUrl + TASK_API_URI + UPDATE_TASK_BY_ID,
+                apiBaseUrl + TASK_API_URI + GET_TASKS_WITH_FILTERS
         };
     }
 
     private String[] getAdminEndpoints() {
         return new String[]{
-                apiBaseUrl + USER_API_URI + "/**"
+                apiBaseUrl + USER_API_URI + "/**",
+                apiBaseUrl + TASK_API_URI + "/**"
         };
     }
 }

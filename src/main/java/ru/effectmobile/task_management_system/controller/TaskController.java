@@ -31,11 +31,12 @@ import java.util.UUID;
 public class TaskController implements TaskApiSpec {
 
     public static final String TASK_API_URI = "/tasks";
+    public static final String TASK_ID_PATH = "/{id}";
     public static final String GET_ALL_TASKS = "/tasks-list";
-    public static final String GET_TASK_BY_ID = "/task/{id}";
+    public static final String GET_TASK_BY_ID = "/task";
     public static final String CREATE_TASK = "/create-task";
-    public static final String UPDATE_TASK_BY_ID = "/update-task/{id}";
-    public static final String DELETE_TASK_BY_ID = "/delete-task/{id}";
+    public static final String UPDATE_TASK_BY_ID = "/update-task";
+    public static final String DELETE_TASK_BY_ID = "/delete-task";
     public static final String GET_TASKS_WITH_FILTERS = "/filter";
 
     private final TaskFacade taskFacade;
@@ -46,7 +47,7 @@ public class TaskController implements TaskApiSpec {
         return ResponseEntity.ok(taskFacade.getAllTasks(pageable));
     }
 
-    @GetMapping(GET_TASK_BY_ID)
+    @GetMapping(GET_TASK_BY_ID + TASK_ID_PATH)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable("id") UUID id) {
         return ResponseEntity.ok(taskFacade.getTaskById(id));
@@ -58,14 +59,14 @@ public class TaskController implements TaskApiSpec {
         return ResponseEntity.ok(taskFacade.createTask(taskRequestDTO));
     }
 
-    @PutMapping(UPDATE_TASK_BY_ID)
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
+    @PutMapping(UPDATE_TASK_BY_ID + TASK_ID_PATH)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or @taskSecurityService.isTaskOwner(#id, authentication.principal.username)")
     public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable("id") UUID id, @Valid @RequestBody TaskRequestDTO taskRequestDTO) {
         return ResponseEntity.ok(taskFacade.updateTask(id, taskRequestDTO));
     }
 
-    @DeleteMapping(DELETE_TASK_BY_ID)
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @DeleteMapping(DELETE_TASK_BY_ID + TASK_ID_PATH)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN') or @taskSecurityService.isTaskOwner(#id, authentication.principal.username)")
     public ResponseEntity<Void> deleteTask(@PathVariable("id") UUID id) {
         taskFacade.deleteTask(id);
         return ResponseEntity.noContent().build();
