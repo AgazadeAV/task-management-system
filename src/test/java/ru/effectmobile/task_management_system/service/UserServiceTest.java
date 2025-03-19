@@ -29,6 +29,9 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static ru.effectmobile.task_management_system.util.DefaultInputs.ENCRYPTED_EMAIL_EXAMPLE;
+import static ru.effectmobile.task_management_system.util.DefaultInputs.ENCRYPTED_PHONE_NUMBER_EXAMPLE;
+import static ru.effectmobile.task_management_system.util.DefaultInputs.ENCRYPTED_USERNAME_EXAMPLE;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createUser;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createUserCredsExistanceCheckDTO;
 
@@ -43,9 +46,6 @@ class UserServiceTest {
 
     private static final User USER = createUser(Role.ROLE_ADMIN);
     private static final PageRequest PAGEABLE = PageRequest.of(0, 10);
-    private static final String ENCRYPTED_USERNAME = "encryptedUsername";
-    private static final String ENCRYPTED_EMAIL = "encryptedRequestEmail";
-    private static final String ENCRYPTED_PHONE_NUMBER = "123456789";
 
     @Test
     void findAll_ShouldReturnPageOfUsers() {
@@ -126,7 +126,7 @@ class UserServiceTest {
     @Test
     void validateExistingFields_ShouldThrowException_WhenUsernameExists() {
         UserCredsExistanceCheckDTO request = createUserCredsExistanceCheckDTO();
-        UserCredsExistanceCheckDTO encryptedRequest = new UserCredsExistanceCheckDTO(request.username(), ENCRYPTED_EMAIL, ENCRYPTED_PHONE_NUMBER);
+        UserCredsExistanceCheckDTO encryptedRequest = new UserCredsExistanceCheckDTO(request.username(), ENCRYPTED_EMAIL_EXAMPLE, ENCRYPTED_PHONE_NUMBER_EXAMPLE);
 
         when(userRepository.findByUsernameOrEmailOrPhoneNumber(
                 encryptedRequest.username(),
@@ -141,7 +141,7 @@ class UserServiceTest {
     @Test
     void validateExistingFields_ShouldThrowException_WhenEmailExists() {
         UserCredsExistanceCheckDTO request = createUserCredsExistanceCheckDTO();
-        UserCredsExistanceCheckDTO encryptedRequest = new UserCredsExistanceCheckDTO(ENCRYPTED_USERNAME, request.email(), ENCRYPTED_PHONE_NUMBER);
+        UserCredsExistanceCheckDTO encryptedRequest = new UserCredsExistanceCheckDTO(ENCRYPTED_USERNAME_EXAMPLE, request.email(), ENCRYPTED_PHONE_NUMBER_EXAMPLE);
 
         when(userRepository.findByUsernameOrEmailOrPhoneNumber(
                 encryptedRequest.username(),
@@ -155,7 +155,7 @@ class UserServiceTest {
     @Test
     void validateExistingFields_ShouldThrowException_WhenPhoneNumberExists() {
         UserCredsExistanceCheckDTO request = createUserCredsExistanceCheckDTO();
-        UserCredsExistanceCheckDTO encryptedRequest = new UserCredsExistanceCheckDTO(ENCRYPTED_USERNAME, ENCRYPTED_EMAIL, request.phoneNumber());
+        UserCredsExistanceCheckDTO encryptedRequest = new UserCredsExistanceCheckDTO(ENCRYPTED_USERNAME_EXAMPLE, ENCRYPTED_EMAIL_EXAMPLE, request.phoneNumber());
 
         when(userRepository.findByUsernameOrEmailOrPhoneNumber(
                 encryptedRequest.username(),

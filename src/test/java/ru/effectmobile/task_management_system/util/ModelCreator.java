@@ -19,6 +19,7 @@ import ru.effectmobile.task_management_system.model.enums.TaskStatus;
 import ru.effectmobile.task_management_system.model.metadata.MetaData;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static ru.effectmobile.task_management_system.util.DefaultInputs.ASSIGNEE_ID_EXAMPLE;
 import static ru.effectmobile.task_management_system.util.DefaultInputs.AUTHOR_ID_EXAMPLE;
@@ -193,6 +194,15 @@ public class ModelCreator {
                 ASSIGNEE_ID_EXAMPLE,
                 TASK_STATUS_EXAMPLE_ENUM,
                 TASK_PRIORITY_EXAMPLE_ENUM
+        );
+    }
+
+    public static TaskFilterDTO createTaskFilterDTO(UUID authorId, UUID assigneeId, TaskStatus status, TaskPriority priority) {
+        return new TaskFilterDTO(
+                authorId,
+                assigneeId,
+                status,
+                priority
         );
     }
 

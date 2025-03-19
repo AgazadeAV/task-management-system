@@ -33,7 +33,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static ru.effectmobile.task_management_system.util.DefaultInputs.EMAIL_EXAMPLE;
-import static ru.effectmobile.task_management_system.util.DefaultInputs.TOKEN_EXAMPLE;
+import static ru.effectmobile.task_management_system.util.ModelCreator.createAuthResponseDTO;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createLoginRequestDTO;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createMetaData;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createUser;
@@ -71,6 +71,7 @@ class UserFacadeTest {
     private static final UserRequestDTO REQUEST_DTO = createUserRequestDTO();
     private static final UserResponseDTO RESPONSE_DTO = createUserResponseDTO();
     private static final LoginRequestDTO LOGIN_REQUEST_DTO = createLoginRequestDTO();
+    private static final AuthResponseDTO AUTH_RESPONSE_DTO = createAuthResponseDTO();
     private static final MetaData META_DATA = createMetaData();
 
     @Test
@@ -116,11 +117,11 @@ class UserFacadeTest {
         when(cipherService.encrypt(LOGIN_REQUEST_DTO.email())).thenReturn(EMAIL_EXAMPLE);
         when(userService.findByEmail(cipherService.encrypt(REQUEST_DTO.email()))).thenReturn(USER);
         when(passwordEncoder.matches(LOGIN_REQUEST_DTO.password(), USER.getPassword())).thenReturn(true);
-        when(jwtService.generateToken(USER)).thenReturn(TOKEN_EXAMPLE);
+        when(jwtService.generateToken(USER)).thenReturn(AUTH_RESPONSE_DTO.token());
 
         AuthResponseDTO result = userFacade.login(LOGIN_REQUEST_DTO);
 
-        assertEquals(TOKEN_EXAMPLE, result.token());
+        assertEquals(AUTH_RESPONSE_DTO.token(), result.token());
         verify(jwtService).generateToken(USER);
     }
 

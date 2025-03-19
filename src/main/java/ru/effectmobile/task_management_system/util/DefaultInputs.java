@@ -48,4 +48,7 @@ public final class DefaultInputs {
     public static final LocalDate BIRTH_DATE_EXAMPLE_LOCALDATE = LocalDate.parse(BIRTH_DATE_EXAMPLE);
     public static final TaskStatus TASK_STATUS_EXAMPLE_ENUM = TaskStatus.IN_PROGRESS;
     public static final TaskPriority TASK_PRIORITY_EXAMPLE_ENUM = TaskPriority.HIGH;
+    public static final String ENCRYPTED_USERNAME_EXAMPLE = "encryptedUsername";
+    public static final String ENCRYPTED_EMAIL_EXAMPLE = "encryptedRequestEmail";
+    public static final String ENCRYPTED_PHONE_NUMBER_EXAMPLE = "123456789";
 }

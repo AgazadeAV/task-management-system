@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -51,6 +50,7 @@ import static ru.effectmobile.task_management_system.util.ModelCreator.createAsi
 import static ru.effectmobile.task_management_system.util.ModelCreator.createAuthorUser;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createMetaData;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createTask;
+import static ru.effectmobile.task_management_system.util.ModelCreator.createTaskFilterDTO;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createTaskRequestDTO;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createTaskResponseDTO;
 
@@ -190,23 +190,23 @@ class TaskFacadeTest {
 
     static Stream<Arguments> provideFilters() {
         return Stream.of(
-                Arguments.of(new TaskFilterDTO(null, null, null, null), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(AUTHOR.getId(), null, null, null), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(null, ASSIGNEE.getId(), null, null), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(null, null, TASK_STATUS_EXAMPLE_ENUM, null), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(null, null, null, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), null, null), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(AUTHOR.getId(), null, TASK_STATUS_EXAMPLE_ENUM, null), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(AUTHOR.getId(), null, null, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(null, ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, null), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(null, ASSIGNEE.getId(), null, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(null, null, TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, null), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), null, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(AUTHOR.getId(), null, TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(null, ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(new TaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), EMPTY_TASKS, EMPTY_TASKS.size())
+                Arguments.of(createTaskFilterDTO(null, null, null, null), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), null, null, null), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(null, ASSIGNEE.getId(), null, null), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(null, null, TASK_STATUS_EXAMPLE_ENUM, null), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(null, null, null, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), null, null), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), null, TASK_STATUS_EXAMPLE_ENUM, null), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), null, null, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(null, ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, null), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(null, ASSIGNEE.getId(), null, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(null, null, TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, null), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), null, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), null, TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(null, ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), EMPTY_TASKS, EMPTY_TASKS.size())
         );
     }
 }
