@@ -63,12 +63,12 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 crypto:
-  cipher-algorithm: AES/ECB/PKCS5Padding
+  cipher-algorithm: ${CRYPTO_CIPHER_ALGORITHM}
   keys:
-    AES: 770A8A65DA156D24EE2A093277530142
+    AES: ${CRYPTO_KEYS_AES}
 
 hash:
-  algorithm: ${HASH_ALGORITHM:HmacSHA256}
+  algorithm: ${HASH_ALGORITHM}
 
 admin:
   username: ${ADMIN_USERNAME}
