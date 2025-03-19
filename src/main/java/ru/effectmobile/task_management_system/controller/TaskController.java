@@ -89,7 +89,7 @@ public class TaskController implements TaskApiSpec {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping(GET_TASKS_WITH_FILTERS)
+    @GetMapping(GET_TASKS_WITH_FILTERS)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER')")
     public ResponseEntity<Page<TaskResponseDTO>> getTasksWithFilters(@RequestBody TaskFilterDTO filter, @ParameterObject Pageable pageable) {
         log.info("Fetching tasks with filters: {}, pagination: {}", filter, pageable);
