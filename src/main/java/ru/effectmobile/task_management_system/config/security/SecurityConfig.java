@@ -23,9 +23,9 @@ import static ru.effectmobile.task_management_system.controller.AuthController.A
 import static ru.effectmobile.task_management_system.controller.CommentController.COMMENT_API_URI;
 import static ru.effectmobile.task_management_system.controller.TaskController.GET_ALL_TASKS;
 import static ru.effectmobile.task_management_system.controller.TaskController.GET_TASKS_WITH_FILTERS;
-import static ru.effectmobile.task_management_system.controller.TaskController.GET_TASK_BY_ID;
+import static ru.effectmobile.task_management_system.controller.TaskController.GET_TASK;
 import static ru.effectmobile.task_management_system.controller.TaskController.TASK_API_URI;
-import static ru.effectmobile.task_management_system.controller.TaskController.UPDATE_TASK_BY_ID;
+import static ru.effectmobile.task_management_system.controller.TaskController.UPDATE_TASK;
 import static ru.effectmobile.task_management_system.controller.UserController.USER_API_URI;
 
 @Slf4j
@@ -108,8 +108,8 @@ public class SecurityConfig {
         String[] endpoints = new String[]{
                 apiBaseUrl + COMMENT_API_URI + "/**",
                 apiBaseUrl + TASK_API_URI + GET_ALL_TASKS,
-                apiBaseUrl + TASK_API_URI + GET_TASK_BY_ID,
-                apiBaseUrl + TASK_API_URI + UPDATE_TASK_BY_ID,
+                apiBaseUrl + TASK_API_URI + GET_TASK,
+                apiBaseUrl + TASK_API_URI + UPDATE_TASK,
                 apiBaseUrl + TASK_API_URI + GET_TASKS_WITH_FILTERS
         };
         log.debug("User endpoints configured: {}", (Object) endpoints);
