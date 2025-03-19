@@ -217,7 +217,6 @@ public class ModelCreator {
     public static CommentRequestDTO createCommentRequestDTO() {
         return new CommentRequestDTO(
                 TASK_ID_EXAMPLE,
-                AUTHOR_ID_EXAMPLE,
                 COMMENT_TEXT_EXAMPLE
         );
     }
@@ -235,7 +234,6 @@ public class ModelCreator {
                 TASK_DESCRIPTION_EXAMPLE,
                 TASK_STATUS_EXAMPLE,
                 TASK_PRIORITY_EXAMPLE,
-                AUTHOR_ID_EXAMPLE,
                 ASSIGNEE_ID_EXAMPLE
         );
     }
@@ -299,5 +297,4 @@ public class ModelCreator {
                 ROLE_EXAMPLE_ENUM
         );
     }
-
 }

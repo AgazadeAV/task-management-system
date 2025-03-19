@@ -1,8 +1,8 @@
 package ru.effectmobile.task_management_system.dto.responses;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import ru.effectmobile.task_management_system.model.enums.Role;
 import ru.effectmobile.task_management_system.config.swagger.schemas.responses.UserResponseDTOSchema;
+import ru.effectmobile.task_management_system.model.enums.Role;
 
 import java.util.UUID;
 

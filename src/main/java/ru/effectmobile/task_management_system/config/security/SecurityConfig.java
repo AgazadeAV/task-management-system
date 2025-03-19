@@ -15,18 +15,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import ru.effectmobile.task_management_system.exception.custom.auth.AdminAccessDeniedException;
+import ru.effectmobile.task_management_system.exception.custom.auth.AuthenticationRequiredException;
 import ru.effectmobile.task_management_system.model.enums.Role;
-import ru.effectmobile.task_management_system.repository.CommentRepository;
-import ru.effectmobile.task_management_system.repository.TaskRepository;
 
-import static ru.effectmobile.task_management_system.controller.AuthController.AUTH_API_URI;
-import static ru.effectmobile.task_management_system.controller.CommentController.COMMENT_API_URI;
-import static ru.effectmobile.task_management_system.controller.TaskController.GET_ALL_TASKS;
-import static ru.effectmobile.task_management_system.controller.TaskController.GET_TASKS_WITH_FILTERS;
-import static ru.effectmobile.task_management_system.controller.TaskController.GET_TASK;
-import static ru.effectmobile.task_management_system.controller.TaskController.TASK_API_URI;
-import static ru.effectmobile.task_management_system.controller.TaskController.UPDATE_TASK;
-import static ru.effectmobile.task_management_system.controller.UserController.USER_API_URI;
+import static ru.effectmobile.task_management_system.controller.AuthController.AUTH_API_URL;
+import static ru.effectmobile.task_management_system.controller.UserController.USER_API_URL;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.ADMIN_ACCESS_DENIED_MESSAGE;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.AUTHENTICATION_REQUIRED_MESSAGE;
 
 @Slf4j
 @Configuration
@@ -43,7 +39,6 @@ public class SecurityConfig {
     private String swaggerUiPath;
 
     private static final String ROLE_ADMIN = Role.ROLE_ADMIN.name();
-    private static final String ROLE_USER = Role.ROLE_USER.name();
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final UserDetailsService userDetailsService;
@@ -56,9 +51,18 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers(getPublicEndpoints()).permitAll();
                     auth.requestMatchers(getAdminEndpoints()).hasAuthority(ROLE_ADMIN);
-                    auth.requestMatchers(getUserEndpoints()).hasAnyAuthority(ROLE_ADMIN, ROLE_USER);
                     auth.anyRequest().authenticated();
                 })
+                .exceptionHandling(ex -> ex
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            log.warn("Access denied: {}", request.getRequestURI());
+                            throw new AdminAccessDeniedException(ADMIN_ACCESS_DENIED_MESSAGE);
+                        })
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            log.warn("Unauthorized access attempt: {}", request.getRequestURI());
+                            throw new AuthenticationRequiredException(AUTHENTICATION_REQUIRED_MESSAGE);
+                        })
+                )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         log.info("Security filter chain configured successfully.");
@@ -81,21 +85,9 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public TaskSecurityService taskSecurityService(TaskRepository taskRepository) {
-        log.info("Creating TaskSecurityService bean...");
-        return new TaskSecurityService(taskRepository);
-    }
-
-    @Bean
-    public CommentSecurityService commentSecurityService(CommentRepository commentRepository) {
-        log.info("Creating CommentSecurityService bean...");
-        return new CommentSecurityService(commentRepository);
-    }
-
     private String[] getPublicEndpoints() {
         String[] endpoints = new String[]{
-                apiBaseUrl + AUTH_API_URI + "/**",
+                apiBaseUrl + AUTH_API_URL + "/**",
                 apiDocsPath + "/**",
                 swaggerUiPath,
                 swaggerUiPath.replaceAll("\\.\\w+$", "") + "/**"
@@ -104,22 +96,9 @@ public class SecurityConfig {
         return endpoints;
     }
 
-    private String[] getUserEndpoints() {
-        String[] endpoints = new String[]{
-                apiBaseUrl + COMMENT_API_URI + "/**",
-                apiBaseUrl + TASK_API_URI + GET_ALL_TASKS,
-                apiBaseUrl + TASK_API_URI + GET_TASK,
-                apiBaseUrl + TASK_API_URI + UPDATE_TASK,
-                apiBaseUrl + TASK_API_URI + GET_TASKS_WITH_FILTERS
-        };
-        log.debug("User endpoints configured: {}", (Object) endpoints);
-        return endpoints;
-    }
-
     private String[] getAdminEndpoints() {
         String[] endpoints = new String[]{
-                apiBaseUrl + USER_API_URI + "/**",
-                apiBaseUrl + TASK_API_URI + "/**"
+                apiBaseUrl + USER_API_URL + "/**"
         };
         log.debug("Admin endpoints configured: {}", (Object) endpoints);
         return endpoints;

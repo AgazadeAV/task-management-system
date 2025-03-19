@@ -91,6 +91,7 @@ public final class ExceptionMessageUtil {
         public static final String TASK_NOT_FOUND_BY_ID_MESSAGE = "Task not found with id: %s";
         public static final String USER_NOT_FOUND_BY_ID_MESSAGE = "User not found with id: %s";
         public static final String ENUM_VALUE_NULL_OR_EMPTY_MESSAGE = "Value cannot be null or empty for %s. Allowed values: %s";
+        public static final String ENUM_VALUE_EMPTY_MESSAGE = "Value cannot be empty for %s. Allowed values: %s";
         public static final String INVALID_ENUM_VALUE_MESSAGE = "Invalid value '%s' for: %s. Allowed values: %s";
         public static final String USER_NOT_FOUND_BY_EMAIL_MESSAGE = "User not found with email: %s";
         public static final String PASSWORD_DOESNT_MATCH_MESSAGE = "Invalid credentials";
@@ -104,5 +105,10 @@ public final class ExceptionMessageUtil {
         public static final String USERNAME_ALREADY_REGISTERED = "Username: '%s' already registered";
         public static final String JWT_DECODING_ERROR_MESSAGE = "Invalid JWT token format: %s";
         public static final String JWT_ERROR_MESSAGE = "JWT processing error: %s";
+        public static final String AUTHENTICATION_REQUIRED_MESSAGE = "Authentication is required to access this resource.";
+        public static final String ADMIN_ACCESS_DENIED_MESSAGE = "Only administrators can access this resource.";
+        public static final String COMMENT_DELETE_FORBIDDEN_MESSAGE = "User doesn't have enough rights to delete the comment.";
+        public static final String TASK_UPDATE_FORBIDDEN_MESSAGE = "User doesn't have enough rights to update the task.";
+        public static final String TASK_CREATE_OR_DELETE_FORBIDDEN_MESSAGE = "User doesn't have enough rights to create/delete the task.";
     }
 }

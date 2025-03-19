@@ -11,7 +11,7 @@ public interface CommentFacade {
 
     Page<CommentResponseDTO> getTaskComments(UUID taskId, Pageable pageable);
 
-    CommentResponseDTO createComment(CommentRequestDTO commentDTO);
+    CommentResponseDTO createComment(CommentRequestDTO commentDTO, String email);
 
-    void deleteComment(UUID id);
+    void deleteComment(UUID id, String email);
 }

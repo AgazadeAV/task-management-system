@@ -8,13 +8,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import ru.effectmobile.task_management_system.dto.filters.TaskFilterDTO;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.effectmobile.task_management_system.dto.requests.TaskRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.TaskResponseDTO;
 
+import java.security.Principal;
 import java.util.UUID;
 
 import static ru.effectmobile.task_management_system.util.DefaultInputs.TASK_ID_EXAMPLE_JSON;
@@ -48,7 +50,7 @@ public interface TaskApiSpec {
             @ApiResponse(responseCode = "400", description = "Invalid input data",
                     content = @Content(schema = @Schema(hidden = true)))
     })
-    ResponseEntity<TaskResponseDTO> createTask(@Valid TaskRequestDTO taskRequestDTO);
+    ResponseEntity<TaskResponseDTO> createTask(@Valid TaskRequestDTO taskRequestDTO, Principal principal);
 
     @Operation(summary = "Update a task", description = "Updates an existing task by ID.")
     @ApiResponses(value = {
@@ -62,7 +64,7 @@ public interface TaskApiSpec {
     ResponseEntity<TaskResponseDTO> updateTask(
             @Parameter(description = "UUID of the task", required = true, example = TASK_ID_EXAMPLE_JSON)
             UUID id,
-            @Valid TaskRequestDTO taskRequestDTO
+            @Valid TaskRequestDTO taskRequestDTO, Principal principal
     );
 
     @Operation(summary = "Delete a task", description = "Deletes a task by ID.")
@@ -73,7 +75,7 @@ public interface TaskApiSpec {
     })
     ResponseEntity<Void> deleteTask(
             @Parameter(description = "UUID of the task", required = true, example = TASK_ID_EXAMPLE_JSON)
-            UUID id
+            UUID id, Principal principal
     );
 
     @Operation(summary = "Filter tasks", description = "Returns a paginated list of tasks matching the specified filters.")
@@ -86,7 +88,10 @@ public interface TaskApiSpec {
                     content = @Content(schema = @Schema(hidden = true)))
     })
     ResponseEntity<Page<TaskResponseDTO>> getTasksWithFilters(
-            @Valid TaskFilterDTO filter,
-            Pageable pageable
+            @RequestParam(required = false) UUID authorId,
+            @RequestParam(required = false) UUID assigneeId,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String priority,
+            @ParameterObject Pageable pageable
     );
 }

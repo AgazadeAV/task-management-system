@@ -4,7 +4,13 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
 
-import static ru.effectmobile.task_management_system.util.DefaultInputs.*;
+import static ru.effectmobile.task_management_system.util.DefaultInputs.EMAIL_EXAMPLE;
+import static ru.effectmobile.task_management_system.util.DefaultInputs.FIRST_NAME_EXAMPLE;
+import static ru.effectmobile.task_management_system.util.DefaultInputs.LAST_NAME_EXAMPLE;
+import static ru.effectmobile.task_management_system.util.DefaultInputs.PHONE_NUMBER_EXAMPLE;
+import static ru.effectmobile.task_management_system.util.DefaultInputs.ROLE_EXAMPLE;
+import static ru.effectmobile.task_management_system.util.DefaultInputs.USERNAME_EXAMPLE;
+import static ru.effectmobile.task_management_system.util.DefaultInputs.USER_ID_EXAMPLE_JSON;
 
 @Getter
 @Builder

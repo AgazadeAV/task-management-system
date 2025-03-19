@@ -17,11 +17,11 @@ import ru.effectmobile.task_management_system.service.facade.UserFacade;
 
 @Slf4j
 @RestController
-@RequestMapping("${api.base.url}" + AuthController.AUTH_API_URI)
+@RequestMapping("${api.base.url}" + AuthController.AUTH_API_URL)
 @RequiredArgsConstructor
 public class AuthController implements AuthApiSpec {
 
-    public static final String AUTH_API_URI = "/auth";
+    public static final String AUTH_API_URL = "/auth";
     public static final String LOGIN = "/login";
     public static final String REGISTER = "/register";
 

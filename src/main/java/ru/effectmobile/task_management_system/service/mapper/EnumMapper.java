@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.ENUM_VALUE_EMPTY_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.ENUM_VALUE_NULL_OR_EMPTY_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.INVALID_ENUM_VALUE_MESSAGE;
 
@@ -22,6 +23,30 @@ public final class EnumMapper {
         if (StringUtils.isBlank(value)) {
             throw new InvalidEnumValueException(String.format(
                     ENUM_VALUE_NULL_OR_EMPTY_MESSAGE,
+                    enumClass.getSimpleName(),
+                    getAllowedValues(enumClass)
+            ));
+        }
+
+        return Arrays.stream(enumClass.getEnumConstants())
+                .filter(type -> type.name().equalsIgnoreCase(value))
+                .findFirst()
+                .orElseThrow(() -> new InvalidEnumValueException(String.format(
+                        INVALID_ENUM_VALUE_MESSAGE,
+                        value,
+                        enumClass.getSimpleName(),
+                        getAllowedValues(enumClass)
+                )));
+    }
+
+    public static <T extends Enum<T>> T mapToEnumNullable(Class<T> enumClass, String value) {
+        if (value == null) {
+            return null;
+        }
+
+        if (StringUtils.isEmpty(value)) {
+            throw new InvalidEnumValueException(String.format(
+                    ENUM_VALUE_EMPTY_MESSAGE,
                     enumClass.getSimpleName(),
                     getAllowedValues(enumClass)
             ));

@@ -14,11 +14,11 @@ public interface TaskFacade {
 
     TaskResponseDTO getTaskById(UUID id);
 
-    TaskResponseDTO createTask(TaskRequestDTO taskDTO);
+    TaskResponseDTO createTask(TaskRequestDTO taskDTO, String email);
 
-    TaskResponseDTO updateTask(UUID id, TaskRequestDTO taskDTO);
+    TaskResponseDTO updateTask(UUID id, TaskRequestDTO taskDTO, String email);
 
-    void deleteTask(UUID id);
+    void deleteTask(UUID id, String email);
 
     Page<TaskResponseDTO> getTasksWithFilters(TaskFilterDTO filter, Pageable pageable);
 }

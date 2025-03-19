@@ -23,12 +23,12 @@ import java.util.UUID;
 
 @Slf4j
 @RestController
-@RequestMapping("${api.base.url}" + UserController.USER_API_URI)
+@RequestMapping("${api.base.url}" + UserController.USER_API_URL)
 @RequiredArgsConstructor
 @SecurityRequirement(name = "bearerAuth")
 public class UserController implements UserApiSpec {
 
-    public static final String USER_API_URI = "/users";
+    public static final String USER_API_URL = "/users";
     public static final String GET_ALL_USERS = "/users-list";
     public static final String GET_USER_BY_ID = "/user/{id}";
     public static final String CREATE_USER = "/create-user";

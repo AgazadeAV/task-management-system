@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.effectmobile.task_management_system.service.base.CipherService;
 import ru.effectmobile.task_management_system.service.base.JwtService;
 
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final CipherService cipherService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -50,7 +52,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             userEmail = jwtService.extractUsername(jwt).trim();
-            log.debug("Extracted username from JWT: {}", userEmail);
+            log.debug("Extracted username from JWT: {}", cipherService.decrypt(userEmail));
         } catch (Exception e) {
             log.warn("Failed to extract username from JWT: {}", e.getMessage());
             filterChain.doFilter(request, response);
@@ -62,18 +64,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt, userDetails)) {
-                log.info("JWT token is valid for user: {}", userEmail);
+                log.info("JWT token is valid for user: {}", cipherService.decrypt(userEmail));
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                log.info("User '{}' successfully authenticated and added to SecurityContext.", userEmail);
+                log.info("User '{}' successfully authenticated and added to SecurityContext.", cipherService.decrypt(userEmail));
             } else {
-                log.warn("JWT token is invalid for user: {}", userEmail);
+                log.warn("JWT token is invalid for user: {}", cipherService.decrypt(userEmail));
             }
         } else {
-            log.debug("User '{}' is already authenticated.", userEmail);
+            log.debug("User '{}' is already authenticated.", cipherService.decrypt(userEmail));
         }
 
         filterChain.doFilter(request, response);

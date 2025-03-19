@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import ru.effectmobile.task_management_system.model.entity.User;
+import ru.effectmobile.task_management_system.service.base.CipherService;
 import ru.effectmobile.task_management_system.service.base.JwtService;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -21,6 +22,7 @@ import java.util.function.Function;
 @Service
 public class JwtServiceImpl implements JwtService {
 
+    private final CipherService cipherService;
     private final Key signInKey;
     private final long jwtExpirationMs;
     private final String issuer;
@@ -29,18 +31,19 @@ public class JwtServiceImpl implements JwtService {
             @Value("${jwt.secret}") String secretKey,
             @Value("${jwt.expiration}") long jwtExpirationMs,
             @Value("${jwt.issuer}") String issuer,
-            @Value("${hash.algorithm}") String hashAlgorithm
-    ) {
+            @Value("${hash.algorithm}") String hashAlgorithm,
+            CipherService cipherService) {
         this.signInKey = new SecretKeySpec(Base64.getDecoder().decode(secretKey), hashAlgorithm);
         this.jwtExpirationMs = jwtExpirationMs;
         this.issuer = issuer;
         log.info("JWT Service initialized with expiration: {}ms, issuer: {}", jwtExpirationMs, issuer);
+        this.cipherService = cipherService;
     }
 
     @Override
     public String extractUsername(String token) {
         String username = extractClaim(token, Claims::getSubject);
-        log.debug("Extracted username from token: {}", username);
+        log.debug("Extracted username from token: {}", cipherService.encrypt(username));
         return username;
     }
 
@@ -61,7 +64,7 @@ public class JwtServiceImpl implements JwtService {
                 .setIssuer(issuer)
                 .signWith(signInKey, SignatureAlgorithm.HS256)
                 .compact();
-        log.info("Generated JWT token for user: {}", user.getEmail());
+        log.info("Generated JWT token for user: {}", cipherService.decrypt(user.getEmail()));
         return token;
     }
 
@@ -69,7 +72,7 @@ public class JwtServiceImpl implements JwtService {
     public boolean isTokenValid(String token, UserDetails userDetails) {
         String username = extractUsername(token);
         boolean valid = username.equals(userDetails.getUsername()) && !isTokenExpired(token) && isIssuerValid(token);
-        log.info("Token validation result for user {}: {}", username, valid);
+        log.info("Token validation result for user {}: {}", cipherService.encrypt(username), valid);
         return valid;
     }
 

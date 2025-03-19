@@ -14,7 +14,10 @@ import org.springframework.http.ResponseEntity;
 import ru.effectmobile.task_management_system.dto.requests.CommentRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.CommentResponseDTO;
 
+import java.security.Principal;
 import java.util.UUID;
+
+import static ru.effectmobile.task_management_system.util.DefaultInputs.COMMENT_ID_EXAMPLE_JSON;
 
 @Tag(name = "Comment API", description = "API for managing comments on tasks")
 public interface CommentApiSpec {
@@ -29,7 +32,7 @@ public interface CommentApiSpec {
                     content = @Content(schema = @Schema(hidden = true)))
     })
     ResponseEntity<Page<CommentResponseDTO>> getTaskComments(
-            @Parameter(description = "UUID of the task", required = true, example = "550e8400-e29b-41d4-a716-446655440000")
+            @Parameter(description = "UUID of the task", required = true, example = COMMENT_ID_EXAMPLE_JSON)
             UUID taskId,
             Pageable pageable
     );
@@ -40,10 +43,10 @@ public interface CommentApiSpec {
                     content = @Content(schema = @Schema(implementation = CommentResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input data",
                     content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = "404", description = "Task or user not found",
+            @ApiResponse(responseCode = "404", description = "Task not found",
                     content = @Content(schema = @Schema(hidden = true)))
     })
-    ResponseEntity<CommentResponseDTO> createComment(@Valid CommentRequestDTO commentRequestDTO);
+    ResponseEntity<CommentResponseDTO> createComment(@Valid CommentRequestDTO commentRequestDTO, Principal principal);
 
     @Operation(summary = "Delete a comment", description = "Deletes a comment by its ID")
     @ApiResponses(value = {
@@ -52,7 +55,7 @@ public interface CommentApiSpec {
                     content = @Content(schema = @Schema(hidden = true)))
     })
     ResponseEntity<Void> deleteComment(
-            @Parameter(description = "UUID of the comment", required = true, example = "550e8400-e29b-41d4-a716-446655440000")
-            UUID id
+            @Parameter(description = "UUID of the comment", required = true, example = COMMENT_ID_EXAMPLE_JSON)
+            UUID id, Principal principal
     );
 }

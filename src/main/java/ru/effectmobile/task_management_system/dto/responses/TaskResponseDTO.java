@@ -1,9 +1,9 @@
 package ru.effectmobile.task_management_system.dto.responses;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import ru.effectmobile.task_management_system.config.swagger.schemas.responses.TaskResponseDTOSchema;
 import ru.effectmobile.task_management_system.model.enums.TaskPriority;
 import ru.effectmobile.task_management_system.model.enums.TaskStatus;
-import ru.effectmobile.task_management_system.config.swagger.schemas.responses.TaskResponseDTOSchema;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

@@ -24,6 +24,7 @@ import ru.effectmobile.task_management_system.service.facade.impl.CommentFacadeI
 import ru.effectmobile.task_management_system.service.factory.CommentFactory;
 import ru.effectmobile.task_management_system.service.factory.MetaDataFactory;
 import ru.effectmobile.task_management_system.service.mapper.CommentMapper;
+import ru.effectmobile.task_management_system.service.base.CipherService;
 
 import java.util.List;
 
@@ -61,6 +62,9 @@ class CommentFacadeTest {
     @Mock
     private MetaDataFactory metaDataFactory;
 
+    @Mock
+    private CipherService cipherService;
+
     @InjectMocks
     private CommentFacadeImpl commentFacade;
 
@@ -90,17 +94,18 @@ class CommentFacadeTest {
     @Test
     void createComment_ShouldReturnSavedComment() {
         when(taskService.findById(TASK.getId())).thenReturn(TASK);
-        when(userService.findById(AUTHOR.getId())).thenReturn(AUTHOR);
+        when(userService.findByEmail(AUTHOR.getEmail())).thenReturn(AUTHOR);
         when(metaDataFactory.createMetaData()).thenReturn(META_DATA);
         when(commentFactory.createComment(COMMENT_REQUEST_DTO, TASK, AUTHOR, META_DATA)).thenReturn(COMMENT);
         when(commentService.save(COMMENT)).thenReturn(COMMENT);
         when(commentMapper.commentToResponseDTO(COMMENT)).thenReturn(COMMENT_RESPONSE_DTO);
+        when(cipherService.decrypt(AUTHOR.getEmail())).thenReturn(AUTHOR.getEmail());
 
-        CommentResponseDTO result = commentFacade.createComment(COMMENT_REQUEST_DTO);
+        CommentResponseDTO result = commentFacade.createComment(COMMENT_REQUEST_DTO, AUTHOR.getEmail());
 
         assertEquals(COMMENT_RESPONSE_DTO, result);
         verify(taskService).findById(TASK.getId());
-        verify(userService).findById(AUTHOR.getId());
+        verify(userService).findByEmail(AUTHOR.getEmail());
         verify(commentFactory).createComment(COMMENT_REQUEST_DTO, TASK, AUTHOR, META_DATA);
         verify(commentService).save(COMMENT);
     }
@@ -108,8 +113,10 @@ class CommentFacadeTest {
     @Test
     void deleteComment_ShouldDeleteSuccessfully() {
         doNothing().when(commentService).deleteById(COMMENT.getId());
+        when(userService.findByEmail(AUTHOR.getEmail())).thenReturn(AUTHOR);
+        when(commentService.findById(COMMENT.getId())).thenReturn(COMMENT);
 
-        assertDoesNotThrow(() -> commentFacade.deleteComment(COMMENT.getId()));
+        assertDoesNotThrow(() -> commentFacade.deleteComment(COMMENT.getId(), AUTHOR.getEmail()));
 
         verify(commentService).deleteById(COMMENT.getId());
     }

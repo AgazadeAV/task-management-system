@@ -25,8 +25,5 @@ public record TaskRequestDTO(
         @NotNull(message = "Task priority cannot be null")
         String priority,
 
-        @NotNull(message = "Author ID cannot be null")
-        UUID authorId,
-
         UUID assigneeId
 ) {}

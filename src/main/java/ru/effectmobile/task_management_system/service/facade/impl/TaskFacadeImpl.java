@@ -9,8 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.effectmobile.task_management_system.dto.filters.TaskFilterDTO;
 import ru.effectmobile.task_management_system.dto.requests.TaskRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.TaskResponseDTO;
+import ru.effectmobile.task_management_system.exception.custom.auth.UserDoesntHaveEnoughRightsException;
 import ru.effectmobile.task_management_system.model.entity.Task;
 import ru.effectmobile.task_management_system.model.entity.User;
+import ru.effectmobile.task_management_system.model.enums.Role;
 import ru.effectmobile.task_management_system.model.metadata.MetaData;
 import ru.effectmobile.task_management_system.service.base.TaskService;
 import ru.effectmobile.task_management_system.service.base.UserService;
@@ -20,6 +22,9 @@ import ru.effectmobile.task_management_system.service.factory.TaskFactory;
 import ru.effectmobile.task_management_system.service.mapper.TaskMapper;
 
 import java.util.UUID;
+
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.TASK_CREATE_OR_DELETE_FORBIDDEN_MESSAGE;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.TASK_UPDATE_FORBIDDEN_MESSAGE;
 
 @Slf4j
 @Service
@@ -53,9 +58,10 @@ public class TaskFacadeImpl implements TaskFacade {
 
     @Override
     @Transactional
-    public TaskResponseDTO createTask(TaskRequestDTO taskDTO) {
+    public TaskResponseDTO createTask(TaskRequestDTO taskDTO, String email) {
+        User author = userService.findByEmail(email);
+        canUserCreateOrDeleteTask(email);
         log.info("Creating a new task with title: {}", taskDTO.title());
-        User author = userService.findById(taskDTO.authorId());
         MetaData metaData = metaDataFactory.createMetaData();
         Task task = taskFactory.createTask(taskDTO, author, metaData);
         setAssignee(task, taskDTO.assigneeId());
@@ -68,7 +74,8 @@ public class TaskFacadeImpl implements TaskFacade {
 
     @Override
     @Transactional
-    public TaskResponseDTO updateTask(UUID id, TaskRequestDTO taskDTO) {
+    public TaskResponseDTO updateTask(UUID id, TaskRequestDTO taskDTO, String email) {
+        canUserUpdateTask(email, taskDTO);
         log.info("Updating task with ID: {}", id);
         Task task = taskService.findById(id);
         taskMapper.updateTaskFromRequestDTO(taskDTO, task);
@@ -82,7 +89,8 @@ public class TaskFacadeImpl implements TaskFacade {
 
     @Override
     @Transactional
-    public void deleteTask(UUID id) {
+    public void deleteTask(UUID id, String email) {
+        canUserCreateOrDeleteTask(email);
         log.warn("Deleting task with ID: {}", id);
         taskService.deleteById(id);
         log.info("Task deleted successfully with ID: {}", id);
@@ -108,6 +116,23 @@ public class TaskFacadeImpl implements TaskFacade {
             log.debug("Assigning user ID: {} to task ID: {}", assigneeId, task.getId());
             User assignee = userService.findById(assigneeId);
             task.setAssignee(assignee);
+        }
+    }
+
+    private void canUserUpdateTask(String email, TaskRequestDTO taskDTO) {
+        User user = userService.findByEmail(email);
+        Role role = user.getRole();
+        if (!role.equals(Role.ROLE_ADMIN)) {
+            if (!user.getId().equals(taskDTO.assigneeId())) {
+                throw new UserDoesntHaveEnoughRightsException(TASK_UPDATE_FORBIDDEN_MESSAGE);
+            }
+        }
+    }
+
+    private void canUserCreateOrDeleteTask(String email) {
+        Role role = userService.findByEmail(email).getRole();
+        if (!role.equals(Role.ROLE_ADMIN)) {
+            throw new UserDoesntHaveEnoughRightsException(TASK_CREATE_OR_DELETE_FORBIDDEN_MESSAGE);
         }
     }
 }

@@ -112,13 +112,13 @@ class TaskFacadeTest {
 
     @Test
     void createTask_ShouldReturnSavedTask() {
-        when(userService.findById(any(UUID.class))).thenReturn(AUTHOR);
         when(metaDataFactory.createMetaData()).thenReturn(META_DATA);
         when(taskFactory.createTask(any(TaskRequestDTO.class), any(User.class), any(MetaData.class))).thenReturn(TASK);
         when(taskService.save(any(Task.class))).thenReturn(TASK);
         when(taskMapper.taskToResponseDTO(TASK)).thenReturn(RESPONSE_DTO);
+        when(userService.findByEmail(AUTHOR.getEmail())).thenReturn(AUTHOR);
 
-        TaskResponseDTO result = taskFacade.createTask(REQUEST_DTO);
+        TaskResponseDTO result = taskFacade.createTask(REQUEST_DTO, AUTHOR.getEmail());
 
         assertNotNull(result);
         assertEquals(RESPONSE_DTO, result);
@@ -132,8 +132,9 @@ class TaskFacadeTest {
         doNothing().when(taskMapper).updateTaskFromRequestDTO(any(TaskRequestDTO.class), any(Task.class));
         when(taskService.save(any(Task.class))).thenReturn(TASK);
         when(taskMapper.taskToResponseDTO(any(Task.class))).thenReturn(RESPONSE_DTO);
+        when(userService.findByEmail(AUTHOR.getEmail())).thenReturn(AUTHOR);
 
-        TaskResponseDTO result = taskFacade.updateTask(TASK.getId(), REQUEST_DTO);
+        TaskResponseDTO result = taskFacade.updateTask(TASK.getId(), REQUEST_DTO, AUTHOR.getEmail());
 
         assertEquals(RESPONSE_DTO, result);
         verify(taskService).save(TASK);
@@ -142,8 +143,9 @@ class TaskFacadeTest {
     @Test
     void deleteTask_ShouldDeleteSuccessfully() {
         doNothing().when(taskService).deleteById(TASK.getId());
+        when(userService.findByEmail(AUTHOR.getEmail())).thenReturn(AUTHOR);
 
-        assertDoesNotThrow(() -> taskFacade.deleteTask(TASK.getId()));
+        assertDoesNotThrow(() -> taskFacade.deleteTask(TASK.getId(), AUTHOR.getEmail()));
 
         verify(taskService).deleteById(TASK.getId());
     }

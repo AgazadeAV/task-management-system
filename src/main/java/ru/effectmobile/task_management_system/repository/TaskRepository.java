@@ -16,12 +16,12 @@ import java.util.UUID;
 public interface TaskRepository extends JpaRepository<Task, UUID> {
 
     @Query("""
-        SELECT t FROM Task t
-        WHERE (:authorId IS NULL OR t.author.id = :authorId)
-          AND (:assigneeId IS NULL OR t.assignee.id = :assigneeId)
-          AND (:status IS NULL OR t.status = :status)
-          AND (:priority IS NULL OR t.priority = :priority)
-    """)
+                SELECT t FROM Task t
+                WHERE (:authorId IS NULL OR t.author.id = :authorId)
+                  AND (:assigneeId IS NULL OR t.assignee.id = :assigneeId)
+                  AND (:status IS NULL OR t.status = :status)
+                  AND (:priority IS NULL OR t.priority = :priority)
+            """)
     Page<Task> findWithFilters(
             @Param("authorId") UUID authorId,
             @Param("assigneeId") UUID assigneeId,

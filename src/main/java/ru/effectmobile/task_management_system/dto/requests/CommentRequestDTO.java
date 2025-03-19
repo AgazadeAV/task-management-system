@@ -14,9 +14,6 @@ public record CommentRequestDTO(
         @NotNull(message = "Task ID cannot be null")
         UUID taskId,
 
-        @NotNull(message = "Author ID cannot be null")
-        UUID authorId,
-
         @NotBlank(message = "Comment text cannot be null")
         @Size(min = 1, max = 2000, message = "Comment text must be between 1 and 2000 characters")
         String text
