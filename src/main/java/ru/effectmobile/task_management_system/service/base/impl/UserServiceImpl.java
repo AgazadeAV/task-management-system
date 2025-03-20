@@ -2,6 +2,8 @@ package ru.effectmobile.task_management_system.service.base.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "usersById", key = "#id")
     @Transactional(readOnly = true)
     public User findById(UUID id) {
         log.debug("Searching for user by ID: {}", id);
@@ -50,6 +53,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = {"usersByEmail", "usersById"}, key = "#user.email")
     @Transactional
     public User save(User user) {
         log.info("Saving user: {}", user.getEmail());
@@ -57,6 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = {"usersByEmail", "usersById"}, key = "#id")
     @Transactional
     public void deleteById(UUID id) {
         log.info("Deleting user by ID: {}", id);
@@ -66,6 +71,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "usersByEmail", key = "#email")
     @Transactional(readOnly = true)
     public User findByEmail(String email) {
         log.debug("Searching for user by email: {}", email);

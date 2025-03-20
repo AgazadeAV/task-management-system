@@ -12,6 +12,7 @@ spring:
     enabled: false
   profiles:
     active: test
+
 jwt:
   secret: ${JWT_SECRET}
   expiration: ${JWT_EXPIRATION}
@@ -23,6 +24,7 @@ logging:
     org.springframework: INFO
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.cache: DEBUG
 
 crypto:
   cipher-algorithm: ${CRYPTO_CIPHER_ALGORITHM}

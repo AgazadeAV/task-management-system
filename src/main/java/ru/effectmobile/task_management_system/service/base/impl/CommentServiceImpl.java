@@ -2,6 +2,8 @@ package ru.effectmobile.task_management_system.service.base.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Cacheable(value = "commentsById", key = "#id")
     @Transactional(readOnly = true)
     public Comment findById(UUID id) {
         log.debug("Fetching comment by id: {}", id);
@@ -40,6 +43,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @CacheEvict(value = {"commentsById", "commentsByTask"}, key = "#comment.id")
     @Transactional
     public Comment save(Comment comment) {
         log.debug("Saving comment: {}", comment);
@@ -47,6 +51,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @CacheEvict(value = {"commentsById", "commentsByTask"}, key = "#id")
     @Transactional
     public void deleteById(UUID id) {
         log.debug("Deleting comment by id: {}", id);
@@ -56,6 +61,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Cacheable(value = "commentsByTask", key = "#taskId.toString() + #pageable.toString()")
     @Transactional(readOnly = true)
     public Page<Comment> findByTaskId(UUID taskId, Pageable pageable) {
         log.debug("Fetching comments for task id: {} with pagination: {}", taskId, pageable);

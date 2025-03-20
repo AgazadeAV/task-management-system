@@ -24,6 +24,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   liquibase:
     user: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
@@ -31,6 +32,11 @@ spring:
     compose:
       enabled: true
       file: docker-compose.yaml
+  cache:
+    type: caffeine
+    caffeine:
+        maximum-size: 5000
+        expire-after-write: 600
 
 jwt:
   secret: ${JWT_SECRET}
@@ -61,6 +67,7 @@ logging:
     org.springframework: INFO
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.cache: DEBUG
 
 crypto:
   cipher-algorithm: ${CRYPTO_CIPHER_ALGORITHM}

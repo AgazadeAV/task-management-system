@@ -109,6 +109,7 @@ public final class ExceptionMessageUtil {
         public static final String ADMIN_ACCESS_DENIED_MESSAGE = "Only administrators can access this resource.";
         public static final String COMMENT_DELETE_FORBIDDEN_MESSAGE = "User doesn't have enough rights to delete the comment.";
         public static final String TASK_UPDATE_FORBIDDEN_MESSAGE = "User doesn't have enough rights to update the task.";
-        public static final String TASK_CREATE_OR_DELETE_FORBIDDEN_MESSAGE = "User doesn't have enough rights to create/delete the task.";
+        public static final String TASK_CREATE_FORBIDDEN_MESSAGE = "User doesn't have enough rights to create the task.";
+        public static final String TASK_DELETE_FORBIDDEN_MESSAGE = "User doesn't have enough rights to delete the task.";
     }
 }

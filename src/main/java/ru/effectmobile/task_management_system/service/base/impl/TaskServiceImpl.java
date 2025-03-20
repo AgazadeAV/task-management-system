@@ -2,6 +2,8 @@ package ru.effectmobile.task_management_system.service.base.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Cacheable(value = "tasksById", key = "#id")
     @Transactional(readOnly = true)
     public Task findById(UUID id) {
         log.debug("Searching for task with ID: {}", id);
@@ -42,6 +45,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @CacheEvict(value = {"tasksById", "tasksByFilters"}, key = "#task.id")
     @Transactional
     public Task save(Task task) {
         log.info("Saving task: {}", task);
@@ -49,6 +53,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @CacheEvict(value = {"tasksById", "tasksByFilters"}, key = "#id")
     @Transactional
     public void deleteById(UUID id) {
         log.info("Deleting task with ID: {}", id);
@@ -58,6 +63,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Cacheable(value = "tasksByFilters", key = "#filter.toString() + #pageable.toString()")
     @Transactional(readOnly = true)
     public Page<Task> findWithFilters(TaskFilterDTO filter, Pageable pageable) {
         log.debug("Fetching tasks with filters: {} and pagination: {}", filter, pageable);
