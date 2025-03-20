@@ -54,6 +54,8 @@ jobs:
       ADMIN_BIRTH_DATE: ${{ secrets.ADMIN_BIRTH_DATE }}
       ADMIN_PHONE_NUMBER: ${{ secrets.ADMIN_PHONE_NUMBER }}
 
+      SPRING_PROFILES_ACTIVE: test
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
