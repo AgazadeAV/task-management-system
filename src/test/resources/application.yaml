@@ -12,6 +12,11 @@ spring:
     enabled: false
   profiles:
     active: test
+  cache:
+    type: caffeine
+    caffeine:
+      maximum-size: 5000
+      expire-after-write: 600
 
 jwt:
   secret: ${JWT_SECRET}
@@ -52,4 +57,3 @@ springdoc:
 api:
   base:
     url: /api/v1
-

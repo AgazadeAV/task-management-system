@@ -52,11 +52,11 @@ public interface UserApiSpec {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User created successfully",
                     content = @Content(schema = @Schema(implementation = UserResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data",
+                    content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "401", description = "Unauthorized - authentication required",
                     content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "403", description = "Forbidden - user does not have permission to create new user",
-                    content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = "400", description = "Invalid input data",
                     content = @Content(schema = @Schema(hidden = true)))
     })
     ResponseEntity<UserResponseDTO> createUser(@Valid UserRequestDTO userRequestDTO);
