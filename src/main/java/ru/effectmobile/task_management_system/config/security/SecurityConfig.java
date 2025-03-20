@@ -1,10 +1,12 @@
 package ru.effectmobile.task_management_system.config.security;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,9 +17,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import ru.effectmobile.task_management_system.exception.custom.auth.AdminAccessDeniedException;
-import ru.effectmobile.task_management_system.exception.custom.auth.AuthenticationRequiredException;
 import ru.effectmobile.task_management_system.model.enums.Role;
+
+import java.time.LocalDateTime;
 
 import static ru.effectmobile.task_management_system.controller.AuthController.AUTH_API_URL;
 import static ru.effectmobile.task_management_system.controller.UserController.USER_API_URL;
@@ -56,11 +58,17 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
                             log.warn("Access denied: {}", request.getRequestURI());
-                            throw new AdminAccessDeniedException(ADMIN_ACCESS_DENIED_MESSAGE);
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
+                            response.getWriter().write(getJsonResponse(HttpServletResponse.SC_FORBIDDEN, ADMIN_ACCESS_DENIED_MESSAGE, request.getRequestURI()));
                         })
                         .authenticationEntryPoint((request, response, authException) -> {
                             log.warn("Unauthorized access attempt: {}", request.getRequestURI());
-                            throw new AuthenticationRequiredException(AUTHENTICATION_REQUIRED_MESSAGE);
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
+                            response.getWriter().write(getJsonResponse(HttpServletResponse.SC_UNAUTHORIZED, AUTHENTICATION_REQUIRED_MESSAGE, request.getRequestURI()));
                         })
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -102,5 +110,23 @@ public class SecurityConfig {
         };
         log.debug("Admin endpoints configured: {}", (Object) endpoints);
         return endpoints;
+    }
+
+    private String getJsonResponse(int status, String message, String path) {
+        return String.format("""
+        {
+            "timestamp": "%s",
+            "status": %d,
+            "error": "%s",
+            "message": "%s",
+            "path": "%s"
+        }
+        """,
+                LocalDateTime.now(),
+                status,
+                HttpStatus.valueOf(status).getReasonPhrase(),
+                message,
+                path
+        );
     }
 }
