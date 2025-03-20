@@ -22,8 +22,6 @@ public interface AuthApiSpec {
                     content = @Content(schema = @Schema(implementation = AuthResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid email or password",
                     content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = "401", description = "Unauthorized access",
-                    content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "404", description = "Email is not registered",
                     content = @Content(schema = @Schema(hidden = true))),
     })
