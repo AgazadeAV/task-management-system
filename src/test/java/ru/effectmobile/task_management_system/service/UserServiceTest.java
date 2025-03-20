@@ -8,14 +8,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import ru.effectmobile.task_management_system.dto.filters.UserCredsExistanceCheckDTO;
-import ru.effectmobile.task_management_system.exception.custom.conflict.EmailAlreadyRegisteredException;
-import ru.effectmobile.task_management_system.exception.custom.conflict.PhoneNumberAlreadyRegisteredException;
-import ru.effectmobile.task_management_system.exception.custom.conflict.UsernameAlreadyRegisteredException;
+import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
 import ru.effectmobile.task_management_system.exception.custom.notfound.UserNotFoundException;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
 import ru.effectmobile.task_management_system.repository.UserRepository;
+import ru.effectmobile.task_management_system.service.base.CipherService;
 import ru.effectmobile.task_management_system.service.base.impl.UserServiceImpl;
 
 import java.util.List;
@@ -29,11 +27,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static ru.effectmobile.task_management_system.util.DefaultInputs.ENCRYPTED_EMAIL_EXAMPLE;
-import static ru.effectmobile.task_management_system.util.DefaultInputs.ENCRYPTED_PHONE_NUMBER_EXAMPLE;
-import static ru.effectmobile.task_management_system.util.DefaultInputs.ENCRYPTED_USERNAME_EXAMPLE;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createUser;
-import static ru.effectmobile.task_management_system.util.ModelCreator.createUserCredsExistanceCheckDTO;
+import static ru.effectmobile.task_management_system.util.ModelCreator.createUserRequestDTO;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -43,6 +38,9 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private CipherService cipherService;
 
     private static final User USER = createUser(Role.ROLE_ADMIN);
     private static final PageRequest PAGEABLE = PageRequest.of(0, 10);
@@ -78,6 +76,7 @@ class UserServiceTest {
 
     @Test
     void save_ShouldReturnSavedUser() {
+        when(cipherService.decrypt(USER.getEmail())).thenReturn(USER.getEmail());
         when(userRepository.save(USER)).thenReturn(USER);
 
         User result = userService.save(USER);
@@ -108,6 +107,7 @@ class UserServiceTest {
     @Test
     void findByEmail_ShouldReturnUser_WhenExists() {
         when(userRepository.findByEmail(USER.getEmail())).thenReturn(Optional.of(USER));
+        when(cipherService.decrypt(USER.getEmail())).thenReturn(USER.getEmail());
 
         User result = userService.findByEmail(USER.getEmail());
 
@@ -121,63 +121,5 @@ class UserServiceTest {
 
         assertThrows(UserNotFoundException.class, () -> userService.findByEmail(USER.getEmail()));
         verify(userRepository).findByEmail(USER.getEmail());
-    }
-
-    @Test
-    void validateExistingFields_ShouldThrowException_WhenUsernameExists() {
-        UserCredsExistanceCheckDTO request = createUserCredsExistanceCheckDTO();
-        UserCredsExistanceCheckDTO encryptedRequest = new UserCredsExistanceCheckDTO(request.username(), ENCRYPTED_EMAIL_EXAMPLE, ENCRYPTED_PHONE_NUMBER_EXAMPLE);
-
-        when(userRepository.findByUsernameOrEmailOrPhoneNumber(
-                encryptedRequest.username(),
-                encryptedRequest.email(),
-                encryptedRequest.phoneNumber()
-        )).thenReturn(Optional.of(USER));
-
-        assertThrows(UsernameAlreadyRegisteredException.class, () -> userService.validateExistingFields(request, encryptedRequest));
-        verify(userRepository).findByUsernameOrEmailOrPhoneNumber(any(), any(), any());
-    }
-
-    @Test
-    void validateExistingFields_ShouldThrowException_WhenEmailExists() {
-        UserCredsExistanceCheckDTO request = createUserCredsExistanceCheckDTO();
-        UserCredsExistanceCheckDTO encryptedRequest = new UserCredsExistanceCheckDTO(ENCRYPTED_USERNAME_EXAMPLE, request.email(), ENCRYPTED_PHONE_NUMBER_EXAMPLE);
-
-        when(userRepository.findByUsernameOrEmailOrPhoneNumber(
-                encryptedRequest.username(),
-                encryptedRequest.email(),
-                encryptedRequest.phoneNumber()
-        )).thenReturn(Optional.of(USER));
-
-        assertThrows(EmailAlreadyRegisteredException.class, () -> userService.validateExistingFields(request, encryptedRequest));
-    }
-
-    @Test
-    void validateExistingFields_ShouldThrowException_WhenPhoneNumberExists() {
-        UserCredsExistanceCheckDTO request = createUserCredsExistanceCheckDTO();
-        UserCredsExistanceCheckDTO encryptedRequest = new UserCredsExistanceCheckDTO(ENCRYPTED_USERNAME_EXAMPLE, ENCRYPTED_EMAIL_EXAMPLE, request.phoneNumber());
-
-        when(userRepository.findByUsernameOrEmailOrPhoneNumber(
-                encryptedRequest.username(),
-                encryptedRequest.email(),
-                encryptedRequest.phoneNumber()
-        )).thenReturn(Optional.of(USER));
-
-        assertThrows(PhoneNumberAlreadyRegisteredException.class, () -> userService.validateExistingFields(request, encryptedRequest));
-    }
-
-    @Test
-    void validateExistingFields_ShouldPass_WhenNoConflicts() {
-        UserCredsExistanceCheckDTO request = createUserCredsExistanceCheckDTO();
-        UserCredsExistanceCheckDTO encryptedRequest = createUserCredsExistanceCheckDTO();
-
-        when(userRepository.findByUsernameOrEmailOrPhoneNumber(
-                encryptedRequest.username(),
-                encryptedRequest.email(),
-                encryptedRequest.phoneNumber()
-        )).thenReturn(Optional.empty());
-
-        assertDoesNotThrow(() -> userService.validateExistingFields(request, encryptedRequest));
-        verify(userRepository).findByUsernameOrEmailOrPhoneNumber(any(), any(), any());
     }
 }

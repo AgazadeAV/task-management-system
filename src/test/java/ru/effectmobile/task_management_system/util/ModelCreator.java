@@ -1,7 +1,6 @@
 package ru.effectmobile.task_management_system.util;
 
 import ru.effectmobile.task_management_system.dto.filters.TaskFilterDTO;
-import ru.effectmobile.task_management_system.dto.filters.UserCredsExistanceCheckDTO;
 import ru.effectmobile.task_management_system.dto.requests.CommentRequestDTO;
 import ru.effectmobile.task_management_system.dto.requests.LoginRequestDTO;
 import ru.effectmobile.task_management_system.dto.requests.TaskRequestDTO;
@@ -203,14 +202,6 @@ public class ModelCreator {
                 assigneeId,
                 status,
                 priority
-        );
-    }
-
-    public static UserCredsExistanceCheckDTO createUserCredsExistanceCheckDTO() {
-        return new UserCredsExistanceCheckDTO(
-                USERNAME_EXAMPLE,
-                EMAIL_EXAMPLE,
-                PHONE_NUMBER_EXAMPLE
         );
     }
 

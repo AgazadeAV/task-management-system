@@ -24,10 +24,12 @@ import static ru.effectmobile.task_management_system.util.DefaultInputs.TASK_ID_
 @Tag(name = "Task API", description = "API for managing tasks")
 public interface TaskApiSpec {
 
-    @Operation(summary = "Get all tasks", description = "Returns a paginated list of tasks.")
+    @Operation(summary = "Get all tasks", description = "Returns a paginated list of all tasks.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Tasks retrieved successfully",
-                    content = @Content(schema = @Schema(implementation = TaskResponseDTO.class)))
+                    content = @Content(schema = @Schema(implementation = TaskResponseDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - authentication required",
+                    content = @Content(schema = @Schema(hidden = true)))
     })
     ResponseEntity<Page<TaskResponseDTO>> getAllTasks(Pageable pageable);
 
@@ -35,6 +37,8 @@ public interface TaskApiSpec {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Task retrieved successfully",
                     content = @Content(schema = @Schema(implementation = TaskResponseDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - authentication required",
+                    content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "404", description = "Task not found",
                     content = @Content(schema = @Schema(hidden = true)))
     })
@@ -48,6 +52,10 @@ public interface TaskApiSpec {
             @ApiResponse(responseCode = "201", description = "Task created successfully",
                     content = @Content(schema = @Schema(implementation = TaskResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input data",
+                    content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - authentication required",
+                    content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "403", description = "Forbidden - user does not have permission to create task",
                     content = @Content(schema = @Schema(hidden = true)))
     })
     ResponseEntity<TaskResponseDTO> createTask(@Valid TaskRequestDTO taskRequestDTO, Principal principal);
@@ -56,9 +64,13 @@ public interface TaskApiSpec {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Task updated successfully",
                     content = @Content(schema = @Schema(implementation = TaskResponseDTO.class))),
-            @ApiResponse(responseCode = "404", description = "Task not found",
-                    content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "400", description = "Invalid input data",
+                    content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - authentication required",
+                    content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "403", description = "Forbidden - user does not have permission to update this task",
+                    content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "404", description = "Task not found",
                     content = @Content(schema = @Schema(hidden = true)))
     })
     ResponseEntity<TaskResponseDTO> updateTask(
@@ -70,6 +82,10 @@ public interface TaskApiSpec {
     @Operation(summary = "Delete a task", description = "Deletes a task by ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Task deleted successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - authentication required",
+                    content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "403", description = "Forbidden - user does not have permission to delete this task",
+                    content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "404", description = "Task not found",
                     content = @Content(schema = @Schema(hidden = true)))
     })
@@ -82,10 +98,10 @@ public interface TaskApiSpec {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Tasks retrieved successfully",
                     content = @Content(schema = @Schema(implementation = TaskResponseDTO.class))),
-            @ApiResponse(responseCode = "204", description = "No tasks found matching the filters",
-                    content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "400", description = "Invalid filter criteria",
-                    content = @Content(schema = @Schema(hidden = true)))
+                    content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - authentication required",
+                    content = @Content(schema = @Schema(hidden = true))),
     })
     ResponseEntity<Page<TaskResponseDTO>> getTasksWithFilters(
             @RequestParam(required = false) UUID authorId,

@@ -8,13 +8,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.effectmobile.task_management_system.dto.filters.UserCredsExistanceCheckDTO;
+import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
 import ru.effectmobile.task_management_system.exception.custom.conflict.EmailAlreadyRegisteredException;
 import ru.effectmobile.task_management_system.exception.custom.conflict.PhoneNumberAlreadyRegisteredException;
 import ru.effectmobile.task_management_system.exception.custom.conflict.UsernameAlreadyRegisteredException;
 import ru.effectmobile.task_management_system.exception.custom.notfound.UserNotFoundException;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.repository.UserRepository;
+import ru.effectmobile.task_management_system.service.base.CipherService;
 import ru.effectmobile.task_management_system.service.base.UserService;
 
 import java.util.Optional;
@@ -32,6 +33,7 @@ import static ru.effectmobile.task_management_system.exception.util.ExceptionMes
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final CipherService cipherService;
 
     @Override
     @Transactional(readOnly = true)
@@ -56,7 +58,7 @@ public class UserServiceImpl implements UserService {
     @CacheEvict(value = {"usersByEmail", "usersById"}, key = "#user.email")
     @Transactional
     public User save(User user) {
-        log.info("Saving user: {}", user.getEmail());
+        log.info("Saving user: {}", cipherService.decrypt(user.getEmail()));
         return userRepository.save(user);
     }
 
@@ -74,37 +76,37 @@ public class UserServiceImpl implements UserService {
     @Cacheable(value = "usersByEmail", key = "#email")
     @Transactional(readOnly = true)
     public User findByEmail(String email) {
-        log.debug("Searching for user by email: {}", email);
+        log.debug("Searching for user by email: {}", cipherService.decrypt(email));
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> {
-                    log.warn("User not found by email: {}", email);
-                    return new UserNotFoundException(String.format(USER_NOT_FOUND_BY_EMAIL_MESSAGE, email));
+                    log.warn("User not found by email: {}", cipherService.decrypt(email));
+                    return new UserNotFoundException(String.format(USER_NOT_FOUND_BY_EMAIL_MESSAGE, cipherService.decrypt(email)));
                 });
     }
 
     @Override
-    public void validateExistingFields(UserCredsExistanceCheckDTO request, UserCredsExistanceCheckDTO encryptedRequest) {
+    public void validateExistingFields(UserRequestDTO request) {
         log.debug("Validating existing user fields: username={}, email={}, phone={}",
-                request.username(), request.email(), request.phoneNumber());
+                cipherService.decrypt(request.username()), cipherService.decrypt(request.email()), cipherService.decrypt(request.phoneNumber()));
 
         Optional<User> existingUser = userRepository.findByUsernameOrEmailOrPhoneNumber(
-                encryptedRequest.username(),
-                encryptedRequest.email(),
-                encryptedRequest.phoneNumber()
+                request.username(),
+                request.email(),
+                request.phoneNumber()
         );
 
         existingUser.ifPresent(user -> {
-            if (user.getUsername().equals(encryptedRequest.username())) {
-                log.warn("Username '{}' is already taken", request.username());
-                throw new UsernameAlreadyRegisteredException(String.format(USERNAME_ALREADY_REGISTERED, request.username()));
+            if (user.getUsername().equals(request.username())) {
+                log.warn("Username '{}' is already registered", cipherService.decrypt(request.username()));
+                throw new UsernameAlreadyRegisteredException(String.format(USERNAME_ALREADY_REGISTERED, cipherService.decrypt(request.username())));
             }
-            if (user.getEmail().equals(encryptedRequest.email())) {
-                log.warn("Email '{}' is already registered", request.email());
-                throw new EmailAlreadyRegisteredException(String.format(EMAIL_ALREADY_REGISTERED, request.email()));
+            if (user.getEmail().equals(request.email())) {
+                log.warn("Email '{}' is already registered", cipherService.decrypt(request.email()));
+                throw new EmailAlreadyRegisteredException(String.format(EMAIL_ALREADY_REGISTERED, cipherService.decrypt(request.email())));
             }
-            if (user.getPhoneNumber().equals(encryptedRequest.phoneNumber())) {
-                log.warn("Phone number '{}' is already in use", request.phoneNumber());
-                throw new PhoneNumberAlreadyRegisteredException(String.format(PHONE_NUMBER_ALREADY_REGISTERED, request.phoneNumber()));
+            if (user.getPhoneNumber().equals(request.phoneNumber())) {
+                log.warn("Phone number '{}' is already registered", cipherService.decrypt(request.phoneNumber()));
+                throw new PhoneNumberAlreadyRegisteredException(String.format(PHONE_NUMBER_ALREADY_REGISTERED, cipherService.decrypt(request.phoneNumber())));
             }
         });
 

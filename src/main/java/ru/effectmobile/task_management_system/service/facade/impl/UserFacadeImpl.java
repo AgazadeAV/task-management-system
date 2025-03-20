@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.effectmobile.task_management_system.dto.filters.UserCredsExistanceCheckDTO;
 import ru.effectmobile.task_management_system.dto.requests.LoginRequestDTO;
 import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.AuthResponseDTO;
@@ -65,7 +64,7 @@ public class UserFacadeImpl implements UserFacade {
     @Transactional
     public UserResponseDTO createUser(UserRequestDTO request) {
         log.info("Creating a new user with username: {}", request.username());
-        validateExistingFields(request);
+        userService.validateExistingFields(request);
         MetaData metaData = metaDataFactory.createMetaData();
         User user = userFactory.createUser(request, metaData);
         handleSensitiveData(user, request);
@@ -97,7 +96,7 @@ public class UserFacadeImpl implements UserFacade {
     @Transactional
     public UserResponseDTO register(UserRequestDTO request) {
         log.info("Registering new user with email: {}", request.email());
-        validateExistingFields(request);
+        userService.validateExistingFields(request);
         MetaData metaData = metaDataFactory.createMetaData();
         User user = userFactory.createUser(request, metaData);
         user.setRole(Role.ROLE_USER);
@@ -114,23 +113,5 @@ public class UserFacadeImpl implements UserFacade {
         user.setUsername(cipherService.encrypt(request.username()));
         user.setEmail(cipherService.encrypt(request.email()));
         user.setPhoneNumber(cipherService.encrypt(request.phoneNumber()));
-    }
-
-    private void validateExistingFields(UserRequestDTO request) {
-        log.debug("Validating existing fields for user: {}", request.username());
-        UserCredsExistanceCheckDTO requestForCheck =
-                new UserCredsExistanceCheckDTO(
-                        request.username(),
-                        request.email(),
-                        request.phoneNumber());
-
-        UserCredsExistanceCheckDTO encryptedRequestForCheck =
-                new UserCredsExistanceCheckDTO(
-                        cipherService.encrypt(request.username()),
-                        cipherService.encrypt(request.email()),
-                        cipherService.encrypt(request.phoneNumber()));
-
-        userService.validateExistingFields(requestForCheck, encryptedRequestForCheck);
-        log.debug("Validation passed for user: {}", request.username());
     }
 }

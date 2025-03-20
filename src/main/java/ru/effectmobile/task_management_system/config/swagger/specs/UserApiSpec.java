@@ -16,13 +16,19 @@ import ru.effectmobile.task_management_system.dto.responses.UserResponseDTO;
 
 import java.util.UUID;
 
+import static ru.effectmobile.task_management_system.util.DefaultInputs.USER_ID_EXAMPLE_JSON;
+
 @Tag(name = "User API", description = "API for managing users")
 public interface UserApiSpec {
 
     @Operation(summary = "Get all users", description = "Returns a paginated list of all registered users.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Users retrieved successfully",
-                    content = @Content(schema = @Schema(implementation = UserResponseDTO.class)))
+                    content = @Content(schema = @Schema(implementation = UserResponseDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - authentication required",
+                    content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "403", description = "Forbidden - user does not have permission to get user list",
+                    content = @Content(schema = @Schema(hidden = true)))
     })
     ResponseEntity<Page<UserResponseDTO>> getAllUsers(Pageable pageable);
 
@@ -30,11 +36,15 @@ public interface UserApiSpec {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User retrieved successfully",
                     content = @Content(schema = @Schema(implementation = UserResponseDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - authentication required",
+                    content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "403", description = "Forbidden - user does not have permission to get user",
+                    content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "404", description = "User not found",
                     content = @Content(schema = @Schema(hidden = true)))
     })
     ResponseEntity<UserResponseDTO> getUserById(
-            @Parameter(description = "UUID of the user", required = true, example = "550e8400-e29b-41d4-a716-446655440000")
+            @Parameter(description = "UUID of the user", required = true, example = USER_ID_EXAMPLE_JSON)
             UUID id
     );
 
@@ -42,6 +52,10 @@ public interface UserApiSpec {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "User created successfully",
                     content = @Content(schema = @Schema(implementation = UserResponseDTO.class))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - authentication required",
+                    content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "403", description = "Forbidden - user does not have permission to create new user",
+                    content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "400", description = "Invalid input data",
                     content = @Content(schema = @Schema(hidden = true)))
     })

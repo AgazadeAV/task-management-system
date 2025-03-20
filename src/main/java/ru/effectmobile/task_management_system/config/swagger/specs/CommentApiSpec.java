@@ -22,11 +22,11 @@ import static ru.effectmobile.task_management_system.util.DefaultInputs.COMMENT_
 @Tag(name = "Comment API", description = "API for managing comments on tasks")
 public interface CommentApiSpec {
 
-    @Operation(summary = "Get comments for a task", description = "Returns a paginated list of comments for a task")
+    @Operation(summary = "Get comments for a task", description = "Returns a paginated list of comments for a task.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Comments retrieved successfully",
                     content = @Content(schema = @Schema(implementation = CommentResponseDTO.class))),
-            @ApiResponse(responseCode = "204", description = "No comments found",
+            @ApiResponse(responseCode = "401", description = "Unauthorized - authentication required",
                     content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "404", description = "Task not found",
                     content = @Content(schema = @Schema(hidden = true)))
@@ -37,20 +37,26 @@ public interface CommentApiSpec {
             Pageable pageable
     );
 
-    @Operation(summary = "Create a new comment", description = "Adds a new comment to a task")
+    @Operation(summary = "Create a new comment", description = "Adds a new comment to a task.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Comment created successfully",
                     content = @Content(schema = @Schema(implementation = CommentResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input data",
+                    content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - authentication required",
                     content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "404", description = "Task not found",
                     content = @Content(schema = @Schema(hidden = true)))
     })
     ResponseEntity<CommentResponseDTO> createComment(@Valid CommentRequestDTO commentRequestDTO, Principal principal);
 
-    @Operation(summary = "Delete a comment", description = "Deletes a comment by its ID")
+    @Operation(summary = "Delete a comment", description = "Deletes a comment by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Comment deleted successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized - authentication required",
+                    content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "403", description = "Forbidden - user does not have permission to delete this comment",
+                    content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "404", description = "Comment not found",
                     content = @Content(schema = @Schema(hidden = true)))
     })

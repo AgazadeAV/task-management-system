@@ -94,7 +94,7 @@ public final class ExceptionMessageUtil {
         public static final String ENUM_VALUE_EMPTY_MESSAGE = "Value cannot be empty for %s. Allowed values: %s";
         public static final String INVALID_ENUM_VALUE_MESSAGE = "Invalid value '%s' for: %s. Allowed values: %s";
         public static final String USER_NOT_FOUND_BY_EMAIL_MESSAGE = "User not found with email: %s";
-        public static final String PASSWORD_DOESNT_MATCH_MESSAGE = "Invalid credentials";
+        public static final String PASSWORD_DOESNT_MATCH_MESSAGE = "Invalid password";
         public static final String ACCESS_DENIED_MESSAGE = "Access denied: ";
         public static final String INVALID_CREDENTIALS_MESSAGE = "Invalid credentials";
         public static final String USER_NOT_FOUND_MESSAGE = "User not found";
