@@ -21,6 +21,7 @@ import ru.effectmobile.task_management_system.model.enums.Role;
 import ru.effectmobile.task_management_system.model.enums.TaskPriority;
 import ru.effectmobile.task_management_system.model.enums.TaskStatus;
 import ru.effectmobile.task_management_system.model.metadata.MetaData;
+import ru.effectmobile.task_management_system.service.base.PermissionService;
 import ru.effectmobile.task_management_system.service.base.TaskService;
 import ru.effectmobile.task_management_system.service.base.UserService;
 import ru.effectmobile.task_management_system.service.facade.impl.TaskFacadeImpl;
@@ -72,6 +73,9 @@ class TaskFacadeTest {
     @Mock
     private MetaDataFactory metaDataFactory;
 
+    @Mock
+    private PermissionService permissionService;
+
     @InjectMocks
     private TaskFacadeImpl taskFacade;
 
@@ -117,6 +121,7 @@ class TaskFacadeTest {
         when(taskService.save(any(Task.class))).thenReturn(TASK);
         when(taskMapper.taskToResponseDTO(TASK)).thenReturn(RESPONSE_DTO);
         when(userService.findByEmail(AUTHOR.getEmail())).thenReturn(AUTHOR);
+        doNothing().when(permissionService).checkCanCreateTask(AUTHOR);
 
         TaskResponseDTO result = taskFacade.createTask(REQUEST_DTO, AUTHOR.getEmail());
 
@@ -133,6 +138,7 @@ class TaskFacadeTest {
         when(taskService.save(any(Task.class))).thenReturn(TASK);
         when(taskMapper.taskToResponseDTO(any(Task.class))).thenReturn(RESPONSE_DTO);
         when(userService.findByEmail(AUTHOR.getEmail())).thenReturn(AUTHOR);
+        doNothing().when(permissionService).checkCanUpdateTask(any(User.class), any(UUID.class));
 
         TaskResponseDTO result = taskFacade.updateTask(TASK.getId(), REQUEST_DTO, AUTHOR.getEmail());
 
@@ -144,6 +150,7 @@ class TaskFacadeTest {
     void deleteTask_ShouldDeleteSuccessfully() {
         doNothing().when(taskService).deleteById(TASK.getId());
         when(userService.findByEmail(AUTHOR.getEmail())).thenReturn(AUTHOR);
+        doNothing().when(permissionService).checkCanDeleteTask(AUTHOR);
 
         assertDoesNotThrow(() -> taskFacade.deleteTask(TASK.getId(), AUTHOR.getEmail()));
 

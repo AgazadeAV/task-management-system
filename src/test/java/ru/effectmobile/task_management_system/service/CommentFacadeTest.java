@@ -17,14 +17,15 @@ import ru.effectmobile.task_management_system.model.enums.Role;
 import ru.effectmobile.task_management_system.model.enums.TaskPriority;
 import ru.effectmobile.task_management_system.model.enums.TaskStatus;
 import ru.effectmobile.task_management_system.model.metadata.MetaData;
+import ru.effectmobile.task_management_system.service.base.CipherService;
 import ru.effectmobile.task_management_system.service.base.CommentService;
+import ru.effectmobile.task_management_system.service.base.PermissionService;
 import ru.effectmobile.task_management_system.service.base.TaskService;
 import ru.effectmobile.task_management_system.service.base.UserService;
 import ru.effectmobile.task_management_system.service.facade.impl.CommentFacadeImpl;
 import ru.effectmobile.task_management_system.service.factory.CommentFactory;
 import ru.effectmobile.task_management_system.service.factory.MetaDataFactory;
 import ru.effectmobile.task_management_system.service.mapper.CommentMapper;
-import ru.effectmobile.task_management_system.service.base.CipherService;
 
 import java.util.List;
 
@@ -64,6 +65,9 @@ class CommentFacadeTest {
 
     @Mock
     private CipherService cipherService;
+
+    @Mock
+    private PermissionService permissionService;
 
     @InjectMocks
     private CommentFacadeImpl commentFacade;
@@ -115,6 +119,7 @@ class CommentFacadeTest {
         doNothing().when(commentService).deleteById(COMMENT.getId());
         when(userService.findByEmail(AUTHOR.getEmail())).thenReturn(AUTHOR);
         when(commentService.findById(COMMENT.getId())).thenReturn(COMMENT);
+        doNothing().when(permissionService).checkCanDeleteComment(COMMENT, AUTHOR);
 
         assertDoesNotThrow(() -> commentFacade.deleteComment(COMMENT.getId(), AUTHOR.getEmail()));
 
