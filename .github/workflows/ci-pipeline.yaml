@@ -12,27 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-          POSTGRES_DB: taskmanagerdb
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-        ports:
-          - 5432:5432
-
     env:
-      # DATABASE
-      POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/taskmanagerdb
-
       # JWT
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
@@ -53,8 +33,6 @@ jobs:
       ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
       ADMIN_BIRTH_DATE: ${{ secrets.ADMIN_BIRTH_DATE }}
       ADMIN_PHONE_NUMBER: ${{ secrets.ADMIN_PHONE_NUMBER }}
-
-      SPRING_PROFILES_ACTIVE: test
 
     steps:
       - name: Checkout code
