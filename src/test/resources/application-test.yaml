@@ -13,8 +13,6 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
   liquibase:
     enabled: false
-  profiles:
-    active: test
   cache:
     type: caffeine
     caffeine:
