@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import ru.effectmobile.task_management_system.dto.filters.TaskFilterDTO;
 import ru.effectmobile.task_management_system.dto.requests.TaskRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.TaskResponseDTO;
+import ru.effectmobile.task_management_system.exception.custom.auth.UserDoesntHaveEnoughRightsException;
+import ru.effectmobile.task_management_system.exception.custom.notfound.TaskNotFoundException;
 import ru.effectmobile.task_management_system.model.entity.Task;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
@@ -41,10 +43,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.TASK_CREATE_FORBIDDEN_MESSAGE;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.TASK_DELETE_FORBIDDEN_MESSAGE;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.TASK_NOT_FOUND_BY_ID_MESSAGE;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.TASK_UPDATE_FORBIDDEN_MESSAGE;
 import static ru.effectmobile.task_management_system.util.DefaultInputs.TASK_PRIORITY_EXAMPLE_ENUM;
 import static ru.effectmobile.task_management_system.util.DefaultInputs.TASK_STATUS_EXAMPLE_ENUM;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createAsigneeUser;
@@ -115,6 +123,17 @@ class TaskFacadeTest {
     }
 
     @Test
+    void getTaskById_ShouldThrowException_WhenTaskNotFound() {
+        when(taskService.findById(TASK.getId()))
+                .thenThrow(new TaskNotFoundException(String.format(TASK_NOT_FOUND_BY_ID_MESSAGE, TASK.getId())));
+
+        Assertions.assertThrows(TaskNotFoundException.class, () -> taskFacade.getTaskById(TASK.getId()));
+
+        verify(taskService).findById(TASK.getId());
+        verify(taskMapper, never()).taskToResponseDTO(any());
+    }
+
+    @Test
     void createTask_ShouldReturnSavedTask() {
         when(metaDataFactory.createMetaData()).thenReturn(META_DATA);
         when(taskFactory.createTask(any(TaskRequestDTO.class), any(User.class), any(MetaData.class))).thenReturn(TASK);
@@ -132,6 +151,21 @@ class TaskFacadeTest {
     }
 
     @Test
+    void createTask_ShouldThrowException_WhenUserHasNoPermission() {
+        when(userService.findByEmail(AUTHOR.getEmail())).thenReturn(AUTHOR);
+        doThrow(new UserDoesntHaveEnoughRightsException(TASK_CREATE_FORBIDDEN_MESSAGE))
+                .when(permissionService).checkCanCreateTask(AUTHOR);
+
+        Assertions.assertThrows(UserDoesntHaveEnoughRightsException.class,
+                () -> taskFacade.createTask(REQUEST_DTO, AUTHOR.getEmail()));
+
+        verify(userService).findByEmail(AUTHOR.getEmail());
+        verify(permissionService).checkCanCreateTask(AUTHOR);
+        verifyNoInteractions(taskFactory, taskService, taskMapper);
+    }
+
+
+    @Test
     void updateTask_ShouldReturnUpdatedTask() {
         when(taskService.findById(any(UUID.class))).thenReturn(TASK);
         doNothing().when(taskMapper).updateTaskFromRequestDTO(any(TaskRequestDTO.class), any(Task.class));
@@ -147,6 +181,37 @@ class TaskFacadeTest {
     }
 
     @Test
+    void updateTask_ShouldThrowException_WhenTaskNotFound() {
+        when(userService.findByEmail(AUTHOR.getEmail())).thenReturn(AUTHOR);
+        doNothing().when(permissionService).checkCanUpdateTask(AUTHOR, REQUEST_DTO.assigneeId());
+        when(taskService.findById(TASK.getId()))
+                .thenThrow(new TaskNotFoundException(String.format(TASK_NOT_FOUND_BY_ID_MESSAGE, TASK.getId())));
+
+        Assertions.assertThrows(TaskNotFoundException.class,
+                () -> taskFacade.updateTask(TASK.getId(), REQUEST_DTO, AUTHOR.getEmail()));
+
+        verify(userService).findByEmail(AUTHOR.getEmail());
+        verify(permissionService).checkCanUpdateTask(AUTHOR, REQUEST_DTO.assigneeId());
+        verify(taskService).findById(TASK.getId());
+        verify(taskMapper, never()).taskToResponseDTO(any());
+    }
+
+    @Test
+    void updateTask_ShouldThrowException_WhenUserHasNoPermission() {
+        when(userService.findByEmail(AUTHOR.getEmail())).thenReturn(AUTHOR);
+        doThrow(new UserDoesntHaveEnoughRightsException(TASK_UPDATE_FORBIDDEN_MESSAGE))
+                .when(permissionService).checkCanUpdateTask(AUTHOR, REQUEST_DTO.assigneeId());
+
+        Assertions.assertThrows(UserDoesntHaveEnoughRightsException.class,
+                () -> taskFacade.updateTask(TASK.getId(), REQUEST_DTO, AUTHOR.getEmail()));
+
+        verify(userService).findByEmail(AUTHOR.getEmail());
+        verify(permissionService).checkCanUpdateTask(AUTHOR, REQUEST_DTO.assigneeId());
+        verify(taskService, never()).findById(any());
+        verify(taskMapper, never()).taskToResponseDTO(any());
+    }
+
+    @Test
     void deleteTask_ShouldDeleteSuccessfully() {
         doNothing().when(taskService).deleteById(TASK.getId());
         when(userService.findByEmail(AUTHOR.getEmail())).thenReturn(AUTHOR);
@@ -156,6 +221,21 @@ class TaskFacadeTest {
 
         verify(taskService).deleteById(TASK.getId());
     }
+
+    @Test
+    void deleteTask_ShouldThrowException_WhenUserHasNoPermission() {
+        when(userService.findByEmail(AUTHOR.getEmail())).thenReturn(AUTHOR);
+        doThrow(new UserDoesntHaveEnoughRightsException(TASK_DELETE_FORBIDDEN_MESSAGE))
+                .when(permissionService).checkCanDeleteTask(AUTHOR);
+
+        Assertions.assertThrows(UserDoesntHaveEnoughRightsException.class,
+                () -> taskFacade.deleteTask(TASK.getId(), AUTHOR.getEmail()));
+
+        verify(userService).findByEmail(AUTHOR.getEmail());
+        verify(permissionService).checkCanDeleteTask(AUTHOR);
+        verify(taskService, never()).deleteById(any());
+    }
+
 
     @Test
     void getTasksWithFilters_ShouldReturnFilteredTasks() {

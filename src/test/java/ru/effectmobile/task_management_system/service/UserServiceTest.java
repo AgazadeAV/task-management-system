@@ -2,6 +2,9 @@ package ru.effectmobile.task_management_system.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -9,6 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
+import ru.effectmobile.task_management_system.exception.custom.conflict.EmailAlreadyRegisteredException;
+import ru.effectmobile.task_management_system.exception.custom.conflict.PhoneNumberAlreadyRegisteredException;
+import ru.effectmobile.task_management_system.exception.custom.conflict.UsernameAlreadyRegisteredException;
 import ru.effectmobile.task_management_system.exception.custom.notfound.UserNotFoundException;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
@@ -18,6 +24,7 @@ import ru.effectmobile.task_management_system.service.base.impl.UserServiceImpl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -121,5 +128,57 @@ class UserServiceTest {
 
         assertThrows(UserNotFoundException.class, () -> userService.findByEmail(USER.getEmail()));
         verify(userRepository).findByEmail(USER.getEmail());
+    }
+
+    @Test
+    void validateExistingFields_ShouldPassValidation_WhenNoConflicts() {
+        UserRequestDTO request = createUserRequestDTO();
+
+        when(userRepository.findByUsernameOrEmailOrPhoneNumber(
+                request.username(), request.email(), request.phoneNumber()))
+                .thenReturn(Optional.empty());
+
+        assertDoesNotThrow(() -> userService.validateExistingFields(request));
+    }
+
+    private static Stream<Arguments> provideExistingUsersForValidation() {
+        UserRequestDTO request = createUserRequestDTO();
+
+        User userWithSameUsername = new User();
+        userWithSameUsername.setUsername(request.username());
+        userWithSameUsername.setEmail("other@example.com");
+        userWithSameUsername.setPhoneNumber("+70000000000");
+
+        User userWithSameEmail = new User();
+        userWithSameEmail.setUsername("other_user");
+        userWithSameEmail.setEmail(request.email());
+        userWithSameEmail.setPhoneNumber("+70000000000");
+
+        User userWithSamePhone = new User();
+        userWithSamePhone.setUsername("other_user");
+        userWithSamePhone.setEmail("other@example.com");
+        userWithSamePhone.setPhoneNumber(request.phoneNumber());
+
+        return Stream.of(
+                Arguments.of(userWithSameUsername, UsernameAlreadyRegisteredException.class),
+                Arguments.of(userWithSameEmail, EmailAlreadyRegisteredException.class),
+                Arguments.of(userWithSamePhone, PhoneNumberAlreadyRegisteredException.class)
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideExistingUsersForValidation")
+    void validateExistingFields_ShouldThrowExpectedException(User existingUser, Class<? extends RuntimeException> expectedException) {
+        UserRequestDTO request = createUserRequestDTO();
+
+        when(userRepository.findByUsernameOrEmailOrPhoneNumber(
+                request.username(), request.email(), request.phoneNumber()))
+                .thenReturn(Optional.of(existingUser));
+
+        when(cipherService.decrypt(request.username())).thenReturn(request.username());
+        when(cipherService.decrypt(request.email())).thenReturn(request.email());
+        when(cipherService.decrypt(request.phoneNumber())).thenReturn(request.phoneNumber());
+
+        assertThrows(expectedException, () -> userService.validateExistingFields(request));
     }
 }

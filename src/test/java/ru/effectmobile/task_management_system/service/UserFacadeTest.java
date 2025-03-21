@@ -14,6 +14,7 @@ import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.AuthResponseDTO;
 import ru.effectmobile.task_management_system.dto.responses.UserResponseDTO;
 import ru.effectmobile.task_management_system.exception.custom.auth.PasswordDoesNotMatchException;
+import ru.effectmobile.task_management_system.exception.custom.notfound.UserNotFoundException;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
 import ru.effectmobile.task_management_system.model.metadata.MetaData;
@@ -29,9 +30,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.USER_NOT_FOUND_BY_ID_MESSAGE;
 import static ru.effectmobile.task_management_system.util.DefaultInputs.EMAIL_EXAMPLE;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createAuthResponseDTO;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createLoginRequestDTO;
@@ -100,6 +104,18 @@ class UserFacadeTest {
     }
 
     @Test
+    void getUserById_ShouldThrowException_WhenUserNotFound() {
+        when(userService.findById(USER.getId()))
+                .thenThrow(new UserNotFoundException(String.format(USER_NOT_FOUND_BY_ID_MESSAGE, USER.getId())));
+
+        assertThrows(UserNotFoundException.class, () -> userFacade.getUserById(USER.getId()));
+
+        verify(userService).findById(USER.getId());
+        verify(userMapper, never()).userToResponseDTO(any(), any());
+    }
+
+
+    @Test
     void createUser_ShouldReturnSavedUser() {
         when(metaDataFactory.createMetaData()).thenReturn(META_DATA);
         when(userFactory.createUser(REQUEST_DTO, META_DATA)).thenReturn(USER);
@@ -110,6 +126,18 @@ class UserFacadeTest {
 
         assertEquals(RESPONSE_DTO, result);
         verify(userService).save(USER);
+    }
+
+    @Test
+    void createUser_ShouldCallValidateExistingFields() {
+        when(metaDataFactory.createMetaData()).thenReturn(META_DATA);
+        when(userFactory.createUser(REQUEST_DTO, META_DATA)).thenReturn(USER);
+        when(userService.save(USER)).thenReturn(USER);
+        when(userMapper.userToResponseDTO(USER, cipherService)).thenReturn(RESPONSE_DTO);
+
+        userFacade.createUser(REQUEST_DTO);
+
+        verify(userService).validateExistingFields(REQUEST_DTO);
     }
 
     @Test
@@ -146,5 +174,17 @@ class UserFacadeTest {
 
         assertEquals(RESPONSE_DTO, result);
         verify(userService).save(USER);
+    }
+
+    @Test
+    void register_ShouldCallValidateExistingFields() {
+        when(metaDataFactory.createMetaData()).thenReturn(META_DATA);
+        when(userFactory.createUser(REQUEST_DTO, META_DATA)).thenReturn(USER);
+        when(userService.save(USER)).thenReturn(USER);
+        when(userMapper.userToResponseDTO(USER, cipherService)).thenReturn(RESPONSE_DTO);
+
+        userFacade.register(REQUEST_DTO);
+
+        verify(userService).validateExistingFields(REQUEST_DTO);
     }
 }
