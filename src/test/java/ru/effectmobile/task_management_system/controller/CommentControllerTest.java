@@ -1,6 +1,7 @@
 package ru.effectmobile.task_management_system.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -69,18 +70,18 @@ class CommentControllerTest {
     @Value("${api.base.url}")
     private String apiBaseUrl;
 
-    private final String apiPathPrefix;
-
-    public CommentControllerTest(@Value("${api.base.url}") String apiBaseUrl) {
-        this.apiBaseUrl = apiBaseUrl;
-        this.apiPathPrefix = this.apiBaseUrl + COMMENT_API_URL;
-    }
+    private String apiPathPrefix;
 
     private static final Task TASK = createTask(TaskStatus.COMPLETED, TaskPriority.LOW);
     private static final Comment COMMENT = createComment();
     private static final CommentResponseDTO COMMENT_RESPONSE_DTO = createCommentResponseDTO();
     private static final Page<CommentResponseDTO> COMMENT_PAGE = new PageImpl<>(List.of(COMMENT_RESPONSE_DTO, COMMENT_RESPONSE_DTO));
     private static final CommentRequestDTO COMMENT_REQUEST_DTO = createCommentRequestDTO();
+
+    @BeforeEach
+    void setUp() {
+        this.apiPathPrefix = apiBaseUrl + COMMENT_API_URL;
+    }
 
     @Test
     @WithMockUser

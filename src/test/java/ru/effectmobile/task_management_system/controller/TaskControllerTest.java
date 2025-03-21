@@ -1,6 +1,7 @@
 package ru.effectmobile.task_management_system.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -40,6 +41,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.effectmobile.task_management_system.controller.CommentController.COMMENT_API_URL;
 import static ru.effectmobile.task_management_system.controller.TaskController.CREATE_TASK;
 import static ru.effectmobile.task_management_system.controller.TaskController.DELETE_TASK_BY_ID;
 import static ru.effectmobile.task_management_system.controller.TaskController.GET_ALL_TASKS;
@@ -72,17 +74,17 @@ class TaskControllerTest {
     @Value("${api.base.url}")
     private String apiBaseUrl;
 
-    private final String apiPathPrefix;
-
-    public TaskControllerTest(@Value("${api.base.url}") String apiBaseUrl) {
-        this.apiBaseUrl = apiBaseUrl;
-        this.apiPathPrefix = this.apiBaseUrl + TASK_API_URL;
-    }
+    private String apiPathPrefix;
 
     private static final Task TASK = createTask(TaskStatus.COMPLETED, TaskPriority.LOW);
     private static final TaskResponseDTO TASK_RESPONSE_DTO = createTaskResponseDTO();
     private static final Page<TaskResponseDTO> TASKS = new PageImpl<>(List.of(TASK_RESPONSE_DTO, TASK_RESPONSE_DTO));
     private static final TaskRequestDTO TASK_REQUEST_DTO = createTaskRequestDTO();
+
+    @BeforeEach
+    void setUp() {
+        this.apiPathPrefix = apiBaseUrl + TASK_API_URL;
+    }
 
     @Test
     @WithMockUser

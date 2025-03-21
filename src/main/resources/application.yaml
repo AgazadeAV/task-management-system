@@ -1,3 +1,7 @@
+spring:
+  profiles:
+    active: dev
+
 server:
   port: 8080
   servlet:
@@ -6,42 +10,6 @@ server:
 api:
   base:
     url: /api/v1
-
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/taskmanagerdb
-    driver-class-name: org.postgresql.Driver
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-    hikari:
-      initialization-fail-timeout: 5000
-      schema: taskmanager
-      maximum-pool-size: 10
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-  liquibase:
-    user: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-  docker:
-    compose:
-      enabled: true
-      file: docker-compose.yaml
-  cache:
-    type: caffeine
-    caffeine:
-        maximum-size: 5000
-        expire-after-write: 600
-
-jwt:
-  secret: ${JWT_SECRET}
-  expiration: ${JWT_EXPIRATION}
-  issuer: ${JWT_ISSUER}
 
 springdoc:
   swagger-ui:

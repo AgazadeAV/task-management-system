@@ -1,6 +1,7 @@
 package ru.effectmobile.task_management_system.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -55,17 +56,17 @@ class AuthControllerTest {
     @Value("${api.base.url}")
     private String apiBaseUrl;
 
-    private final String apiPathPrefix;
-
-    public AuthControllerTest(@Value("${api.base.url}") String apiBaseUrl) {
-        this.apiBaseUrl = apiBaseUrl;
-        this.apiPathPrefix = this.apiBaseUrl + AUTH_API_URL;
-    }
+    private String apiPathPrefix;
 
     private static final AuthResponseDTO AUTH_RESPONSE_DTO = createAuthResponseDTO();
     private static final UserResponseDTO USER_RESPONSE_DTO = createUserResponseDTO();
     private static final LoginRequestDTO LOGIN_REQUEST_DTO = createLoginRequestDTO();
     private static final UserRequestDTO USER_REQUEST_DTO = createUserRequestDTO();
+
+    @BeforeEach
+    void setUp() {
+        this.apiPathPrefix = apiBaseUrl + AUTH_API_URL;
+    }
 
     @Test
     void login_Success() throws Exception {
