@@ -1,9 +1,7 @@
 package ru.effectmobile.task_management_system.service.mapper;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
-import org.mockito.junit.jupiter.MockitoExtension;
 import ru.effectmobile.task_management_system.dto.responses.CommentResponseDTO;
 import ru.effectmobile.task_management_system.model.entity.Comment;
 import ru.effectmobile.task_management_system.model.entity.Task;
@@ -17,7 +15,6 @@ import static ru.effectmobile.task_management_system.util.ModelCreator.createAut
 import static ru.effectmobile.task_management_system.util.ModelCreator.createComment;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createTask;
 
-@ExtendWith(MockitoExtension.class)
 class CommentMapperTest {
 
     private final CommentMapper mapper = Mappers.getMapper(CommentMapper.class);

@@ -1,9 +1,7 @@
 package ru.effectmobile.task_management_system.service.mapper;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mapstruct.factory.Mappers;
-import org.mockito.junit.jupiter.MockitoExtension;
 import ru.effectmobile.task_management_system.dto.requests.TaskRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.TaskResponseDTO;
 import ru.effectmobile.task_management_system.model.entity.Task;
@@ -20,7 +18,6 @@ import static ru.effectmobile.task_management_system.util.ModelCreator.createMet
 import static ru.effectmobile.task_management_system.util.ModelCreator.createTask;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createTaskRequestDTO;
 
-@ExtendWith(MockitoExtension.class)
 class TaskMapperTest {
 
     private final TaskMapper mapper = Mappers.getMapper(TaskMapper.class);
