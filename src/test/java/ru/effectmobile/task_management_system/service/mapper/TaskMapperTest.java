@@ -13,8 +13,6 @@ import ru.effectmobile.task_management_system.model.enums.TaskPriority;
 import ru.effectmobile.task_management_system.model.enums.TaskStatus;
 import ru.effectmobile.task_management_system.model.metadata.MetaData;
 
-import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createAsigneeUser;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createAuthorUser;
