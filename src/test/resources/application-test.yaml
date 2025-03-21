@@ -13,11 +13,6 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
   liquibase:
     enabled: false
-  cache:
-    type: caffeine
-    caffeine:
-      maximum-size: 5000
-      expire-after-write: 600
 
 logging:
   level:
