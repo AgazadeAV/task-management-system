@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.service;
+package ru.effectmobile.task_management_system.service.facade;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

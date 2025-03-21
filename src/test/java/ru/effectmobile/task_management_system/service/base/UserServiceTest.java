@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.service;
+package ru.effectmobile.task_management_system.service.base;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,6 @@ import ru.effectmobile.task_management_system.exception.custom.notfound.UserNotF
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
 import ru.effectmobile.task_management_system.repository.UserRepository;
-import ru.effectmobile.task_management_system.service.base.CipherService;
 import ru.effectmobile.task_management_system.service.base.impl.UserServiceImpl;
 
 import java.util.List;

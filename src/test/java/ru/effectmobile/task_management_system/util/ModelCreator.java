@@ -148,6 +148,7 @@ public class ModelCreator {
         return Comment.builder()
                 .id(COMMENT_ID_EXAMPLE)
                 .version(VERSION_EXAMPLE)
+                .metaData(createMetaData())
                 .text(COMMENT_TEXT_EXAMPLE)
                 .build();
     }
@@ -156,6 +157,7 @@ public class ModelCreator {
         return Comment.builder()
                 .id(COMMENT_ID_EXAMPLE)
                 .version(VERSION_EXAMPLE)
+                .metaData(createMetaData())
                 .text(COMMENT_TEXT_EXAMPLE)
                 .task(task)
                 .build();
@@ -165,6 +167,7 @@ public class ModelCreator {
         return Comment.builder()
                 .id(COMMENT_ID_EXAMPLE)
                 .version(VERSION_EXAMPLE)
+                .metaData(createMetaData())
                 .text(COMMENT_TEXT_EXAMPLE)
                 .author(author)
                 .build();
@@ -174,6 +177,7 @@ public class ModelCreator {
         return Comment.builder()
                 .id(COMMENT_ID_EXAMPLE)
                 .version(VERSION_EXAMPLE)
+                .metaData(createMetaData())
                 .text(COMMENT_TEXT_EXAMPLE)
                 .task(task)
                 .author(author)

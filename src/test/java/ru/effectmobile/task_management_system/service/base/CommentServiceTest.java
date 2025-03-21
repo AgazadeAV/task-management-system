@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.service;
+package ru.effectmobile.task_management_system.service.base;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
