@@ -111,5 +111,7 @@ public final class ExceptionMessageUtil {
         public static final String TASK_UPDATE_FORBIDDEN_MESSAGE = "User doesn't have enough rights to update the task.";
         public static final String TASK_CREATE_FORBIDDEN_MESSAGE = "User doesn't have enough rights to create the task.";
         public static final String TASK_DELETE_FORBIDDEN_MESSAGE = "User doesn't have enough rights to delete the task.";
+        public static final String ENCRYPTION_FAILED_MESSAGE = "Encryption failed";
+        public static final String DECRYPTION_FAILED_MESSAGE = "Decryption failed";
     }
 }
