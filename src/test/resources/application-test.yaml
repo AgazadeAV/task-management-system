@@ -19,42 +19,9 @@ spring:
       maximum-size: 5000
       expire-after-write: 600
 
-jwt:
-  secret: ${JWT_SECRET}
-  expiration: ${JWT_EXPIRATION}
-  issuer: ${JWT_ISSUER}
-
 logging:
   level:
     root: INFO
     org.springframework: INFO
     org.hibernate.SQL: DEBUG
     org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.springframework.cache: DEBUG
-
-crypto:
-  cipher-algorithm: ${CRYPTO_CIPHER_ALGORITHM}
-  keys:
-    AES: ${CRYPTO_KEYS_AES}
-
-hash:
-  algorithm: ${HASH_ALGORITHM}
-
-admin:
-  username: ${ADMIN_USERNAME}
-  first-name: ${ADMIN_FIRST_NAME}
-  last-name: ${ADMIN_LAST_NAME}
-  email: ${ADMIN_EMAIL}
-  password: ${ADMIN_PASSWORD}
-  birth-date: ${ADMIN_BIRTH_DATE}
-  phone-number: ${ADMIN_PHONE_NUMBER}
-
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-  swagger-ui:
-    path: /swagger-ui
-
-api:
-  base:
-    url: /api/v1

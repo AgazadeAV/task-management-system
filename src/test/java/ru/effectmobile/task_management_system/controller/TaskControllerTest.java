@@ -1,6 +1,7 @@
 package ru.effectmobile.task_management_system.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -72,17 +73,17 @@ class TaskControllerTest {
     @Value("${api.base.url}")
     private String apiBaseUrl;
 
-    private final String apiPathPrefix;
-
-    public TaskControllerTest(@Value("${api.base.url}") String apiBaseUrl) {
-        this.apiBaseUrl = apiBaseUrl;
-        this.apiPathPrefix = this.apiBaseUrl + TASK_API_URL;
-    }
+    private String apiPathPrefix;
 
     private static final Task TASK = createTask(TaskStatus.COMPLETED, TaskPriority.LOW);
     private static final TaskResponseDTO TASK_RESPONSE_DTO = createTaskResponseDTO();
     private static final Page<TaskResponseDTO> TASKS = new PageImpl<>(List.of(TASK_RESPONSE_DTO, TASK_RESPONSE_DTO));
     private static final TaskRequestDTO TASK_REQUEST_DTO = createTaskRequestDTO();
+
+    @BeforeEach
+    void setUp() {
+        this.apiPathPrefix = apiBaseUrl + TASK_API_URL;
+    }
 
     @Test
     @WithMockUser
