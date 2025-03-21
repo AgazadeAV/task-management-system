@@ -41,7 +41,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.effectmobile.task_management_system.controller.CommentController.COMMENT_API_URL;
 import static ru.effectmobile.task_management_system.controller.TaskController.CREATE_TASK;
 import static ru.effectmobile.task_management_system.controller.TaskController.DELETE_TASK_BY_ID;
 import static ru.effectmobile.task_management_system.controller.TaskController.GET_ALL_TASKS;
