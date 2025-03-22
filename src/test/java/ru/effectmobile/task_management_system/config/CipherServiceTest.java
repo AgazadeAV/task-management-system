@@ -3,16 +3,20 @@ package ru.effectmobile.task_management_system.config;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.effectmobile.task_management_system.config.crypto.CipherService;
-import ru.effectmobile.task_management_system.exception.custom.encryption.EncryptionException;
 import ru.effectmobile.task_management_system.config.crypto.KeyStorage;
+import ru.effectmobile.task_management_system.exception.custom.encryption.EncryptionException;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.lang.reflect.Field;
 import java.util.Base64;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -43,7 +47,6 @@ class CipherServiceTest {
         Field field = CipherService.class.getDeclaredField("cipherAlgorithm");
         field.setAccessible(true);
         field.set(cipherService, CIPHER_ALGORITHM);
-        cipherService.init();
     }
 
     @Test
@@ -98,5 +101,61 @@ class CipherServiceTest {
     void decrypt_ShouldThrowException_WhenInputIsInvalidEncryptedData() {
         String base64ButInvalid = Base64.getEncoder().encodeToString("invalid".getBytes());
         assertThrows(EncryptionException.class, () -> cipherService.decrypt(base64ButInvalid));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "Hello123,Hello123",
+            "'Special#Chars!@$',Special#Chars!@$",
+            "'Some spaces here',Some spaces here",
+            "'1234567890',1234567890"
+    })
+    void encrypt_decrypt_Parametrized_ShouldReturnOriginal(String input, String expected) {
+        String encrypted = cipherService.encrypt(input);
+        String decrypted = cipherService.decrypt(encrypted);
+
+        assertEquals(expected, decrypted);
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideStringsForEncryption")
+    void encrypt_decrypt_MethodSource_ShouldReturnOriginal(String input) {
+        if (input == null) {
+            assertThrows(EncryptionException.class, () -> cipherService.encrypt(input));
+        } else {
+            String encrypted = cipherService.encrypt(input);
+            String decrypted = cipherService.decrypt(encrypted);
+            assertEquals(input, decrypted);
+        }
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideInvalidEncryptedData")
+    void decrypt_ShouldThrowException_ForInvalidEncryptedData(String invalidEncryptedInput) {
+        assertThrows(EncryptionException.class, () -> cipherService.decrypt(invalidEncryptedInput));
+    }
+
+    private static Stream<String> provideStringsForEncryption() {
+        return Stream.of(
+                "SimpleText",
+                "",
+                "🔥🔥🔥",
+                "ТекстНаРусском",
+                "中文测试",
+                "1234567890",
+                "With\nNewLine",
+                "Tabs\tHere",
+                "VeryLongString".repeat(100),
+                null
+        );
+    }
+
+    private static Stream<String> provideInvalidEncryptedData() {
+        return Stream.of(
+                "%%%not-base64$$$",
+                Base64.getEncoder().encodeToString("notEncryptedData".getBytes()),
+                "null",
+                null
+        );
     }
 }
