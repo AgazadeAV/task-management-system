@@ -29,7 +29,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,metrics
+        include: health,info,prometheus,metrics
   info:
     env:
       enabled: true
