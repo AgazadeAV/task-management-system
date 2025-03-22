@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/taskmanagerdb
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    username: your_username
+    password: your_secure_password
     hikari:
       initialization-fail-timeout: 5000
       schema: taskmanager
@@ -16,14 +16,9 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
   liquibase:
-    user: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    user: your_username
+    password: your_secure_password
   docker:
     compose:
       enabled: true
       file: docker-compose.yaml
-
-jwt:
-  secret: ${JWT_SECRET}
-  expiration: ${JWT_EXPIRATION}
-  issuer: ${JWT_ISSUER}

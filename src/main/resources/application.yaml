@@ -43,18 +43,23 @@ logging:
     org.springframework.cache: DEBUG
 
 crypto:
-  cipher-algorithm: ${CRYPTO_CIPHER_ALGORITHM}
+  cipher-algorithm: AES/ECB/PKCS5Padding
   keys:
-    AES: ${CRYPTO_KEYS_AES}
+    AES: 770A8A65DA156D24EE2A093277530142
 
 hash:
-  algorithm: ${HASH_ALGORITHM}
+  algorithm: HmacSHA256
 
 admin:
-  username: ${ADMIN_USERNAME}
-  first-name: ${ADMIN_FIRST_NAME}
-  last-name: ${ADMIN_LAST_NAME}
-  email: ${ADMIN_EMAIL}
-  password: ${ADMIN_PASSWORD}
-  birth-date: ${ADMIN_BIRTH_DATE}
-  phone-number: ${ADMIN_PHONE_NUMBER}
+  username: admin
+  first-name: admin
+  last-name: admin
+  email: admin@effectmobile.ru
+  password: YourPassword123!
+  birth-date: 1995-03-05
+  phone-number: +71234567890
+
+jwt:
+  secret: bXlTdXBlclNlY3JldEtleTEyMzQ1Njc4OTAwNTAzMTk5NUF6ZXJiYWlqYW4
+  expiration: 86400000
+  issuer: task-management-system

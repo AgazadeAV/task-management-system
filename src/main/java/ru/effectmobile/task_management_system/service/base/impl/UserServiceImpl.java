@@ -87,7 +87,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void validateExistingFields(UserRequestDTO request) {
         log.debug("Validating existing user fields: username={}, email={}, phone={}",
-                cipherService.decrypt(request.username()), cipherService.decrypt(request.email()), cipherService.decrypt(request.phoneNumber()));
+                request.username(), request.email(), request.phoneNumber());
 
         Optional<User> existingUser = userRepository.findByUsernameOrEmailOrPhoneNumber(
                 request.username(),
@@ -96,17 +96,17 @@ public class UserServiceImpl implements UserService {
         );
 
         existingUser.ifPresent(user -> {
-            if (user.getUsername().equals(request.username())) {
-                log.warn("Username '{}' is already registered", cipherService.decrypt(request.username()));
-                throw new UsernameAlreadyRegisteredException(String.format(USERNAME_ALREADY_REGISTERED, cipherService.decrypt(request.username())));
+            if (user.getUsername().equals(cipherService.encrypt(request.username()))) {
+                log.warn("Username '{}' is already registered", request.username());
+                throw new UsernameAlreadyRegisteredException(String.format(USERNAME_ALREADY_REGISTERED, request.username()));
             }
-            if (user.getEmail().equals(request.email())) {
-                log.warn("Email '{}' is already registered", cipherService.decrypt(request.email()));
-                throw new EmailAlreadyRegisteredException(String.format(EMAIL_ALREADY_REGISTERED, cipherService.decrypt(request.email())));
+            if (user.getEmail().equals(cipherService.encrypt(request.email()))) {
+                log.warn("Email '{}' is already registered", request.email());
+                throw new EmailAlreadyRegisteredException(String.format(EMAIL_ALREADY_REGISTERED, request.email()));
             }
-            if (user.getPhoneNumber().equals(request.phoneNumber())) {
-                log.warn("Phone number '{}' is already registered", cipherService.decrypt(request.phoneNumber()));
-                throw new PhoneNumberAlreadyRegisteredException(String.format(PHONE_NUMBER_ALREADY_REGISTERED, cipherService.decrypt(request.phoneNumber())));
+            if (user.getPhoneNumber().equals(cipherService.encrypt(request.phoneNumber()))) {
+                log.warn("Phone number '{}' is already registered", request.phoneNumber());
+                throw new PhoneNumberAlreadyRegisteredException(String.format(PHONE_NUMBER_ALREADY_REGISTERED, request.phoneNumber()));
             }
         });
 
