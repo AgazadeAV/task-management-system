@@ -14,8 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import ru.effectmobile.task_management_system.service.base.CipherService;
-import ru.effectmobile.task_management_system.service.base.JwtService;
+import ru.effectmobile.task_management_system.config.crypto.CipherService;
 
 import java.io.IOException;
 

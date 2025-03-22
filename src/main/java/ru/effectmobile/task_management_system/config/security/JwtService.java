@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.service.base.impl;
+package ru.effectmobile.task_management_system.config.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -7,9 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import ru.effectmobile.task_management_system.config.crypto.CipherService;
 import ru.effectmobile.task_management_system.model.entity.User;
-import ru.effectmobile.task_management_system.service.base.CipherService;
-import ru.effectmobile.task_management_system.service.base.JwtService;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
@@ -20,14 +19,14 @@ import java.util.function.Function;
 
 @Slf4j
 @Service
-public class JwtServiceImpl implements JwtService {
+public class JwtService {
 
     private final CipherService cipherService;
     private final Key signInKey;
     private final long jwtExpirationMs;
     private final String issuer;
 
-    public JwtServiceImpl(
+    public JwtService(
             @Value("${jwt.secret}") String secretKey,
             @Value("${jwt.expiration}") long jwtExpirationMs,
             @Value("${jwt.issuer}") String issuer,
@@ -40,21 +39,18 @@ public class JwtServiceImpl implements JwtService {
         this.cipherService = cipherService;
     }
 
-    @Override
     public String extractUsername(String token) {
         String username = extractClaim(token, Claims::getSubject);
         log.debug("Extracted username from token: {}", cipherService.encrypt(username));
         return username;
     }
 
-    @Override
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         Claims claims = extractAllClaims(token);
         log.debug("Extracted claims: {}", claims);
         return claimsResolver.apply(claims);
     }
 
-    @Override
     public String generateToken(User user) {
         String token = Jwts.builder()
                 .setClaims(Map.of("role", user.getRole().name()))
@@ -68,7 +64,6 @@ public class JwtServiceImpl implements JwtService {
         return token;
     }
 
-    @Override
     public boolean isTokenValid(String token, UserDetails userDetails) {
         String username = extractUsername(token);
         boolean valid = username.equals(userDetails.getUsername()) && !isTokenExpired(token) && isIssuerValid(token);

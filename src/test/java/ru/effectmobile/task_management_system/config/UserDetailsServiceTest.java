@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.service.base;
+package ru.effectmobile.task_management_system.config;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -7,9 +7,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import ru.effectmobile.task_management_system.config.crypto.CipherService;
+import ru.effectmobile.task_management_system.config.security.UserDetailsServiceImpl;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
-import ru.effectmobile.task_management_system.service.base.impl.UserDetailsServiceImpl;
+import ru.effectmobile.task_management_system.service.base.UserService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

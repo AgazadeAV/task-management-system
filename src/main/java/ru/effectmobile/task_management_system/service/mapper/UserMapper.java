@@ -4,9 +4,9 @@ import org.mapstruct.Context;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
+import ru.effectmobile.task_management_system.config.crypto.CipherService;
 import ru.effectmobile.task_management_system.dto.responses.UserResponseDTO;
 import ru.effectmobile.task_management_system.model.entity.User;
-import ru.effectmobile.task_management_system.service.base.CipherService;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

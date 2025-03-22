@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.repository;
+package ru.effectmobile.task_management_system.config.crypto;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

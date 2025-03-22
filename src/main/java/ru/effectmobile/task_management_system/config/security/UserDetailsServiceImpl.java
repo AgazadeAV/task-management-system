@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.service.base.impl;
+package ru.effectmobile.task_management_system.config.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -6,8 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import ru.effectmobile.task_management_system.config.crypto.CipherService;
 import ru.effectmobile.task_management_system.model.entity.User;
-import ru.effectmobile.task_management_system.service.base.CipherService;
 import ru.effectmobile.task_management_system.service.base.UserService;
 
 @Slf4j

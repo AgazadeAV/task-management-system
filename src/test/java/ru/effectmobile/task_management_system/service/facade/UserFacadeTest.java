@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.effectmobile.task_management_system.config.crypto.CipherService;
+import ru.effectmobile.task_management_system.config.security.JwtService;
 import ru.effectmobile.task_management_system.dto.requests.LoginRequestDTO;
 import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.AuthResponseDTO;
@@ -18,8 +20,6 @@ import ru.effectmobile.task_management_system.exception.custom.notfound.UserNotF
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
 import ru.effectmobile.task_management_system.model.metadata.MetaData;
-import ru.effectmobile.task_management_system.service.base.CipherService;
-import ru.effectmobile.task_management_system.service.base.JwtService;
 import ru.effectmobile.task_management_system.service.base.UserService;
 import ru.effectmobile.task_management_system.service.facade.impl.UserFacadeImpl;
 import ru.effectmobile.task_management_system.service.factory.MetaDataFactory;

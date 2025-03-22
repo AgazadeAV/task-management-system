@@ -1,13 +1,13 @@
-package ru.effectmobile.task_management_system.service.base;
+package ru.effectmobile.task_management_system.config;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import ru.effectmobile.task_management_system.config.crypto.CipherService;
 import ru.effectmobile.task_management_system.exception.custom.encryption.EncryptionException;
-import ru.effectmobile.task_management_system.repository.KeyStorage;
-import ru.effectmobile.task_management_system.service.base.impl.CipherServiceImpl;
+import ru.effectmobile.task_management_system.config.crypto.KeyStorage;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -26,7 +26,7 @@ class CipherServiceTest {
 
     private static final String CIPHER_ALGORITHM = "AES";
 
-    private CipherServiceImpl cipherService;
+    private CipherService cipherService;
 
     @Mock
     private KeyStorage keyStorage;
@@ -39,8 +39,8 @@ class CipherServiceTest {
 
         when(keyStorage.getAesKey()).thenReturn(secretKey);
 
-        cipherService = new CipherServiceImpl(keyStorage);
-        Field field = CipherServiceImpl.class.getDeclaredField("cipherAlgorithm");
+        cipherService = new CipherService(keyStorage);
+        Field field = CipherService.class.getDeclaredField("cipherAlgorithm");
         field.setAccessible(true);
         field.set(cipherService, CIPHER_ALGORITHM);
         cipherService.init();

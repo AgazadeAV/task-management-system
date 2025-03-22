@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.service.base.impl;
+package ru.effectmobile.task_management_system.config.crypto;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import ru.effectmobile.task_management_system.exception.custom.encryption.EncryptionException;
-import ru.effectmobile.task_management_system.repository.KeyStorage;
-import ru.effectmobile.task_management_system.service.base.CipherService;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -19,7 +17,7 @@ import static ru.effectmobile.task_management_system.exception.util.ExceptionMes
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class CipherServiceImpl implements CipherService {
+public class CipherService {
 
     private final KeyStorage keyStorage;
 
@@ -34,7 +32,6 @@ public class CipherServiceImpl implements CipherService {
         log.info("CipherService initialized with algorithm: {}", cipherAlgorithm);
     }
 
-    @Override
     public String encrypt(String data) {
         try {
             log.debug("Encrypting data: {}", data);
@@ -50,7 +47,6 @@ public class CipherServiceImpl implements CipherService {
         }
     }
 
-    @Override
     public String decrypt(String encryptedData) {
         try {
             log.debug("Decrypting data");
