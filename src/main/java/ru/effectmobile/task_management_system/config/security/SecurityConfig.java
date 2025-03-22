@@ -98,7 +98,8 @@ public class SecurityConfig {
                 apiBaseUrl + AUTH_API_URL + "/**",
                 apiDocsPath + "/**",
                 swaggerUiPath,
-                swaggerUiPath.replaceAll("\\.\\w+$", "") + "/**"
+                swaggerUiPath.replaceAll("\\.\\w+$", "") + "/**",
+                "/actuator/**"
         };
         log.debug("Public endpoints configured: {}", (Object) endpoints);
         return endpoints;
