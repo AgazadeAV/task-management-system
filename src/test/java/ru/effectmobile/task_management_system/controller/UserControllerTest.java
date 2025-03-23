@@ -173,21 +173,21 @@ class UserControllerTest {
 
     private static Stream<Arguments> provideInvalidUserRequests() {
         return Stream.of(
-                Arguments.of(new UserRequestDTO(null, "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // null
-                Arguments.of(new UserRequestDTO("", "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // пустая строка
-                Arguments.of(new UserRequestDTO("Jo", "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // менее 3 символов
-                Arguments.of(new UserRequestDTO("J".repeat(51), "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // больше 50 символов
-                Arguments.of(new UserRequestDTO("Username", null, "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // null
-                Arguments.of(new UserRequestDTO("Username", "", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // пустая строка
-                Arguments.of(new UserRequestDTO("Username", "J", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // менее 2 символов
-                Arguments.of(new UserRequestDTO("Username", "J".repeat(51), "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // больше 50 символов
-                Arguments.of(new UserRequestDTO("Username", "John", null, "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // null
-                Arguments.of(new UserRequestDTO("Username", "John", "", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // пустая строка
-                Arguments.of(new UserRequestDTO("Username", "John", "D", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // менее 2 символов
-                Arguments.of(new UserRequestDTO("Username", "John", "D".repeat(51), "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // больше 50 символов
-                Arguments.of(new UserRequestDTO("Username", "John", "Doe", null, "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // null
-                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // пустая строка
-                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "invalid-email", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")), // невалидный email
+                Arguments.of(new UserRequestDTO(null, "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("", "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Jo", "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("J".repeat(51), "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", null, "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "J", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "J".repeat(51), "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", null, "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "D", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "D".repeat(51), "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", null, "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "invalid-email", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
                 Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", null, "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
                 Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
                 Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "short1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
