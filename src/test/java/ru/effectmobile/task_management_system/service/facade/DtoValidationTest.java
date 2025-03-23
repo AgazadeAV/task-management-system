@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import ru.effectmobile.task_management_system.dto.requests.CommentRequestDTO;
 import ru.effectmobile.task_management_system.dto.requests.LoginRequestDTO;
@@ -17,6 +18,7 @@ import static ru.effectmobile.task_management_system.util.DefaultInputs.EMAIL_EX
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
+@ActiveProfiles("test")
 class DtoValidationTest {
 
     @Autowired
