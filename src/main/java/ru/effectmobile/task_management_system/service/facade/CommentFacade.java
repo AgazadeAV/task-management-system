@@ -1,5 +1,6 @@
 package ru.effectmobile.task_management_system.service.facade;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ru.effectmobile.task_management_system.dto.requests.CommentRequestDTO;
@@ -11,7 +12,7 @@ public interface CommentFacade {
 
     Page<CommentResponseDTO> getTaskComments(UUID taskId, Pageable pageable);
 
-    CommentResponseDTO createComment(CommentRequestDTO commentDTO, String email);
+    CommentResponseDTO createComment(@Valid CommentRequestDTO commentDTO, String email);
 
     void deleteComment(UUID id, String email);
 }

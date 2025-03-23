@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import ru.effectmobile.task_management_system.config.crypto.CipherService;
 import ru.effectmobile.task_management_system.dto.requests.CommentRequestDTO;
 import ru.effectmobile.task_management_system.dto.responses.CommentResponseDTO;
@@ -27,6 +28,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Validated
 public class CommentFacadeImpl implements CommentFacade {
 
     private final CommentService commentService;

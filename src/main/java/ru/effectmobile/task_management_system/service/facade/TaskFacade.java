@@ -1,5 +1,6 @@
 package ru.effectmobile.task_management_system.service.facade;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ru.effectmobile.task_management_system.dto.filters.TaskFilterDTO;
@@ -14,9 +15,9 @@ public interface TaskFacade {
 
     TaskResponseDTO getTaskById(UUID id);
 
-    TaskResponseDTO createTask(TaskRequestDTO taskDTO, String email);
+    TaskResponseDTO createTask(@Valid TaskRequestDTO taskDTO, String email);
 
-    TaskResponseDTO updateTask(UUID id, TaskRequestDTO taskDTO, String email);
+    TaskResponseDTO updateTask(UUID id, @Valid TaskRequestDTO taskDTO, String email);
 
     void deleteTask(UUID id, String email);
 

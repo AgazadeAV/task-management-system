@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,7 +29,6 @@ import ru.effectmobile.task_management_system.service.facade.TaskFacade;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -133,7 +131,7 @@ class TaskControllerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideInvalidTaskRequests")
+    @MethodSource("ru.effectmobile.task_management_system.util.ModelCreator#provideInvalidTaskRequests")
     @WithMockUser
     void createTask_BadRequest(TaskRequestDTO invalidRequests) throws Exception {
         mockMvc.perform(post(apiPathPrefix + CREATE_TASK)
@@ -174,7 +172,7 @@ class TaskControllerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideInvalidTaskRequests")
+    @MethodSource("ru.effectmobile.task_management_system.util.ModelCreator#provideInvalidTaskRequests")
     @WithMockUser
     void updateTask_BadRequest(TaskRequestDTO invalidRequests) throws Exception {
         mockMvc.perform(put(apiPathPrefix + UPDATE_TASK_BY_ID, TASK.getId())
@@ -273,22 +271,5 @@ class TaskControllerTest {
     void getTasksWithFilters_Unauthorized() throws Exception {
         mockMvc.perform(get(apiPathPrefix + GET_TASKS_WITH_FILTERS))
                 .andExpect(status().isUnauthorized());
-    }
-
-    private static Stream<Arguments> provideInvalidTaskRequests() {
-        return Stream.of(
-                Arguments.of(new TaskRequestDTO(null, "Valid description", "TODO", "HIGH", UUID.randomUUID())),
-                Arguments.of(new TaskRequestDTO("", "Valid description", "TODO", "HIGH", UUID.randomUUID())),
-                Arguments.of(new TaskRequestDTO("   ", "Valid description", "TODO", "HIGH", UUID.randomUUID())),
-                Arguments.of(new TaskRequestDTO("A".repeat(256), "Valid description", "TODO", "HIGH", UUID.randomUUID())),
-
-                Arguments.of(new TaskRequestDTO("Valid title", null, "TODO", "HIGH", UUID.randomUUID())),
-                Arguments.of(new TaskRequestDTO("Valid title", "", "TODO", "HIGH", UUID.randomUUID())),
-                Arguments.of(new TaskRequestDTO("Valid title", "   ", "TODO", "HIGH", UUID.randomUUID())),
-                Arguments.of(new TaskRequestDTO("Valid title", "A".repeat(1001), "TODO", "HIGH", UUID.randomUUID())),
-
-                Arguments.of(new TaskRequestDTO("Valid title", "Valid description", null, "HIGH", UUID.randomUUID())),
-                Arguments.of(new TaskRequestDTO("Valid title", "Valid description", "TODO", null, UUID.randomUUID()))
-        );
     }
 }

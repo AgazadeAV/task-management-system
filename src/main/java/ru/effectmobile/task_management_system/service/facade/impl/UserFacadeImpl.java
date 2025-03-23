@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import ru.effectmobile.task_management_system.config.crypto.CipherService;
 import ru.effectmobile.task_management_system.config.security.JwtService;
 import ru.effectmobile.task_management_system.dto.requests.LoginRequestDTO;
@@ -31,6 +32,7 @@ import static ru.effectmobile.task_management_system.exception.util.ExceptionMes
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Validated
 public class UserFacadeImpl implements UserFacade {
 
     private final UserService userService;

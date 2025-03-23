@@ -1,5 +1,6 @@
 package ru.effectmobile.task_management_system.util;
 
+import org.junit.jupiter.params.provider.Arguments;
 import ru.effectmobile.task_management_system.dto.filters.TaskFilterDTO;
 import ru.effectmobile.task_management_system.dto.requests.CommentRequestDTO;
 import ru.effectmobile.task_management_system.dto.requests.LoginRequestDTO;
@@ -17,8 +18,13 @@ import ru.effectmobile.task_management_system.model.enums.TaskPriority;
 import ru.effectmobile.task_management_system.model.enums.TaskStatus;
 import ru.effectmobile.task_management_system.model.metadata.MetaData;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static ru.effectmobile.task_management_system.util.DefaultInputs.ASSIGNEE_ID_EXAMPLE;
 import static ru.effectmobile.task_management_system.util.DefaultInputs.AUTHOR_ID_EXAMPLE;
@@ -290,6 +296,109 @@ public class ModelCreator {
                 EMAIL_EXAMPLE,
                 PHONE_NUMBER_EXAMPLE,
                 ROLE_EXAMPLE_ENUM
+        );
+    }
+
+    public static Stream<Arguments> provideInvalidCommentRequests() {
+        return Stream.of(
+                Arguments.of(new CommentRequestDTO(null, "Valid comment")),
+                Arguments.of(new CommentRequestDTO(UUID.randomUUID(), "")),
+                Arguments.of(new CommentRequestDTO(UUID.randomUUID(), "  ")),
+                Arguments.of(new CommentRequestDTO(UUID.randomUUID(), "A".repeat(2001)))
+        );
+    }
+
+    public static Stream<Arguments> provideInvalidTaskRequests() {
+        return Stream.of(
+                Arguments.of(new TaskRequestDTO(null, "Valid description", "TODO", "HIGH", UUID.randomUUID())),
+                Arguments.of(new TaskRequestDTO("", "Valid description", "TODO", "HIGH", UUID.randomUUID())),
+                Arguments.of(new TaskRequestDTO("   ", "Valid description", "TODO", "HIGH", UUID.randomUUID())),
+                Arguments.of(new TaskRequestDTO("A".repeat(256), "Valid description", "TODO", "HIGH", UUID.randomUUID())),
+                Arguments.of(new TaskRequestDTO("Valid title", null, "TODO", "HIGH", UUID.randomUUID())),
+                Arguments.of(new TaskRequestDTO("Valid title", "", "TODO", "HIGH", UUID.randomUUID())),
+                Arguments.of(new TaskRequestDTO("Valid title", "   ", "TODO", "HIGH", UUID.randomUUID())),
+                Arguments.of(new TaskRequestDTO("Valid title", "A".repeat(1001), "TODO", "HIGH", UUID.randomUUID())),
+                Arguments.of(new TaskRequestDTO("Valid title", "Valid description", null, "HIGH", UUID.randomUUID())),
+                Arguments.of(new TaskRequestDTO("Valid title", "Valid description", "TODO", null, UUID.randomUUID()))
+        );
+    }
+
+    public static Stream<Arguments> provideInvalidUserRequests() {
+        return Stream.of(
+                Arguments.of(new UserRequestDTO(null, "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("", "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Jo", "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("J".repeat(51), "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", null, "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "J", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "J".repeat(51), "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", null, "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "D", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "D".repeat(51), "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", null, "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "invalid-email", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", null, "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "short1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "long".repeat(6) + "1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "PASSWORD1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "Password!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "Password1", "ROLE_USER", LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "Password1!", null, LocalDate.of(2000, 1, 1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", null, "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.now().plusDays(1), "+79991112233")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), null)),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "1234567890")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+7123456789")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+712345678901")),
+                Arguments.of(new UserRequestDTO("Username", "John", "Doe", "john.doe@example.com", "Password1!", "ROLE_USER", LocalDate.of(2000, 1, 1), "+7abcdefghij"))
+        );
+    }
+
+    public static Stream<Arguments> provideInvalidLoginRequests() {
+        return Stream.of(
+                Arguments.of(new LoginRequestDTO("", "ValidP@ssw0rd")),
+                Arguments.of(new LoginRequestDTO("not-an-email", "ValidP@ssw0rd")),
+                Arguments.of(new LoginRequestDTO("john.doe@example.com", null)),
+                Arguments.of(new LoginRequestDTO("john.doe@example.com", "")),
+                Arguments.of(new LoginRequestDTO("john.doe@example.com", "short1!")),
+                Arguments.of(new LoginRequestDTO("john.doe@example.com", "long".repeat(6) + "1!")),
+                Arguments.of(new LoginRequestDTO("john.doe@example.com", "password1!")),
+                Arguments.of(new LoginRequestDTO("john.doe@example.com", "PASSWORD1!")),
+                Arguments.of(new LoginRequestDTO("john.doe@example.com", "Password!")),
+                Arguments.of(new LoginRequestDTO("john.doe@example.com", "Password1"))
+
+        );
+    }
+
+    public static Stream<Arguments> provideFilters() {
+        Task task = createTask(TaskStatus.COMPLETED, TaskPriority.LOW);
+        final List<Task> tasks = Arrays.asList(task, task);
+        final List<Task> emptyTasks = Collections.emptyList();
+
+        return Stream.of(
+                Arguments.of(createTaskFilterDTO(null, null, null, null), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR_ID_EXAMPLE, null, null, null), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(null, ASSIGNEE_ID_EXAMPLE, null, null), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(null, null, TASK_STATUS_EXAMPLE_ENUM, null), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(null, null, null, TASK_PRIORITY_EXAMPLE_ENUM), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR_ID_EXAMPLE, ASSIGNEE_ID_EXAMPLE, null, null), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR_ID_EXAMPLE, null, TASK_STATUS_EXAMPLE_ENUM, null), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR_ID_EXAMPLE, null, null, TASK_PRIORITY_EXAMPLE_ENUM), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(null, ASSIGNEE_ID_EXAMPLE, TASK_STATUS_EXAMPLE_ENUM, null), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(null, ASSIGNEE_ID_EXAMPLE, null, TASK_PRIORITY_EXAMPLE_ENUM), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(null, null, TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR_ID_EXAMPLE, ASSIGNEE_ID_EXAMPLE, TASK_STATUS_EXAMPLE_ENUM, null), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR_ID_EXAMPLE, ASSIGNEE_ID_EXAMPLE, null, TASK_PRIORITY_EXAMPLE_ENUM), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR_ID_EXAMPLE, null, TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(null, ASSIGNEE_ID_EXAMPLE, TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(), tasks, tasks.size()),
+                Arguments.of(createTaskFilterDTO(AUTHOR_ID_EXAMPLE, ASSIGNEE_ID_EXAMPLE, TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), emptyTasks, 0)
         );
     }
 }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,7 +30,6 @@ import ru.effectmobile.task_management_system.service.facade.CommentFacade;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -121,7 +119,7 @@ class CommentControllerTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideInvalidCommentRequests")
+    @MethodSource("ru.effectmobile.task_management_system.util.ModelCreator#provideInvalidCommentRequests")
     @WithMockUser
     void createComment_BadRequest(CommentRequestDTO invalidRequest) throws Exception {
         mockMvc.perform(post(apiPathPrefix + CREATE_COMMENT)
@@ -183,14 +181,5 @@ class CommentControllerTest {
 
         mockMvc.perform(delete(apiPathPrefix + DELETE_COMMENT_BY_ID, COMMENT.getId()))
                 .andExpect(status().isNotFound());
-    }
-
-    private static Stream<Arguments> provideInvalidCommentRequests() {
-        return Stream.of(
-                Arguments.of(new CommentRequestDTO(null, "Valid comment")),
-                Arguments.of(new CommentRequestDTO(UUID.randomUUID(), "")),
-                Arguments.of(new CommentRequestDTO(UUID.randomUUID(), "  ")),
-                Arguments.of(new CommentRequestDTO(UUID.randomUUID(), "A".repeat(2001)))
-        );
     }
 }

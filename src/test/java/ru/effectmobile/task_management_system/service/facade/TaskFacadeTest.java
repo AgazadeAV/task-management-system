@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -35,7 +34,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -53,13 +51,10 @@ import static ru.effectmobile.task_management_system.exception.util.ExceptionMes
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.TASK_DELETE_FORBIDDEN_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.TASK_NOT_FOUND_BY_ID_MESSAGE;
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.TASK_UPDATE_FORBIDDEN_MESSAGE;
-import static ru.effectmobile.task_management_system.util.DefaultInputs.TASK_PRIORITY_EXAMPLE_ENUM;
-import static ru.effectmobile.task_management_system.util.DefaultInputs.TASK_STATUS_EXAMPLE_ENUM;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createAsigneeUser;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createAuthorUser;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createMetaData;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createTask;
-import static ru.effectmobile.task_management_system.util.ModelCreator.createTaskFilterDTO;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createTaskRequestDTO;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createTaskResponseDTO;
 
@@ -94,8 +89,6 @@ class TaskFacadeTest {
     private static final TaskResponseDTO RESPONSE_DTO = createTaskResponseDTO();
     private static final MetaData META_DATA = createMetaData();
     private static final Pageable PAGEABLE = mock(Pageable.class);
-    private static final List<Task> TASKS = Arrays.asList(TASK, TASK);
-    private static final List<Task> EMPTY_TASKS = Collections.emptyList();
 
     @Test
     void getAllTasks_ShouldReturnTasks() {
@@ -253,7 +246,7 @@ class TaskFacadeTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideFilters")
+    @MethodSource("ru.effectmobile.task_management_system.util.ModelCreator#provideFilters")
     void getTasksWithFilters_ShouldReturnFilteredTasks(TaskFilterDTO filterDTO, List<Task> expectedTasks, long expectedTotal) {
         Page<Task> taskPage = new PageImpl<>(expectedTasks);
         when(taskService.findWithFilters(filterDTO, PAGEABLE)).thenReturn(taskPage);
@@ -275,27 +268,5 @@ class TaskFacadeTest {
         }
 
         verify(taskService).findWithFilters(filterDTO, PAGEABLE);
-    }
-
-    static Stream<Arguments> provideFilters() {
-        return Stream.of(
-                Arguments.of(createTaskFilterDTO(null, null, null, null), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), null, null, null), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(null, ASSIGNEE.getId(), null, null), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(null, null, TASK_STATUS_EXAMPLE_ENUM, null), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(null, null, null, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), null, null), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), null, TASK_STATUS_EXAMPLE_ENUM, null), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), null, null, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(null, ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, null), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(null, ASSIGNEE.getId(), null, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(null, null, TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, null), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), null, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), null, TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(null, ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), TASKS, TASKS.size()),
-                Arguments.of(createTaskFilterDTO(AUTHOR.getId(), ASSIGNEE.getId(), TASK_STATUS_EXAMPLE_ENUM, TASK_PRIORITY_EXAMPLE_ENUM), EMPTY_TASKS, EMPTY_TASKS.size())
-        );
     }
 }

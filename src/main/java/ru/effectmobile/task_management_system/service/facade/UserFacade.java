@@ -1,5 +1,6 @@
 package ru.effectmobile.task_management_system.service.facade;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ru.effectmobile.task_management_system.dto.requests.LoginRequestDTO;
@@ -15,9 +16,9 @@ public interface UserFacade {
 
     UserResponseDTO getUserById(UUID id);
 
-    UserResponseDTO createUser(UserRequestDTO userDTO);
+    UserResponseDTO createUser(@Valid UserRequestDTO userDTO);
 
-    AuthResponseDTO login(LoginRequestDTO loginDTO);
+    AuthResponseDTO login(@Valid LoginRequestDTO loginDTO);
 
-    UserResponseDTO register(UserRequestDTO request);
+    UserResponseDTO register(@Valid UserRequestDTO request);
 }
