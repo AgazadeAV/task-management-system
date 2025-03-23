@@ -281,12 +281,10 @@ class TaskControllerTest {
                 Arguments.of(new TaskRequestDTO("", "Valid description", "TODO", "HIGH", UUID.randomUUID())),
                 Arguments.of(new TaskRequestDTO("   ", "Valid description", "TODO", "HIGH", UUID.randomUUID())),
                 Arguments.of(new TaskRequestDTO("A".repeat(256), "Valid description", "TODO", "HIGH", UUID.randomUUID())),
-
                 Arguments.of(new TaskRequestDTO("Valid title", null, "TODO", "HIGH", UUID.randomUUID())),
                 Arguments.of(new TaskRequestDTO("Valid title", "", "TODO", "HIGH", UUID.randomUUID())),
                 Arguments.of(new TaskRequestDTO("Valid title", "   ", "TODO", "HIGH", UUID.randomUUID())),
                 Arguments.of(new TaskRequestDTO("Valid title", "A".repeat(1001), "TODO", "HIGH", UUID.randomUUID())),
-
                 Arguments.of(new TaskRequestDTO("Valid title", "Valid description", null, "HIGH", UUID.randomUUID())),
                 Arguments.of(new TaskRequestDTO("Valid title", "Valid description", "TODO", null, UUID.randomUUID()))
         );
