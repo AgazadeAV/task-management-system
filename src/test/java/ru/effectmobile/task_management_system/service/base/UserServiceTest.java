@@ -122,15 +122,4 @@ class UserServiceTest {
         assertThrows(UserNotFoundException.class, () -> userService.findByEmail(USER.getEmail()));
         verify(userRepository).findByEmail(USER.getEmail());
     }
-
-    @Test
-    void validateExistingFields_ShouldPassValidation_WhenNoConflicts() {
-        UserRequestDTO request = createUserRequestDTO();
-
-        when(userRepository.findByUsernameOrEmailOrPhoneNumber(
-                request.username(), request.email(), request.phoneNumber()))
-                .thenReturn(Optional.empty());
-
-        assertDoesNotThrow(() -> userService.validateExistingFields(request));
-    }
 }

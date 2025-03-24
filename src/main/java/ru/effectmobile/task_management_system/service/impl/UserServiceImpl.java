@@ -18,7 +18,6 @@ import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.repository.UserRepository;
 import ru.effectmobile.task_management_system.service.UserService;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static ru.effectmobile.task_management_system.exception.util.ExceptionMessageUtil.Messages.EMAIL_ALREADY_REGISTERED;
@@ -89,26 +88,18 @@ public class UserServiceImpl implements UserService {
         log.debug("Validating existing user fields: username={}, email={}, phone={}",
                 request.username(), request.email(), request.phoneNumber());
 
-        Optional<User> existingUser = userRepository.findByUsernameOrEmailOrPhoneNumber(
-                request.username(),
-                request.email(),
-                request.phoneNumber()
-        );
-
-        existingUser.ifPresent(user -> {
-            if (user.getUsername().equals(cipherService.encrypt(request.username()))) {
-                log.warn("Username '{}' is already registered", request.username());
-                throw new UsernameAlreadyRegisteredException(String.format(USERNAME_ALREADY_REGISTERED, request.username()));
-            }
-            if (user.getEmail().equals(cipherService.encrypt(request.email()))) {
-                log.warn("Email '{}' is already registered", request.email());
-                throw new EmailAlreadyRegisteredException(String.format(EMAIL_ALREADY_REGISTERED, request.email()));
-            }
-            if (user.getPhoneNumber().equals(cipherService.encrypt(request.phoneNumber()))) {
-                log.warn("Phone number '{}' is already registered", request.phoneNumber());
-                throw new PhoneNumberAlreadyRegisteredException(String.format(PHONE_NUMBER_ALREADY_REGISTERED, request.phoneNumber()));
-            }
-        });
+        if (userRepository.existsByUsername(cipherService.encrypt(request.username()))) {
+            log.warn("Username '{}' is already registered", request.username());
+            throw new UsernameAlreadyRegisteredException(String.format(USERNAME_ALREADY_REGISTERED, request.username()));
+        }
+        if (userRepository.existsByEmail(cipherService.encrypt(request.email()))) {
+            log.warn("Email '{}' is already registered", request.email());
+            throw new EmailAlreadyRegisteredException(String.format(EMAIL_ALREADY_REGISTERED, request.email()));
+        }
+        if (userRepository.existsByPhoneNumber(cipherService.encrypt(request.phoneNumber()))) {
+            log.warn("Phone number '{}' is already registered", request.phoneNumber());
+            throw new PhoneNumberAlreadyRegisteredException(String.format(PHONE_NUMBER_ALREADY_REGISTERED, request.phoneNumber()));
+        }
 
         log.debug("User fields validation passed");
     }
