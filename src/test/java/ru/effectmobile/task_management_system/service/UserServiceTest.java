@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.service.base;
+package ru.effectmobile.task_management_system.service;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import ru.effectmobile.task_management_system.config.crypto.CipherService;
-import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
 import ru.effectmobile.task_management_system.exception.custom.notfound.UserNotFoundException;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
@@ -28,7 +27,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static ru.effectmobile.task_management_system.util.ModelCreator.createUser;
-import static ru.effectmobile.task_management_system.util.ModelCreator.createUserRequestDTO;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
