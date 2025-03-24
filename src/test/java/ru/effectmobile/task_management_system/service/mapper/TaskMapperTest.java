@@ -33,21 +33,30 @@ class TaskMapperTest {
 
         TaskResponseDTO dto = mapper.taskToResponseDTO(task);
 
+        assertEquals(task.getId(), dto.id());
+        assertEquals(task.getTitle(), dto.title());
+        assertEquals(task.getDescription(), dto.description());
+        assertEquals(task.getStatus(), dto.status());
+        assertEquals(task.getPriority(), dto.priority());
         assertEquals(author.getId(), dto.authorId());
         assertEquals(author.getFirstName() + " " + author.getLastName(), dto.authorFullName());
         assertEquals(assignee.getId(), dto.assigneeId());
         assertEquals(assignee.getFirstName() + " " + assignee.getLastName(), dto.assigneeFullName());
         assertEquals(metaData.getCreatedAt(), dto.createdAt());
+        assertEquals(metaData.getUpdatedAt(), dto.updatedAt());
     }
 
     @Test
     void updateTaskFromRequestDTO_ShouldUpdateFields() {
-        Task task = createTask(TaskStatus.COMPLETED, TaskPriority.LOW);
+        Task task = createTask(TaskStatus.COMPLETED, TaskPriority.LOW, createAuthorUser(Role.ROLE_ADMIN), createAsigneeUser(Role.ROLE_USER));
         TaskRequestDTO dto = createTaskRequestDTO();
 
         mapper.updateTaskFromRequestDTO(dto, task);
 
         assertEquals(dto.title(), task.getTitle());
         assertEquals(dto.description(), task.getDescription());
+        assertEquals(dto.status(), task.getStatus().name());
+        assertEquals(dto.priority(), task.getPriority().name());
+        assertEquals(dto.assigneeId(), task.getAssignee().getId());
     }
 }

@@ -27,10 +27,12 @@ class CommentMapperTest {
 
         CommentResponseDTO dto = mapper.commentToResponseDTO(comment);
 
+        assertEquals(comment.getId(), dto.id());
         assertEquals(task.getId(), dto.taskId());
         assertEquals(task.getTitle(), dto.taskTitle());
         assertEquals(author.getId(), dto.authorId());
         assertEquals(comment.getAuthor().getFirstName() + " " + comment.getAuthor().getLastName(), dto.authorFullName());
+        assertEquals(comment.getText(), dto.text());
         assertEquals(comment.getMetaData().getCreatedAt(), dto.createdAt());
         assertEquals(comment.getMetaData().getUpdatedAt(), dto.updatedAt());
     }
