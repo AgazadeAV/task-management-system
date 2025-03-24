@@ -16,7 +16,7 @@ import ru.effectmobile.task_management_system.model.entity.Task;
 import ru.effectmobile.task_management_system.model.enums.TaskPriority;
 import ru.effectmobile.task_management_system.model.enums.TaskStatus;
 import ru.effectmobile.task_management_system.repository.TaskRepository;
-import ru.effectmobile.task_management_system.service.base.impl.TaskServiceImpl;
+import ru.effectmobile.task_management_system.service.impl.TaskServiceImpl;
 
 import java.util.List;
 import java.util.Optional;

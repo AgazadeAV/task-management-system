@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.service.base;
+package ru.effectmobile.task_management_system.service;
 
 import ru.effectmobile.task_management_system.dto.requests.UserRequestDTO;
 import ru.effectmobile.task_management_system.model.entity.User;

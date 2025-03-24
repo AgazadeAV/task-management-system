@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.service.base.impl;
+package ru.effectmobile.task_management_system.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import ru.effectmobile.task_management_system.dto.filters.TaskFilterDTO;
 import ru.effectmobile.task_management_system.exception.custom.notfound.TaskNotFoundException;
 import ru.effectmobile.task_management_system.model.entity.Task;
 import ru.effectmobile.task_management_system.repository.TaskRepository;
-import ru.effectmobile.task_management_system.service.base.TaskService;
+import ru.effectmobile.task_management_system.service.TaskService;
 
 import java.util.UUID;
 

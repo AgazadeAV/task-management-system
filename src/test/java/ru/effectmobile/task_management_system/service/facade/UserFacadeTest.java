@@ -20,7 +20,7 @@ import ru.effectmobile.task_management_system.exception.custom.notfound.UserNotF
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
 import ru.effectmobile.task_management_system.model.metadata.MetaData;
-import ru.effectmobile.task_management_system.service.base.UserService;
+import ru.effectmobile.task_management_system.service.UserService;
 import ru.effectmobile.task_management_system.service.facade.impl.UserFacadeImpl;
 import ru.effectmobile.task_management_system.service.factory.MetaDataFactory;
 import ru.effectmobile.task_management_system.service.factory.UserFactory;

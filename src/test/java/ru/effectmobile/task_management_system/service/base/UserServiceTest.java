@@ -14,7 +14,7 @@ import ru.effectmobile.task_management_system.exception.custom.notfound.UserNotF
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
 import ru.effectmobile.task_management_system.repository.UserRepository;
-import ru.effectmobile.task_management_system.service.base.impl.UserServiceImpl;
+import ru.effectmobile.task_management_system.service.impl.UserServiceImpl;
 
 import java.util.List;
 import java.util.Optional;

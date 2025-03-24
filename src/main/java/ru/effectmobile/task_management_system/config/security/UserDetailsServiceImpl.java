@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.effectmobile.task_management_system.config.crypto.CipherService;
 import ru.effectmobile.task_management_system.model.entity.User;
-import ru.effectmobile.task_management_system.service.base.UserService;
+import ru.effectmobile.task_management_system.service.UserService;
 
 @Slf4j
 @Service

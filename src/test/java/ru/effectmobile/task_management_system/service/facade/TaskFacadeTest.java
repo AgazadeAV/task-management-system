@@ -22,16 +22,14 @@ import ru.effectmobile.task_management_system.model.enums.Role;
 import ru.effectmobile.task_management_system.model.enums.TaskPriority;
 import ru.effectmobile.task_management_system.model.enums.TaskStatus;
 import ru.effectmobile.task_management_system.model.metadata.MetaData;
-import ru.effectmobile.task_management_system.service.base.PermissionService;
-import ru.effectmobile.task_management_system.service.base.TaskService;
-import ru.effectmobile.task_management_system.service.base.UserService;
+import ru.effectmobile.task_management_system.service.PermissionService;
+import ru.effectmobile.task_management_system.service.TaskService;
+import ru.effectmobile.task_management_system.service.UserService;
 import ru.effectmobile.task_management_system.service.facade.impl.TaskFacadeImpl;
 import ru.effectmobile.task_management_system.service.factory.MetaDataFactory;
 import ru.effectmobile.task_management_system.service.factory.TaskFactory;
 import ru.effectmobile.task_management_system.service.mapper.TaskMapper;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 

@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.service.base.impl;
+package ru.effectmobile.task_management_system.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.effectmobile.task_management_system.exception.custom.notfound.CommentNotFoundException;
 import ru.effectmobile.task_management_system.model.entity.Comment;
 import ru.effectmobile.task_management_system.repository.CommentRepository;
-import ru.effectmobile.task_management_system.service.base.CommentService;
+import ru.effectmobile.task_management_system.service.CommentService;
 
 import java.util.UUID;
 

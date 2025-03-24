@@ -8,7 +8,7 @@ import ru.effectmobile.task_management_system.exception.custom.auth.UserDoesntHa
 import ru.effectmobile.task_management_system.model.entity.Comment;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
-import ru.effectmobile.task_management_system.service.base.impl.PermissionServiceImpl;
+import ru.effectmobile.task_management_system.service.impl.PermissionServiceImpl;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;

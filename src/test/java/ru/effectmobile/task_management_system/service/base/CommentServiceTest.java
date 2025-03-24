@@ -14,7 +14,7 @@ import ru.effectmobile.task_management_system.model.entity.Task;
 import ru.effectmobile.task_management_system.model.enums.TaskPriority;
 import ru.effectmobile.task_management_system.model.enums.TaskStatus;
 import ru.effectmobile.task_management_system.repository.CommentRepository;
-import ru.effectmobile.task_management_system.service.base.impl.CommentServiceImpl;
+import ru.effectmobile.task_management_system.service.impl.CommentServiceImpl;
 
 import java.util.List;
 import java.util.Optional;

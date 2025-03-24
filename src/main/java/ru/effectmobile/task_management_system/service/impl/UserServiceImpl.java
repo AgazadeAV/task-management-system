@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.service.base.impl;
+package ru.effectmobile.task_management_system.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +16,7 @@ import ru.effectmobile.task_management_system.exception.custom.conflict.Username
 import ru.effectmobile.task_management_system.exception.custom.notfound.UserNotFoundException;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.repository.UserRepository;
-import ru.effectmobile.task_management_system.service.base.UserService;
+import ru.effectmobile.task_management_system.service.UserService;
 
 import java.util.Optional;
 import java.util.UUID;

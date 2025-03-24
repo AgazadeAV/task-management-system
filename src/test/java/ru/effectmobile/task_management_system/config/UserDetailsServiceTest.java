@@ -11,7 +11,7 @@ import ru.effectmobile.task_management_system.config.crypto.CipherService;
 import ru.effectmobile.task_management_system.config.security.UserDetailsServiceImpl;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
-import ru.effectmobile.task_management_system.service.base.UserService;
+import ru.effectmobile.task_management_system.service.UserService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

@@ -1,4 +1,4 @@
-package ru.effectmobile.task_management_system.service.base.impl;
+package ru.effectmobile.task_management_system.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -6,7 +6,7 @@ import ru.effectmobile.task_management_system.exception.custom.auth.UserDoesntHa
 import ru.effectmobile.task_management_system.model.entity.Comment;
 import ru.effectmobile.task_management_system.model.entity.User;
 import ru.effectmobile.task_management_system.model.enums.Role;
-import ru.effectmobile.task_management_system.service.base.PermissionService;
+import ru.effectmobile.task_management_system.service.PermissionService;
 
 import java.util.UUID;
 
