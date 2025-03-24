@@ -1,13 +1,13 @@
 package ru.effectmobile.task_management_system.dto.requests;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import ru.effectmobile.task_management_system.config.swagger.schemas.requests.UserRequestDTOSchema;
+import ru.effectmobile.task_management_system.service.validation.annotation.Email;
 import ru.effectmobile.task_management_system.service.validation.annotation.Password;
 
 import java.time.LocalDate;
@@ -27,7 +27,7 @@ public record UserRequestDTO(
         @Size(min = 2, max = 50, message = "Last name must be between 2 and 50 characters long")
         String lastName,
 
-        @Email(message = "Invalid email format")
+        @Email
         @NotBlank(message = "Email cannot be blank")
         String email,
 
